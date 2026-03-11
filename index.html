@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SG Condo Hidden Gem Finder</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e17;
+    --card: #111827;
+    --card-hover: #1a2332;
+    --border: #1e293b;
+    --text: #e2e8f0;
+    --text-dim: #94a3b8;
+    --accent: #22d3ee;
+    --accent2: #a78bfa;
+    --green: #34d399;
+    --red: #f87171;
+    --amber: #fbbf24;
+    --gold: linear-gradient(135deg, #f59e0b, #d97706);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  .noise {
+    position: fixed; inset:0; z-index:0; pointer-events:none; opacity:0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .container { max-width:1280px; margin:0 auto; padding:2rem 1.5rem; position:relative; z-index:1; }
+
+  /* Header */
+  .hero {
+    text-align:center; padding:3rem 0 2rem;
+    background: radial-gradient(ellipse at 50% 0%, rgba(34,211,238,0.08) 0%, transparent 60%);
+  }
+  .hero h1 {
+    font-family:'Space Mono',monospace; font-size:2.2rem; font-weight:700;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+    letter-spacing:-1px;
+  }
+  .hero .subtitle { color:var(--text-dim); margin-top:0.5rem; font-size:0.95rem; }
+  .hero .params {
+    display:flex; gap:1rem; justify-content:center; margin-top:1.5rem; flex-wrap:wrap;
+  }
+  .hero .param {
+    background:var(--card); border:1px solid var(--border); border-radius:10px;
+    padding:0.6rem 1.2rem; font-family:'Space Mono',monospace; font-size:0.8rem;
+    color:var(--accent);
+  }
+
+  /* Stats row */
+  .stats-row {
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:1rem; margin:2rem 0;
+  }
+  .stat-card {
+    background:var(--card); border:1px solid var(--border); border-radius:12px;
+    padding:1.2rem; text-align:center;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .stat-card:hover { transform:translateY(-2px); border-color:var(--accent); }
+  .stat-card .label { font-size:0.75rem; color:var(--text-dim); text-transform:uppercase; letter-spacing:1px; }
+  .stat-card .value {
+    font-family:'Space Mono',monospace; font-size:1.6rem; font-weight:700;
+    color:var(--accent); margin-top:0.3rem;
+  }
+
+  /* Section headers */
+  .section-title {
+    font-family:'Space Mono',monospace; font-size:1.1rem; color:var(--accent2);
+    margin:2.5rem 0 1rem; padding-bottom:0.5rem;
+    border-bottom:1px solid var(--border);
+    display:flex; align-items:center; gap:0.5rem;
+  }
+
+  /* Strategy note */
+  .strategy {
+    background: linear-gradient(135deg, rgba(34,211,238,0.05), rgba(167,139,250,0.05));
+    border:1px solid var(--border); border-radius:14px;
+    padding:1.5rem; margin:1.5rem 0; font-size:0.9rem; color:var(--text-dim);
+    line-height:1.8;
+  }
+  .strategy strong { color:var(--text); }
+  .strategy .layer { margin:0.4rem 0; }
+  .strategy .tag {
+    display:inline-block; background:rgba(34,211,238,0.1); color:var(--accent);
+    border-radius:4px; padding:0.1rem 0.5rem; font-family:'Space Mono',monospace;
+    font-size:0.75rem; margin-right:0.3rem;
+  }
+
+  /* Table */
+  .table-wrap { overflow-x:auto; margin:1rem 0; border-radius:12px; border:1px solid var(--border); }
+  table { width:100%; border-collapse:collapse; font-size:0.82rem; }
+  th {
+    background:#0f172a; font-family:'Space Mono',monospace; font-size:0.7rem;
+    text-transform:uppercase; letter-spacing:0.5px; color:var(--text-dim);
+    padding:0.8rem 0.6rem; text-align:left; position:sticky; top:0;
+    white-space:nowrap; cursor:pointer;
+  }
+  th:hover { color:var(--accent); }
+  td { padding:0.7rem 0.6rem; border-top:1px solid var(--border); white-space:nowrap; }
+  tr:hover td { background:var(--card-hover); }
+  .rank-cell {
+    font-family:'Space Mono',monospace; font-weight:700; color:var(--accent);
+  }
+  .gem-bar {
+    height:6px; border-radius:3px; background:var(--border); position:relative;
+    min-width:60px;
+  }
+  .gem-bar-fill {
+    height:100%; border-radius:3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+  }
+  .badge {
+    display:inline-block; padding:0.15rem 0.5rem; border-radius:4px;
+    font-size:0.7rem; font-weight:600;
+  }
+  .badge-green { background:rgba(52,211,153,0.15); color:var(--green); }
+  .badge-red { background:rgba(248,113,113,0.15); color:var(--red); }
+  .badge-amber { background:rgba(251,191,36,0.15); color:var(--amber); }
+
+  /* Charts section */
+  .charts-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin:1rem 0; }
+  @media(max-width:800px) { .charts-grid { grid-template-columns:1fr; } }
+  .chart-card {
+    background:var(--card); border:1px solid var(--border); border-radius:12px;
+    padding:1.2rem;
+  }
+  .chart-card h3 {
+    font-family:'Space Mono',monospace; font-size:0.8rem; color:var(--text-dim);
+    margin-bottom:1rem; text-transform:uppercase; letter-spacing:0.5px;
+  }
+  .bar-chart { display:flex; flex-direction:column; gap:0.4rem; }
+  .bar-row { display:flex; align-items:center; gap:0.5rem; font-size:0.78rem; }
+  .bar-label { width:50px; text-align:right; color:var(--text-dim); font-family:'Space Mono',monospace; flex-shrink:0; }
+  .bar-track { flex:1; height:22px; background:var(--border); border-radius:4px; position:relative; overflow:hidden; }
+  .bar-fill { height:100%; border-radius:4px; transition:width 0.5s ease; display:flex; align-items:center; padding-left:6px; font-family:'Space Mono',monospace; font-size:0.7rem; color:var(--bg); font-weight:700; }
+  .bar-fill-accent { background: linear-gradient(90deg, var(--accent), #06b6d4); }
+  .bar-fill-purple { background: linear-gradient(90deg, var(--accent2), #8b5cf6); }
+
+  /* Footer */
+  .footer { text-align:center; padding:2rem 0 1rem; color:var(--text-dim); font-size:0.75rem; }
+  .footer a { color:var(--accent); text-decoration:none; }
+
+  /* Sortable indicator */
+  th.sorted-asc::after { content:" ↑"; color:var(--accent); }
+  th.sorted-desc::after { content:" ↓"; color:var(--accent); }
+
+  /* Modal styles */
+  .modal-overlay {
+    display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8);
+    z-index:1000; align-items:center; justify-content:center;
+  }
+  .modal-overlay.active { display:flex; }
+  .modal {
+    background:var(--card); border:1px solid var(--border); border-radius:16px;
+    width:90%; max-width:900px; max-height:90vh; overflow:auto;
+    padding:1.5rem; position:relative;
+  }
+  .modal-close {
+    position:absolute; top:1rem; right:1rem; background:none; border:none;
+    color:var(--text-dim); font-size:1.5rem; cursor:pointer; padding:0.5rem;
+  }
+  .modal-close:hover { color:var(--accent); }
+  .modal h2 {
+    font-family:'Space Mono',monospace; font-size:1.1rem; color:var(--accent);
+    margin-bottom:0.5rem; padding-right:2rem;
+  }
+  .modal-subtitle { color:var(--text-dim); font-size:0.85rem; margin-bottom:1.5rem; }
+  .modal-chart { height:300px; margin-bottom:1.5rem; }
+  .modal-stats {
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+    gap:0.8rem; margin-bottom:1.5rem;
+  }
+  .modal-stat {
+    background:var(--bg); border-radius:8px; padding:0.8rem; text-align:center;
+  }
+  .modal-stat .label { font-size:0.7rem; color:var(--text-dim); text-transform:uppercase; }
+  .modal-stat .value { font-family:'Space Mono',monospace; font-size:1rem; color:var(--accent); margin-top:0.3rem; }
+  .txn-table { width:100%; font-size:0.75rem; }
+  .txn-table th { background:var(--bg); padding:0.5rem; text-align:left; color:var(--text-dim); }
+  .txn-table td { padding:0.5rem; border-top:1px solid var(--border); }
+  tr.clickable { cursor:pointer; }
+  tr.clickable:hover td { background:var(--card-hover); }
+
+  /* Land Use score pill in table */
+  .lu-pill {
+    display:inline-flex; align-items:center; gap:4px;
+    padding:0.15rem 0.55rem; border-radius:20px; font-size:0.7rem;
+    font-family:'Space Mono',monospace; font-weight:700;
+  }
+  .lu-high   { background:rgba(52,211,153,0.15);  color:var(--green); }
+  .lu-mid    { background:rgba(251,191,36,0.15);  color:var(--amber); }
+  .lu-low    { background:rgba(148,163,184,0.1);  color:var(--text-dim); }
+  .enbloc-badge {
+    display:inline-block; padding:0.15rem 0.5rem; border-radius:4px;
+    background:linear-gradient(135deg,rgba(245,158,11,0.2),rgba(217,119,6,0.2));
+    color:#f59e0b; font-size:0.65rem; font-weight:700;
+    border:1px solid rgba(245,158,11,0.3); letter-spacing:0.3px;
+    vertical-align:middle; margin-left:4px;
+  }
+
+  /* LU section in modal */
+  .lu-radar-wrap { height:220px; margin:1rem 0 0.5rem; }
+  .lu-breakdown-grid {
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(100px,1fr));
+    gap:0.5rem; margin:0.5rem 0 1rem;
+  }
+  .lu-dim {
+    background:var(--bg); border-radius:8px; padding:0.6rem; text-align:center;
+  }
+  .lu-dim .label { font-size:0.65rem; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.5px; }
+  .lu-dim .value { font-family:'Space Mono',monospace; font-size:0.9rem; margin-top:0.2rem; }
+
+  /* Trend Analyser */
+  .trend-analyser {
+    background:var(--card); border:1px solid var(--border); border-radius:14px;
+    padding:1.5rem; margin:1rem 0;
+  }
+  .trend-search-row {
+    display:flex; gap:0.8rem; align-items:flex-end; flex-wrap:wrap; margin-bottom:1.2rem;
+  }
+  .trend-search-row .field { flex:1; min-width:220px; }
+  .trend-search-row .field label {
+    display:block; font-size:0.72rem; color:var(--text-dim);
+    text-transform:uppercase; letter-spacing:1px; margin-bottom:0.4rem;
+  }
+  .trend-input {
+    width:100%; background:#0a0e17; border:1px solid var(--border); border-radius:8px;
+    padding:0.65rem 1rem; color:var(--text); font-family:'Space Mono',monospace;
+    font-size:0.85rem; outline:none; transition:border-color 0.2s;
+  }
+  .trend-input:focus { border-color:var(--accent); }
+  .trend-btn {
+    background: linear-gradient(135deg, var(--accent), #06b6d4);
+    color:#0a0e17; border:none; border-radius:8px;
+    padding:0.65rem 1.4rem; font-family:'Space Mono',monospace; font-size:0.82rem;
+    font-weight:700; cursor:pointer; transition:opacity 0.2s; white-space:nowrap;
+  }
+  .trend-btn:hover { opacity:0.85; }
+  .trend-placeholder {
+    text-align:center; padding:2rem; color:var(--text-dim); font-size:0.85rem;
+  }
+  .trend-not-found {
+    background:rgba(248,113,113,0.08); border:1px solid rgba(248,113,113,0.2);
+    border-radius:8px; padding:0.8rem 1rem; color:var(--red); font-size:0.85rem;
+  }
+  .trend-result { display:none; }
+  .trend-header {
+    display:flex; justify-content:space-between; align-items:center;
+    flex-wrap:wrap; gap:0.5rem; margin-bottom:1rem;
+  }
+  .trend-header h3 {
+    font-family:'Space Mono',monospace; font-size:1rem; color:var(--accent);
+  }
+  .trend-header .badge-pill {
+    font-size:0.72rem; padding:0.2rem 0.7rem; border-radius:20px;
+    font-family:'Space Mono',monospace;
+  }
+  .trend-chart-wrap { height:300px; margin:1rem 0; }
+  .trend-txn-wrap { max-height:200px; overflow-y:auto; margin-top:1rem; }
+  .in-budget-dot {
+    display:inline-block; width:7px; height:7px; border-radius:50%;
+    background:var(--green); margin-right:4px; vertical-align:middle;
+  }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="noise"></div>
+<div class="container">
+
+  <div class="hero">
+    <h1>🏠 SG Condo Hidden Gem Finder</h1>
+    <p class="subtitle">Data-driven approach to finding undervalued condos with strong resale potential</p>
+    <div class="params">
+      <span class="param">💰 S$1.5M – S$2.0M</span>
+      <span class="param">📐 900 – 1200 sqft</span>
+      <span class="param">📅 Sep 2024 – Dec 2025</span>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="label">Matching Transactions</div>
+      <div class="value">162</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Unique Projects</div>
+      <div class="value">103</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Avg PSF</div>
+      <div class="value">$1,711</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Top Gem Score</div>
+      <div class="value">76/100</div>
+    </div>
+  </div>
+
+  <div class="strategy">
+    <strong>🧠 How the "Hidden Gem" Score Works</strong><br><br>
+    <div class="layer"><span class="tag">30%</span> <strong>Value:</strong> Buying below district median PSF — paying less than neighbours</div>
+    <div class="layer"><span class="tag">25%</span> <strong>Liquidity:</strong> Recent transaction volume — easy to sell when you want to upgrade</div>
+    <div class="layer"><span class="tag">20%</span> <strong>Trend:</strong> PSF appreciation trajectory — the project is going up, not sideways</div>
+    <div class="layer"><span class="tag">15%</span> <strong>Size Efficiency:</strong> More sqft per dollar — maximising living space</div>
+    <div class="layer"><span class="tag">10%</span> <strong>Location Intel:</strong> MasterPlan 2025 proximity score — parks, schools, commercial vitality &amp; upside zones</div>
+  </div>
+
+  <div class="strategy" style="margin-top:1rem;">
+    <strong>🗺️ Location Intelligence (MasterPlan 2025)</strong><br><br>
+    <div class="layer"><span class="tag" style="background:rgba(52,211,153,0.15);color:#34d399;">🌿 Green</span> <strong>Green Space:</strong> Parks, open space &amp; sports within 500 m — premium liveability signal</div>
+    <div class="layer"><span class="tag" style="background:rgba(245,158,11,0.15);color:#f59e0b;">🏪 Buzz</span> <strong>Urban Vitality:</strong> Commercial zones within 300 m — walkable convenience &amp; F&amp;B</div>
+    <div class="layer"><span class="tag" style="background:rgba(251,146,60,0.15);color:#fb923c;">🏫 Edu</span> <strong>Education Access:</strong> Schools within 1 km — significant price premium driver in Singapore</div>
+    <div class="layer"><span class="tag" style="background:rgba(232,121,249,0.15);color:#e879f9;">🚀 Upside</span> <strong>Future Upside:</strong> WHITE &amp; COMMERCIAL &amp; RESIDENTIAL zones within 800 m — intensification &amp; en-bloc catalyst</div>
+    <div class="layer"><span class="tag" style="background:rgba(96,165,250,0.15);color:#60a5fa;">✅ Pure</span> <strong>Neighbourhood Purity:</strong> Low industrial / utility zone density — quality living environment</div>
+    <div style="margin-top:0.8rem;font-size:0.82rem;">
+      <span class="enbloc-badge" style="font-size:0.72rem;">EN-BLOC▲</span>
+      Projects flagged <strong style="color:#f59e0b;">EN-BLOC▲</strong> are freehold with ≥2 WHITE / C&amp;R zones within 800 m — historically the highest-correlation indicator of successful en-bloc redevelopment.
+    </div>
+  </div>
+
+  <div class="section-title">💎 Top 30 Hidden Gem Projects</div>
+  <div class="table-wrap">
+    <table id="mainTable">
+      <thead>
+        <tr>
+          <th data-col="0">#</th>
+          <th data-col="1">Project</th>
+          <th data-col="2">District</th>
+          <th data-col="3">Gem Score</th>
+          <th data-col="4">Avg Price</th>
+          <th data-col="5">Avg PSF</th>
+          <th data-col="6">PSF Discount</th>
+          <th data-col="7">PSF Trend</th>
+          <th data-col="8">Txns</th>
+          <th data-col="9">Sqft</th>
+          <th data-col="10">Tenure</th>
+          <th data-col="11">Loc Score</th>
+          <th data-col="12">Avg GPR</th>
+          <th data-col="13">Street</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable" data-project="CLEMENTI PARK" data-idx="0">
+          <td class="rank-cell">1</td>
+          <td><strong>CLEMENTI PARK</strong></td>
+          <td>D21</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:75.5%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">75.5</span>
+            </div>
+          </td>
+          <td>$1,730,000</td>
+          <td>$1,474</td>
+          <td><span class="badge badge-green">-15.2%</span></td>
+          <td><span class="badge badge-green">+4.5%</span></td>
+          <td>2</td>
+          <td>1173</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-mid">52.1</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">1.70</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">SUNSET WAY</td>
+        </tr>
+        <tr class="clickable" data-project="SIMS MEADOWS" data-idx="1">
+          <td class="rank-cell">2</td>
+          <td><strong>SIMS MEADOWS</strong></td>
+          <td>D14</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:74.5%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">74.5</span>
+            </div>
+          </td>
+          <td>$1,500,000</td>
+          <td>$1,408</td>
+          <td><span class="badge badge-green">-9.3%</span></td>
+          <td><span class="badge badge-green">+8.4%</span></td>
+          <td>1</td>
+          <td>1066</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-high">97.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.89</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">LORONG 33 GEYLANG</td>
+        </tr>
+        <tr class="clickable" data-project="CASA FORTUNA" data-idx="2">
+          <td class="rank-cell">3</td>
+          <td><strong>CASA FORTUNA</strong> <span class="enbloc-badge">EN-BLOC▲</span></td>
+          <td>D12</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:74.3%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">74.3</span>
+            </div>
+          </td>
+          <td>$1,605,000</td>
+          <td>$1,537</td>
+          <td><span class="badge badge-green">-8.4%</span></td>
+          <td><span class="badge badge-green">+7.2%</span></td>
+          <td>2</td>
+          <td>1044</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-high">97.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.91</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">AH HOOD ROAD</td>
+        </tr>
+        <tr class="clickable" data-project="LOFT @ NATHAN" data-idx="3">
+          <td class="rank-cell">4</td>
+          <td><strong>LOFT @ NATHAN</strong></td>
+          <td>D10</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:73.7%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">73.7</span>
+            </div>
+          </td>
+          <td>$1,510,000</td>
+          <td>$1,542</td>
+          <td><span class="badge badge-green">-31.5%</span></td>
+          <td><span class="badge badge-green">+33.1%</span></td>
+          <td>1</td>
+          <td>980</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-high">66.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.01</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">NATHAN ROAD</td>
+        </tr>
+        <tr class="clickable" data-project="WHITEHAVEN" data-idx="4">
+          <td class="rank-cell">5</td>
+          <td><strong>WHITEHAVEN</strong></td>
+          <td>D5</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:72.9%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">72.9</span>
+            </div>
+          </td>
+          <td>$1,818,000</td>
+          <td>$1,578</td>
+          <td><span class="badge badge-green">-12.0%</span></td>
+          <td><span class="badge badge-green">+36.6%</span></td>
+          <td>1</td>
+          <td>1152</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-mid">58.3</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.28</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">PASIR PANJANG ROAD</td>
+        </tr>
+        <tr class="clickable" data-project="SOUTHAVEN II" data-idx="5">
+          <td class="rank-cell">6</td>
+          <td><strong>SOUTHAVEN II</strong></td>
+          <td>D21</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:72.6%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">72.6</span>
+            </div>
+          </td>
+          <td>$1,719,333</td>
+          <td>$1,652</td>
+          <td><span class="badge badge-green">-4.9%</span></td>
+          <td><span class="badge badge-green">+10.0%</span></td>
+          <td>3</td>
+          <td>1041</td>
+          <td style="font-size:0.72rem;">999 yrs lease commen</td>
+          <td><span class="lu-pill lu-high">78.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">1.59</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">HINDHEDE WALK</td>
+        </tr>
+        <tr class="clickable" data-project="M5" data-idx="6">
+          <td class="rank-cell">7</td>
+          <td><strong>M5</strong></td>
+          <td>D10</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:70.4%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">70.4</span>
+            </div>
+          </td>
+          <td>$1,718,000</td>
+          <td>$1,698</td>
+          <td><span class="badge badge-green">-24.6%</span></td>
+          <td><span class="badge badge-amber">-3.5%</span></td>
+          <td>1</td>
+          <td>1012</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-high">100.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.28</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">JALAN MUTIARA</td>
+        </tr>
+        <tr class="clickable" data-project="LE HILL CONDOMINIUM" data-idx="7">
+          <td class="rank-cell">8</td>
+          <td><strong>LE HILL CONDOMINIUM</strong></td>
+          <td>D5</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:69.9%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">69.9</span>
+            </div>
+          </td>
+          <td>$1,552,000</td>
+          <td>$1,567</td>
+          <td><span class="badge badge-green">-12.6%</span></td>
+          <td><span class="badge badge-green">+4.5%</span></td>
+          <td>1</td>
+          <td>990</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-high">69.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">1.53</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">PASIR PANJANG HILL</td>
+        </tr>
+        <tr class="clickable" data-project="M66" data-idx="8">
+          <td class="rank-cell">9</td>
+          <td><strong>M66</strong> <span class="enbloc-badge">EN-BLOC▲</span></td>
+          <td>D12</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:68.5%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">68.5</span>
+            </div>
+          </td>
+          <td>$1,550,000</td>
+          <td>$1,412</td>
+          <td><span class="badge badge-green">-15.8%</span></td>
+          <td><span class="badge badge-green">+2.9%</span></td>
+          <td>1</td>
+          <td>1098</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-high">91.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.14</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">MOONSTONE LANE</td>
+        </tr>
+        <tr class="clickable" data-project="BEACON HEIGHTS" data-idx="9">
+          <td class="rank-cell">10</td>
+          <td><strong>BEACON HEIGHTS</strong> <span class="enbloc-badge">EN-BLOC▲</span></td>
+          <td>D12</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:67.2%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">67.2</span>
+            </div>
+          </td>
+          <td>$1,688,000</td>
+          <td>$1,590</td>
+          <td><span class="badge badge-green">-5.2%</span></td>
+          <td><span class="badge badge-green">+2.2%</span></td>
+          <td>6</td>
+          <td>1062</td>
+          <td style="font-size:0.72rem;">999 yrs lease commen</td>
+          <td><span class="lu-pill lu-high">80.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.05</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">MAR THOMA ROAD</td>
+        </tr>
+        <tr class="clickable" data-project="FLORAVIEW" data-idx="10">
+          <td class="rank-cell">11</td>
+          <td><strong>FLORAVIEW</strong></td>
+          <td>D20</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:67.0%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">67.0</span>
+            </div>
+          </td>
+          <td>$1,640,000</td>
+          <td>$1,392</td>
+          <td><span class="badge badge-green">-22.8%</span></td>
+          <td><span class="badge badge-green">+1.1%</span></td>
+          <td>2</td>
+          <td>1179</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-mid">40.4</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.05</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">ANG MO KIO STREET 66</td>
+        </tr>
+        <tr class="clickable" data-project="CASSIA VIEW" data-idx="11">
+          <td class="rank-cell">12</td>
+          <td><strong>CASSIA VIEW</strong></td>
+          <td>D14</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:66.1%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">66.1</span>
+            </div>
+          </td>
+          <td>$1,760,000</td>
+          <td>$1,528</td>
+          <td><span class="badge badge-green">-1.5%</span></td>
+          <td><span class="badge badge-green">+6.4%</span></td>
+          <td>1</td>
+          <td>1152</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-high">98.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.84</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">GUILLEMARD ROAD</td>
+        </tr>
+        <tr class="clickable" data-project="REZI 24" data-idx="12">
+          <td class="rank-cell">13</td>
+          <td><strong>REZI 24</strong></td>
+          <td>D14</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:65.4%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">65.4</span>
+            </div>
+          </td>
+          <td>$1,780,000</td>
+          <td>$1,503</td>
+          <td><span class="badge badge-green">-3.2%</span></td>
+          <td><span class="badge badge-green">+0.9%</span></td>
+          <td>1</td>
+          <td>1184</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-high">100.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.84</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">LORONG 24 GEYLANG</td>
+        </tr>
+        <tr class="clickable" data-project="RESIDENTIAL APARTMENTS" data-idx="13">
+          <td class="rank-cell">14</td>
+          <td><strong>RESIDENTIAL APARTMENTS</strong> <span class="enbloc-badge">EN-BLOC▲</span></td>
+          <td>D12</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:65.2%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">65.2</span>
+            </div>
+          </td>
+          <td>$1,770,000</td>
+          <td>$1,787</td>
+          <td><span class="badge badge-red">+6.5%</span></td>
+          <td><span class="badge badge-green">+47.7%</span></td>
+          <td>1</td>
+          <td>990</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-high">100.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.02</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">ST. GEORGE'S ROAD</td>
+        </tr>
+        <tr class="clickable" data-project="D\'LOTUS" data-idx="14">
+          <td class="rank-cell">15</td>
+          <td><strong>D'LOTUS</strong> <span class="enbloc-badge">EN-BLOC▲</span></td>
+          <td>D12</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:64.7%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">64.7</span>
+            </div>
+          </td>
+          <td>$1,716,667</td>
+          <td>$1,611</td>
+          <td><span class="badge badge-green">-4.0%</span></td>
+          <td><span class="badge badge-green">+3.5%</span></td>
+          <td>3</td>
+          <td>1066</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-high">98.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.89</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">LORONG AMPAS</td>
+        </tr>
+        <tr class="clickable" data-project="THE SPRINGS" data-idx="15">
+          <td class="rank-cell">16</td>
+          <td><strong>THE SPRINGS</strong> <span class="enbloc-badge">EN-BLOC▲</span></td>
+          <td>D11</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:63.6%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">63.6</span>
+            </div>
+          </td>
+          <td>$1,949,000</td>
+          <td>$1,947</td>
+          <td><span class="badge badge-green">-7.8%</span></td>
+          <td><span class="badge badge-green">+7.6%</span></td>
+          <td>2</td>
+          <td>1001</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-high">100.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.32</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">MOULMEIN RISE</td>
+        </tr>
+        <tr class="clickable" data-project="THE CITRINE" data-idx="16">
+          <td class="rank-cell">17</td>
+          <td><strong>THE CITRINE</strong> <span class="enbloc-badge">EN-BLOC▲</span></td>
+          <td>D12</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:63.1%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">63.1</span>
+            </div>
+          </td>
+          <td>$1,521,750</td>
+          <td>$1,588</td>
+          <td><span class="badge badge-green">-5.3%</span></td>
+          <td><span class="badge badge-green">+3.9%</span></td>
+          <td>2</td>
+          <td>958</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-high">95.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.84</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">JALAN DATOH</td>
+        </tr>
+        <tr class="clickable" data-project="REGAL COURT" data-idx="17">
+          <td class="rank-cell">18</td>
+          <td><strong>REGAL COURT</strong> <span class="enbloc-badge">EN-BLOC▲</span></td>
+          <td>D12</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:63.0%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">63.0</span>
+            </div>
+          </td>
+          <td>$1,580,000</td>
+          <td>$1,347</td>
+          <td><span class="badge badge-green">-19.7%</span></td>
+          <td><span class="badge badge-amber">0.0%</span></td>
+          <td>1</td>
+          <td>1173</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-high">98.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.89</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">KIM KEAT ROAD</td>
+        </tr>
+        <tr class="clickable" data-project="TROPIKA EAST" data-idx="18">
+          <td class="rank-cell">19</td>
+          <td><strong>TROPIKA EAST</strong></td>
+          <td>D14</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:62.5%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">62.5</span>
+            </div>
+          </td>
+          <td>$1,600,000</td>
+          <td>$1,457</td>
+          <td><span class="badge badge-green">-6.1%</span></td>
+          <td><span class="badge badge-green">+14.1%</span></td>
+          <td>1</td>
+          <td>1098</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-mid">52.1</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">1.43</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">FOO KIM LIN ROAD</td>
+        </tr>
+        <tr class="clickable" data-project="BALESTIER POINT" data-idx="19">
+          <td class="rank-cell">20</td>
+          <td><strong>BALESTIER POINT</strong> <span class="enbloc-badge">EN-BLOC▲</span></td>
+          <td>D12</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:62.1%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">62.1</span>
+            </div>
+          </td>
+          <td>$1,520,000</td>
+          <td>$1,345</td>
+          <td><span class="badge badge-green">-19.8%</span></td>
+          <td><span class="badge badge-amber">0.0%</span></td>
+          <td>1</td>
+          <td>1130</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-high">97.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.90</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">BALESTIER ROAD</td>
+        </tr>
+        <tr class="clickable" data-project="QUEENSBERRY LODGE" data-idx="20">
+          <td class="rank-cell">21</td>
+          <td><strong>QUEENSBERRY LODGE</strong></td>
+          <td>D10</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:61.9%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">61.9</span>
+            </div>
+          </td>
+          <td>$1,620,000</td>
+          <td>$1,407</td>
+          <td><span class="badge badge-green">-37.5%</span></td>
+          <td><span class="badge badge-amber">0.0%</span></td>
+          <td>1</td>
+          <td>1152</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-high">97.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.24</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">SHANGHAI ROAD</td>
+        </tr>
+        <tr class="clickable" data-project="PARC IMPERIAL" data-idx="21">
+          <td class="rank-cell">22</td>
+          <td><strong>PARC IMPERIAL</strong></td>
+          <td>D5</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:60.4%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">60.4</span>
+            </div>
+          </td>
+          <td>$1,648,888</td>
+          <td>$1,380</td>
+          <td><span class="badge badge-green">-23.0%</span></td>
+          <td><span class="badge badge-red">-5.2%</span></td>
+          <td>1</td>
+          <td>1195</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-mid">58.3</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.28</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">PASIR PANJANG ROAD</td>
+        </tr>
+        <tr class="clickable" data-project="REGAL 35" data-idx="22">
+          <td class="rank-cell">23</td>
+          <td><strong>REGAL 35</strong></td>
+          <td>D14</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:59.5%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">59.5</span>
+            </div>
+          </td>
+          <td>$1,500,000</td>
+          <td>$1,255</td>
+          <td><span class="badge badge-green">-19.1%</span></td>
+          <td><span class="badge badge-amber">0.0%</span></td>
+          <td>1</td>
+          <td>1195</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-high">97.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.88</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">LORONG 35 GEYLANG</td>
+        </tr>
+        <tr class="clickable" data-project="ONE ST MICHAEL\'S" data-idx="23">
+          <td class="rank-cell">24</td>
+          <td><strong>ONE ST MICHAEL'S</strong></td>
+          <td>D12</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:58.8%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">58.8</span>
+            </div>
+          </td>
+          <td>$1,550,000</td>
+          <td>$1,655</td>
+          <td><span class="badge badge-green">-1.3%</span></td>
+          <td><span class="badge badge-green">+11.7%</span></td>
+          <td>1</td>
+          <td>936</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-high">80.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.14</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">ST. MICHAEL'S ROAD</td>
+        </tr>
+        <tr class="clickable" data-project="SPRINGDALE CONDOMINIUM" data-idx="24">
+          <td class="rank-cell">25</td>
+          <td><strong>SPRINGDALE CONDOMINIUM</strong></td>
+          <td>D21</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:58.7%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">58.7</span>
+            </div>
+          </td>
+          <td>$1,857,571</td>
+          <td>$1,676</td>
+          <td><span class="badge badge-green">-3.5%</span></td>
+          <td><span class="badge badge-green">+1.3%</span></td>
+          <td>7</td>
+          <td>1107</td>
+          <td style="font-size:0.72rem;">999 yrs lease commen</td>
+          <td><span class="lu-pill lu-high">78.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">1.59</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">HINDHEDE WALK</td>
+        </tr>
+        <tr class="clickable" data-project="RIVERBAY" data-idx="25">
+          <td class="rank-cell">26</td>
+          <td><strong>RIVERBAY</strong> <span class="enbloc-badge">EN-BLOC▲</span></td>
+          <td>D12</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:58.5%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">58.5</span>
+            </div>
+          </td>
+          <td>$1,543,296</td>
+          <td>$1,642</td>
+          <td><span class="badge badge-green">-2.1%</span></td>
+          <td><span class="badge badge-green">+3.6%</span></td>
+          <td>3</td>
+          <td>940</td>
+          <td style="font-size:0.72rem;">999 yrs lease commen</td>
+          <td><span class="lu-pill lu-high">80.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.05</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">MAR THOMA ROAD</td>
+        </tr>
+        <tr class="clickable" data-project="THE PARC CONDOMINIUM" data-idx="26">
+          <td class="rank-cell">27</td>
+          <td><strong>THE PARC CONDOMINIUM</strong></td>
+          <td>D5</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:58.2%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">58.2</span>
+            </div>
+          </td>
+          <td>$1,780,000</td>
+          <td>$1,817</td>
+          <td><span class="badge badge-red">+1.4%</span></td>
+          <td><span class="badge badge-green">+4.0%</span></td>
+          <td>1</td>
+          <td>980</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-high">87.6</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">3.15</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">WEST COAST WALK</td>
+        </tr>
+        <tr class="clickable" data-project="VIZ AT HOLLAND" data-idx="27">
+          <td class="rank-cell">28</td>
+          <td><strong>VIZ AT HOLLAND</strong></td>
+          <td>D10</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:57.6%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">57.6</span>
+            </div>
+          </td>
+          <td>$1,940,000</td>
+          <td>$2,048</td>
+          <td><span class="badge badge-green">-9.1%</span></td>
+          <td><span class="badge badge-green">+9.0%</span></td>
+          <td>1</td>
+          <td>947</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-mid">51.5</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">3.70</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">QUEENSWAY</td>
+        </tr>
+        <tr class="clickable" data-project="SIGNATURE PARK" data-idx="28">
+          <td class="rank-cell">29</td>
+          <td><strong>SIGNATURE PARK</strong></td>
+          <td>D21</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:57.0%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">57.0</span>
+            </div>
+          </td>
+          <td>$1,740,611</td>
+          <td>$1,665</td>
+          <td><span class="badge badge-green">-4.2%</span></td>
+          <td><span class="badge badge-green">+2.0%</span></td>
+          <td>8</td>
+          <td>1045</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-low">34.9</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.17</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">TOH TUCK ROAD</td>
+        </tr>
+        <tr class="clickable" data-project="DOMUS" data-idx="29">
+          <td class="rank-cell">30</td>
+          <td><strong>DOMUS</strong> <span class="enbloc-badge">EN-BLOC▲</span></td>
+          <td>D12</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:56.4%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">56.4</span>
+            </div>
+          </td>
+          <td>$1,660,000</td>
+          <td>$1,658</td>
+          <td><span class="badge badge-green">-1.2%</span></td>
+          <td><span class="badge badge-green">+29.2%</span></td>
+          <td>1</td>
+          <td>1001</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-high">83.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.10</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">IRRAWADDY ROAD</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="charts-grid">
+    <div class="chart-card">
+      <h3>📊 Transactions by District (in budget)</h3>
+      <div class="bar-chart" id="districtChart"></div>
+    </div>
+    <div class="chart-card">
+      <h3>📈 Yearly Transaction Volume (in budget)</h3>
+      <div class="bar-chart" id="yearChart"></div>
+    </div>
+  </div>
+
+  <div class="section-title">🔍 Property Price Trend Analyser</div>
+  <div class="trend-analyser">
+    <div class="trend-search-row">
+      <div class="field">
+        <label>Project Name</label>
+        <input type="text" id="trendSearch" list="trendProjectList"
+          class="trend-input"
+          placeholder="Type to search (e.g. MIRO, LUCIDA)…"
+          oninput="onTrendInput(this.value)"
+          onkeydown="if(event.key==='Enter') analyseProperty()">
+        <datalist id="trendProjectList"></datalist>
+      </div>
+      <button class="trend-btn" onclick="analyseProperty()">Analyse Trend</button>
+    </div>
+    <div id="trendMsg" class="trend-placeholder">
+      Type any project name from our constrained search to see its full PSF price history.
+    </div>
+    <div id="trendNotFound" class="trend-not-found" style="display:none;">
+      Project not found in the constrained search dataset. Check the spelling or try another name.
+    </div>
+    <div class="trend-result" id="trendResult">
+      <div class="trend-header">
+        <h3 id="trendTitle">—</h3>
+        <div>
+          <span id="trendBadge" class="badge badge-amber badge-pill">0%</span>
+          <span style="font-size:0.72rem;color:var(--text-dim);margin-left:0.5rem;">PSF trend (all history)</span>
+        </div>
+      </div>
+      <div class="modal-stats" id="trendStats"></div>
+      <div class="trend-chart-wrap"><canvas id="trendChart"></canvas></div>
+      <div style="font-size:0.72rem;color:var(--text-dim);margin-top:0.3rem;">
+        <span class="in-budget-dot"></span> Green dots = transactions within your budget &amp; size range
+      </div>
+      <div class="trend-txn-wrap">
+        <table class="txn-table" id="trendTxnTable">
+          <thead><tr><th>Date</th><th>Price</th><th>PSF</th><th>Sqft</th><th>In Budget?</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">🎯 Quick Realtor Picks — Why These Stand Out</div>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(350px,1fr)); gap:1rem; margin:1rem 0;">
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <strong style="color:var(--accent);">#1 CLEMENTI PARK</strong>
+        <span style="font-family:'Space Mono',monospace;font-size:0.85rem;color:var(--accent2);">75.5/100</span>
+      </div>
+      <div style="font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;">
+        D21 · ~$1,730,000 · $1474 psf · 1173 sqft
+      </div>
+      <div style="font-size:0.82rem;margin-top:0.6rem;">Trading 15% below district median. 10 recent transactions — liquid exit.</div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <strong style="color:var(--accent);">#2 SIMS MEADOWS</strong>
+        <span style="font-family:'Space Mono',monospace;font-size:0.85rem;color:var(--accent2);">74.5/100</span>
+      </div>
+      <div style="font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;">
+        D14 · ~$1,500,000 · $1408 psf · 1066 sqft
+      </div>
+      <div style="font-size:0.82rem;margin-top:0.6rem;">Trading 9% below district median.</div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <strong style="color:var(--accent);">#3 CASA FORTUNA</strong>
+        <span style="font-family:'Space Mono',monospace;font-size:0.85rem;color:var(--accent2);">74.3/100</span>
+      </div>
+      <div style="font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;">
+        D12 · ~$1,605,000 · $1537 psf · 1044 sqft
+      </div>
+      <div style="font-size:0.82rem;margin-top:0.6rem;">Trading 8% below district median.</div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <strong style="color:var(--accent);">#4 LOFT @ NATHAN</strong>
+        <span style="font-family:'Space Mono',monospace;font-size:0.85rem;color:var(--accent2);">73.7/100</span>
+      </div>
+      <div style="font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;">
+        D10 · ~$1,510,000 · $1542 psf · 980 sqft
+      </div>
+      <div style="font-size:0.82rem;margin-top:0.6rem;">Trading 32% below district median. PSF up 33% — strong momentum.</div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <strong style="color:var(--accent);">#5 WHITEHAVEN</strong>
+        <span style="font-family:'Space Mono',monospace;font-size:0.85rem;color:var(--accent2);">72.9/100</span>
+      </div>
+      <div style="font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;">
+        D5 · ~$1,818,000 · $1578 psf · 1152 sqft
+      </div>
+      <div style="font-size:0.82rem;margin-top:0.6rem;">Trading 12% below district median. PSF up 37% — strong momentum.</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Generated by Hidden Gem Finder · Data: URA Caveats · Not financial advice · DYOR
+  </div>
+</div>
+
+<!-- Modal for project details -->
+<div class="modal-overlay" id="projectModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">&times;</button>
+    <h2 id="modalTitle">Project Name</h2>
+    <div class="modal-subtitle" id="modalSubtitle">District · Street · Tenure</div>
+    <div class="modal-stats" id="modalStats"></div>
+
+    <!-- PSF price history chart -->
+    <h3 style="font-size:0.8rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px;margin:0.8rem 0 0.4rem;">PSF Price History</h3>
+    <div class="modal-chart">
+      <canvas id="priceChart"></canvas>
+    </div>
+
+    <!-- Land use radar (shown only when LU data available) -->
+    <div id="modalLUSection" style="display:none;">
+      <h3 style="font-size:0.8rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px;margin:1rem 0 0.4rem;">
+        📍 Location Intelligence <small style="font-size:0.65rem;color:#64748b;font-weight:400;">(MasterPlan 2025 · 500 m radius)</small>
+      </h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+        <div class="lu-radar-wrap"><canvas id="luRadarChart"></canvas></div>
+        <div>
+          <div class="lu-breakdown-grid" id="luDimGrid"></div>
+          <div id="luBreakdownList" style="font-size:0.72rem;color:var(--text-dim);line-height:1.8;"></div>
+        </div>
+      </div>
+      <div id="enBlocAlert" style="display:none;
+        background:linear-gradient(135deg,rgba(245,158,11,0.12),rgba(217,119,6,0.08));
+        border:1px solid rgba(245,158,11,0.35); border-radius:10px;
+        padding:0.8rem 1rem; margin-top:0.8rem; font-size:0.82rem;">
+        <strong style="color:#f59e0b;">⚡ En-Bloc / Redevelopment Signal</strong><br>
+        <span style="color:var(--text-dim);">This freehold project sits within 800 m of multiple WHITE or COMMERCIAL & RESIDENTIAL zones — land use types associated with flexible redevelopment and intensification. Historically, proximity to such zones has correlated with higher en-bloc likelihood.</span>
+      </div>
+    </div>
+
+    <h3 style="font-size:0.85rem;color:var(--text-dim);margin:1rem 0 0.5rem;">Recent Transactions</h3>
+    <div style="max-height:200px;overflow-y:auto;">
+      <table class="txn-table" id="txnTable">
+        <thead><tr><th>Date</th><th>Price</th><th>PSF</th><th>Sqft</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+// Chart data — all constrained-search projects, full transaction history
+const allProjectTxns = {"1 KING ALBERT PARK": [{"date": "2024-12-01", "price": 1450000, "psf": 1796, "sqft": 807, "inBudget": false}, {"date": "2025-08-01", "price": 1950000, "psf": 1759, "sqft": 1108, "inBudget": true}], "ADAM PARK CONDOMINIUM": [{"date": "2024-11-01", "price": 1930000, "psf": 2015, "sqft": 958, "inBudget": true}, {"date": "2025-08-01", "price": 3000000, "psf": 1072, "sqft": 2798, "inBudget": false}, {"date": "2025-10-01", "price": 2000000, "psf": 2088, "sqft": 958, "inBudget": true}], "ADAM PLACE": [{"date": "2025-08-01", "price": 1730000, "psf": 1891, "sqft": 914, "inBudget": true}], "ALLSWORTH PARK": [{"date": "2024-09-01", "price": 1900000, "psf": 1839, "sqft": 1033, "inBudget": true}, {"date": "2025-09-01", "price": 4100000, "psf": 2093, "sqft": 1959, "inBudget": false}], "ATRIUM RESIDENCES": [{"date": "2025-08-01", "price": 1630000, "psf": 1594, "sqft": 1022, "inBudget": true}, {"date": "2025-09-01", "price": 1540000, "psf": 1538, "sqft": 1001, "inBudget": true}], "AVA TOWERS": [{"date": "2024-11-01", "price": 1915000, "psf": 1632, "sqft": 1173, "inBudget": true}, {"date": "2024-12-01", "price": 1788000, "psf": 1396, "sqft": 1280, "inBudget": false}, {"date": "2025-11-01", "price": 1980000, "psf": 1546, "sqft": 1280, "inBudget": false}], "BALESTIER POINT": [{"date": "2025-10-01", "price": 1520000, "psf": 1345, "sqft": 1130, "inBudget": true}, {"date": "2025-10-01", "price": 1900000, "psf": 1161, "sqft": 1636, "inBudget": false}], "BEACON HEIGHTS": [{"date": "2024-10-01", "price": 1500000, "psf": 1620, "sqft": 925, "inBudget": true}, {"date": "2024-11-01", "price": 1628000, "psf": 1512, "sqft": 1076, "inBudget": true}, {"date": "2024-11-01", "price": 995000, "psf": 1491, "sqft": 667, "inBudget": false}, {"date": "2024-11-01", "price": 1350000, "psf": 1511, "sqft": 893, "inBudget": false}, {"date": "2024-12-01", "price": 1710000, "psf": 1589, "sqft": 1076, "inBudget": true}, {"date": "2025-08-01", "price": 1850000, "psf": 1669, "sqft": 1108, "inBudget": true}, {"date": "2025-09-01", "price": 1740000, "psf": 1569, "sqft": 1108, "inBudget": true}, {"date": "2025-09-01", "price": 1410000, "psf": 1523, "sqft": 925, "inBudget": false}, {"date": "2025-09-01", "price": 1700000, "psf": 1579, "sqft": 1076, "inBudget": true}, {"date": "2025-10-01", "price": 1038000, "psf": 1555, "sqft": 667, "inBudget": false}], "BIRMINGHAM MANSIONS": [{"date": "2025-10-01", "price": 2168300, "psf": 2035, "sqft": 1065, "inBudget": false}, {"date": "2025-10-01", "price": 1870000, "psf": 1737, "sqft": 1076, "inBudget": true}], "CALARASI": [{"date": "2025-11-01", "price": 1725000, "psf": 1526, "sqft": 1130, "inBudget": true}], "CANAAN": [{"date": "2024-09-01", "price": 1441503, "psf": 1860, "sqft": 775, "inBudget": false}, {"date": "2024-09-01", "price": 1426003, "psf": 1840, "sqft": 775, "inBudget": false}, {"date": "2024-10-01", "price": 1410503, "psf": 1820, "sqft": 775, "inBudget": false}, {"date": "2024-10-01", "price": 1657643, "psf": 1750, "sqft": 947, "inBudget": true}, {"date": "2024-10-01", "price": 1998213, "psf": 1560, "sqft": 1280, "inBudget": false}], "CARIBBEAN AT KEPPEL BAY": [{"date": "2024-09-01", "price": 2600000, "psf": 1917, "sqft": 1356, "inBudget": false}, {"date": "2024-09-01", "price": 2300000, "psf": 1874, "sqft": 1227, "inBudget": false}, {"date": "2024-09-01", "price": 4850000, "psf": 1781, "sqft": 2723, "inBudget": false}, {"date": "2024-09-01", "price": 2300000, "psf": 1874, "sqft": 1227, "inBudget": false}, {"date": "2024-10-01", "price": 2950000, "psf": 1791, "sqft": 1646, "inBudget": false}, {"date": "2024-10-01", "price": 3000000, "psf": 1380, "sqft": 2174, "inBudget": false}, {"date": "2024-10-01", "price": 2400000, "psf": 1973, "sqft": 1216, "inBudget": false}, {"date": "2024-11-01", "price": 1680000, "psf": 1880, "sqft": 893, "inBudget": false}, {"date": "2024-11-01", "price": 3150000, "psf": 1913, "sqft": 1646, "inBudget": false}, {"date": "2024-11-01", "price": 2591000, "psf": 1910, "sqft": 1356, "inBudget": false}, {"date": "2024-11-01", "price": 1750000, "psf": 1935, "sqft": 904, "inBudget": true}, {"date": "2024-12-01", "price": 4200000, "psf": 1561, "sqft": 2691, "inBudget": false}, {"date": "2024-12-01", "price": 2320000, "psf": 1891, "sqft": 1227, "inBudget": false}, {"date": "2024-12-01", "price": 2650000, "psf": 1985, "sqft": 1334, "inBudget": false}, {"date": "2025-01-01", "price": 2380000, "psf": 1858, "sqft": 1280, "inBudget": false}, {"date": "2025-01-01", "price": 2360000, "psf": 1958, "sqft": 1205, "inBudget": false}, {"date": "2025-02-01", "price": 3980000, "psf": 1241, "sqft": 3207, "inBudget": false}, {"date": "2025-02-01", "price": 2610000, "psf": 1955, "sqft": 1334, "inBudget": false}, {"date": "2025-07-01", "price": 2400000, "psf": 1973, "sqft": 1216, "inBudget": false}, {"date": "2025-08-01", "price": 4000000, "psf": 1925, "sqft": 2077, "inBudget": false}, {"date": "2025-08-01", "price": 3800000, "psf": 2029, "sqft": 1872, "inBudget": false}, {"date": "2025-08-01", "price": 1700000, "psf": 1880, "sqft": 904, "inBudget": true}, {"date": "2025-08-01", "price": 3200000, "psf": 1956, "sqft": 1636, "inBudget": false}, {"date": "2025-08-01", "price": 2450000, "psf": 1913, "sqft": 1280, "inBudget": false}, {"date": "2025-09-01", "price": 2400000, "psf": 1991, "sqft": 1205, "inBudget": false}, {"date": "2025-09-01", "price": 2500000, "psf": 1888, "sqft": 1323, "inBudget": false}, {"date": "2025-09-01", "price": 5700000, "psf": 1226, "sqft": 4650, "inBudget": false}, {"date": "2025-09-01", "price": 2450000, "psf": 1997, "sqft": 1227, "inBudget": false}, {"date": "2025-10-01", "price": 2720000, "psf": 2038, "sqft": 1334, "inBudget": false}, {"date": "2025-10-01", "price": 2450000, "psf": 1997, "sqft": 1227, "inBudget": false}, {"date": "2025-10-01", "price": 2388000, "psf": 1864, "sqft": 1280, "inBudget": false}, {"date": "2025-11-01", "price": 1960000, "psf": 1543, "sqft": 1270, "inBudget": false}, {"date": "2025-12-01", "price": 2330000, "psf": 1819, "sqft": 1280, "inBudget": false}, {"date": "2025-12-01", "price": 2420000, "psf": 1938, "sqft": 1248, "inBudget": false}, {"date": "2025-12-01", "price": 5008888, "psf": 2059, "sqft": 2432, "inBudget": false}], "CASA FORTUNA": [{"date": "2024-11-01", "price": 1610000, "psf": 1542, "sqft": 1044, "inBudget": true}, {"date": "2024-12-01", "price": 1600000, "psf": 1532, "sqft": 1044, "inBudget": true}, {"date": "2025-08-01", "price": 835000, "psf": 1650, "sqft": 505, "inBudget": false}, {"date": "2025-11-01", "price": 832500, "psf": 1646, "sqft": 505, "inBudget": false}], "CASSIA VIEW": [{"date": "2024-10-01", "price": 1786000, "psf": 1481, "sqft": 1205, "inBudget": false}, {"date": "2024-10-01", "price": 1777000, "psf": 1474, "sqft": 1205, "inBudget": false}, {"date": "2024-10-01", "price": 1760000, "psf": 1528, "sqft": 1151, "inBudget": true}, {"date": "2025-08-01", "price": 1950000, "psf": 1617, "sqft": 1205, "inBudget": false}], "CHARLESTON": [{"date": "2025-09-01", "price": 1968000, "psf": 2031, "sqft": 968, "inBudget": true}], "CLEMENTI PARK": [{"date": "2024-11-01", "price": 2100000, "psf": 1561, "sqft": 1345, "inBudget": false}, {"date": "2024-12-01", "price": 2560000, "psf": 1486, "sqft": 1722, "inBudget": false}, {"date": "2024-12-01", "price": 1680000, "psf": 1445, "sqft": 1162, "inBudget": true}, {"date": "2025-08-01", "price": 2320000, "psf": 1400, "sqft": 1657, "inBudget": false}, {"date": "2025-08-01", "price": 1780000, "psf": 1503, "sqft": 1184, "inBudget": true}, {"date": "2025-08-01", "price": 3080000, "psf": 1644, "sqft": 1872, "inBudget": false}, {"date": "2025-08-01", "price": 3120000, "psf": 1374, "sqft": 2271, "inBudget": false}, {"date": "2025-08-01", "price": 2060000, "psf": 1531, "sqft": 1345, "inBudget": false}, {"date": "2025-09-01", "price": 2880000, "psf": 1641, "sqft": 1754, "inBudget": false}, {"date": "2025-10-01", "price": 2880000, "psf": 1538, "sqft": 1872, "inBudget": false}], "CUBE 8": [{"date": "2024-09-01", "price": 1650888, "psf": 1848, "sqft": 893, "inBudget": false}, {"date": "2024-10-01", "price": 2700000, "psf": 2023, "sqft": 1334, "inBudget": false}, {"date": "2024-11-01", "price": 1780000, "psf": 1923, "sqft": 925, "inBudget": true}, {"date": "2025-02-01", "price": 2680000, "psf": 2008, "sqft": 1334, "inBudget": false}, {"date": "2025-07-01", "price": 2700000, "psf": 2023, "sqft": 1334, "inBudget": false}, {"date": "2025-11-01", "price": 1750000, "psf": 1959, "sqft": 893, "inBudget": false}, {"date": "2025-12-01", "price": 1000000, "psf": 1787, "sqft": 559, "inBudget": false}], "D'GALLERY": [{"date": "2025-08-01", "price": 1675000, "psf": 1638, "sqft": 1022, "inBudget": true}], "D'LOTUS": [{"date": "2024-10-01", "price": 1650000, "psf": 1548, "sqft": 1065, "inBudget": true}, {"date": "2025-08-01", "price": 1750000, "psf": 1642, "sqft": 1065, "inBudget": true}, {"date": "2025-09-01", "price": 1750000, "psf": 1642, "sqft": 1065, "inBudget": true}, {"date": "2025-11-01", "price": 1340000, "psf": 1660, "sqft": 807, "inBudget": false}], "D'OASIA": [{"date": "2024-10-01", "price": 945000, "psf": 1656, "sqft": 570, "inBudget": false}, {"date": "2025-01-01", "price": 1650000, "psf": 1503, "sqft": 1097, "inBudget": true}, {"date": "2025-01-01", "price": 1300000, "psf": 1510, "sqft": 861, "inBudget": false}], "DE ROYALE": [{"date": "2025-02-01", "price": 2560000, "psf": 1999, "sqft": 1280, "inBudget": false}, {"date": "2025-08-01", "price": 2340000, "psf": 1858, "sqft": 1259, "inBudget": false}, {"date": "2025-08-01", "price": 1830000, "psf": 1735, "sqft": 1054, "inBudget": true}, {"date": "2025-11-01", "price": 2388888, "psf": 1897, "sqft": 1259, "inBudget": false}], "DENG FU VILLE": [{"date": "2025-02-01", "price": 1835000, "psf": 1624, "sqft": 1130, "inBudget": true}, {"date": "2025-09-01", "price": 1830000, "psf": 1635, "sqft": 1119, "inBudget": true}, {"date": "2025-10-01", "price": 1670000, "psf": 1668, "sqft": 1001, "inBudget": true}], "DOMUS": [{"date": "2024-09-01", "price": 3880000, "psf": 1392, "sqft": 2787, "inBudget": false}, {"date": "2025-08-01", "price": 1660000, "psf": 1658, "sqft": 1001, "inBudget": true}, {"date": "2025-08-01", "price": 2650000, "psf": 1939, "sqft": 1367, "inBudget": false}], "ESTA RUBY": [{"date": "2024-11-01", "price": 2020000, "psf": 1787, "sqft": 1130, "inBudget": false}, {"date": "2024-11-01", "price": 1672000, "psf": 1745, "sqft": 958, "inBudget": true}, {"date": "2024-12-01", "price": 2050000, "psf": 1814, "sqft": 1130, "inBudget": false}, {"date": "2025-10-01", "price": 2038000, "psf": 1803, "sqft": 1130, "inBudget": false}, {"date": "2025-12-01", "price": 2188000, "psf": 1936, "sqft": 1130, "inBudget": false}], "FLORAVIEW": [{"date": "2024-10-01", "price": 1680000, "psf": 1419, "sqft": 1184, "inBudget": true}, {"date": "2024-11-01", "price": 1098000, "psf": 1417, "sqft": 775, "inBudget": false}, {"date": "2025-01-01", "price": 962888, "psf": 1443, "sqft": 667, "inBudget": false}, {"date": "2025-02-01", "price": 1200000, "psf": 1593, "sqft": 753, "inBudget": false}, {"date": "2025-08-01", "price": 1100000, "psf": 1525, "sqft": 721, "inBudget": false}, {"date": "2025-08-01", "price": 855000, "psf": 1444, "sqft": 592, "inBudget": false}, {"date": "2025-10-01", "price": 1140000, "psf": 1605, "sqft": 710, "inBudget": false}, {"date": "2025-12-01", "price": 1600000, "psf": 1364, "sqft": 1173, "inBudget": true}], "GARDENVISTA": [{"date": "2024-09-01", "price": 2200000, "psf": 1875, "sqft": 1173, "inBudget": false}, {"date": "2024-10-01", "price": 2328000, "psf": 2003, "sqft": 1162, "inBudget": false}, {"date": "2024-10-01", "price": 2200000, "psf": 1984, "sqft": 1108, "inBudget": false}, {"date": "2024-10-01", "price": 1750000, "psf": 1869, "sqft": 936, "inBudget": true}, {"date": "2024-12-01", "price": 2540000, "psf": 1888, "sqft": 1345, "inBudget": false}, {"date": "2024-12-01", "price": 1505000, "psf": 1726, "sqft": 871, "inBudget": false}, {"date": "2025-01-01", "price": 2238888, "psf": 1981, "sqft": 1130, "inBudget": false}, {"date": "2025-02-01", "price": 2000000, "psf": 1804, "sqft": 1108, "inBudget": true}, {"date": "2025-08-01", "price": 2340000, "psf": 2013, "sqft": 1162, "inBudget": false}, {"date": "2025-09-01", "price": 1550000, "psf": 1778, "sqft": 871, "inBudget": false}, {"date": "2025-10-01", "price": 2275000, "psf": 1939, "sqft": 1173, "inBudget": false}, {"date": "2025-10-01", "price": 2260000, "psf": 1981, "sqft": 1140, "inBudget": false}, {"date": "2025-10-01", "price": 2390000, "psf": 2115, "sqft": 1130, "inBudget": false}], "GILSTEAD TWO": [{"date": "2024-09-01", "price": 2100000, "psf": 2323, "sqft": 904, "inBudget": false}, {"date": "2024-09-01", "price": 1750000, "psf": 2258, "sqft": 775, "inBudget": false}, {"date": "2025-12-01", "price": 1600000, "psf": 1770, "sqft": 904, "inBudget": true}], "GRAND CHATEAU": [{"date": "2024-10-01", "price": 1850000, "psf": 1469, "sqft": 1259, "inBudget": false}, {"date": "2024-12-01", "price": 1670000, "psf": 1551, "sqft": 1076, "inBudget": true}], "GRAND REGENCY": [{"date": "2024-10-01", "price": 1900000, "psf": 1697, "sqft": 1119, "inBudget": true}], "HARBOURLIGHTS": [{"date": "2024-10-01", "price": 2100000, "psf": 1806, "sqft": 1162, "inBudget": false}, {"date": "2025-02-01", "price": 1745000, "psf": 1907, "sqft": 914, "inBudget": true}, {"date": "2025-10-01", "price": 1520000, "psf": 1858, "sqft": 818, "inBudget": false}], "HILLVIEW GREEN": [{"date": "2024-09-01", "price": 2050000, "psf": 1574, "sqft": 1302, "inBudget": false}, {"date": "2024-10-01", "price": 1900000, "psf": 1459, "sqft": 1302, "inBudget": false}, {"date": "2024-12-01", "price": 1608000, "psf": 1642, "sqft": 979, "inBudget": true}, {"date": "2024-12-01", "price": 1880000, "psf": 1468, "sqft": 1280, "inBudget": false}], "HORIZON RESIDENCES": [{"date": "2024-12-01", "price": 1980000, "psf": 1978, "sqft": 1001, "inBudget": true}, {"date": "2025-09-01", "price": 1990000, "psf": 2010, "sqft": 990, "inBudget": true}, {"date": "2025-10-01", "price": 1888888, "psf": 1887, "sqft": 1001, "inBudget": true}], "HUME PARK I": [{"date": "2025-01-01", "price": 2700000, "psf": 1706, "sqft": 1582, "inBudget": false}, {"date": "2025-01-01", "price": 2578000, "psf": 1629, "sqft": 1582, "inBudget": false}, {"date": "2025-09-01", "price": 2700000, "psf": 1805, "sqft": 1496, "inBudget": false}, {"date": "2025-11-01", "price": 1580000, "psf": 1747, "sqft": 904, "inBudget": true}], "HUME PARK II": [{"date": "2024-09-01", "price": 2550000, "psf": 1729, "sqft": 1474, "inBudget": false}, {"date": "2025-09-01", "price": 2078888, "psf": 1665, "sqft": 1248, "inBudget": false}, {"date": "2025-09-01", "price": 1815000, "psf": 1775, "sqft": 1022, "inBudget": true}], "IRESIDENCES": [{"date": "2025-01-01", "price": 1800000, "psf": 1689, "sqft": 1065, "inBudget": true}, {"date": "2025-09-01", "price": 2650000, "psf": 1970, "sqft": 1345, "inBudget": false}], "JUI RESIDENCES": [{"date": "2024-11-01", "price": 1305678, "psf": 1989, "sqft": 656, "inBudget": false}, {"date": "2025-02-01", "price": 840888, "psf": 1953, "sqft": 430, "inBudget": false}, {"date": "2025-08-01", "price": 1340000, "psf": 1886, "sqft": 710, "inBudget": false}, {"date": "2025-08-01", "price": 1910000, "psf": 2016, "sqft": 947, "inBudget": true}, {"date": "2025-09-01", "price": 1357800, "psf": 1941, "sqft": 699, "inBudget": false}], "KAP RESIDENCES": [{"date": "2024-10-01", "price": 1730000, "psf": 1710, "sqft": 1011, "inBudget": true}, {"date": "2024-10-01", "price": 1430000, "psf": 2044, "sqft": 699, "inBudget": false}, {"date": "2025-08-01", "price": 1680000, "psf": 1815, "sqft": 925, "inBudget": true}, {"date": "2025-09-01", "price": 988000, "psf": 1995, "sqft": 495, "inBudget": false}], "LAVENDER RESIDENCE": [{"date": "2024-11-01", "price": 1610000, "psf": 1626, "sqft": 990, "inBudget": true}], "LE CRESCENDO": [{"date": "2024-10-01", "price": 1465000, "psf": 1547, "sqft": 947, "inBudget": false}, {"date": "2024-10-01", "price": 1300000, "psf": 1421, "sqft": 914, "inBudget": false}, {"date": "2024-12-01", "price": 1880000, "psf": 1323, "sqft": 1420, "inBudget": false}, {"date": "2025-08-01", "price": 2200000, "psf": 1675, "sqft": 1313, "inBudget": false}, {"date": "2025-09-01", "price": 1550000, "psf": 1694, "sqft": 914, "inBudget": true}, {"date": "2025-10-01", "price": 2250000, "psf": 1633, "sqft": 1377, "inBudget": false}, {"date": "2025-11-01", "price": 1988888, "psf": 1695, "sqft": 1173, "inBudget": true}, {"date": "2025-11-01", "price": 2160000, "psf": 1645, "sqft": 1313, "inBudget": false}], "LE HILL CONDOMINIUM": [{"date": "2024-10-01", "price": 1765000, "psf": 1355, "sqft": 1302, "inBudget": false}, {"date": "2025-01-01", "price": 1470000, "psf": 1484, "sqft": 990, "inBudget": false}, {"date": "2025-02-01", "price": 1868000, "psf": 1400, "sqft": 1334, "inBudget": false}, {"date": "2025-08-01", "price": 1552000, "psf": 1567, "sqft": 990, "inBudget": true}], "LE REVE": [{"date": "2025-11-01", "price": 1768000, "psf": 1711, "sqft": 1033, "inBudget": true}], "LOFT @ NATHAN": [{"date": "2024-10-01", "price": 1510000, "psf": 1542, "sqft": 979, "inBudget": true}, {"date": "2025-01-01", "price": 910000, "psf": 2013, "sqft": 452, "inBudget": false}, {"date": "2025-09-01", "price": 788000, "psf": 2092, "sqft": 376, "inBudget": false}], "LUCIDA": [{"date": "2024-12-01", "price": 2368000, "psf": 1789, "sqft": 1323, "inBudget": false}, {"date": "2025-10-01", "price": 1788000, "psf": 1629, "sqft": 1097, "inBudget": true}, {"date": "2025-10-01", "price": 1760000, "psf": 1652, "sqft": 1065, "inBudget": true}], "M21": [{"date": "2025-08-01", "price": 1800000, "psf": 1689, "sqft": 1065, "inBudget": true}], "M5": [{"date": "2024-10-01", "price": 925000, "psf": 2096, "sqft": 441, "inBudget": false}, {"date": "2024-11-01", "price": 940000, "psf": 2130, "sqft": 441, "inBudget": false}, {"date": "2024-12-01", "price": 1540000, "psf": 2044, "sqft": 753, "inBudget": false}, {"date": "2024-12-01", "price": 1515000, "psf": 2040, "sqft": 742, "inBudget": false}, {"date": "2024-12-01", "price": 1578500, "psf": 2095, "sqft": 753, "inBudget": false}, {"date": "2024-12-01", "price": 1489000, "psf": 2005, "sqft": 742, "inBudget": false}, {"date": "2025-01-01", "price": 1548000, "psf": 2084, "sqft": 742, "inBudget": false}, {"date": "2025-08-01", "price": 935000, "psf": 2119, "sqft": 441, "inBudget": false}, {"date": "2025-10-01", "price": 1566300, "psf": 2109, "sqft": 742, "inBudget": false}, {"date": "2025-11-01", "price": 1535000, "psf": 2037, "sqft": 753, "inBudget": false}, {"date": "2025-12-01", "price": 1718000, "psf": 1698, "sqft": 1011, "inBudget": true}], "M66": [{"date": "2024-09-01", "price": 1550000, "psf": 1412, "sqft": 1097, "inBudget": true}, {"date": "2024-11-01", "price": 990000, "psf": 1586, "sqft": 624, "inBudget": false}, {"date": "2025-09-01", "price": 2030000, "psf": 1319, "sqft": 1539, "inBudget": false}], "MEADOWS @ PEIRCE": [{"date": "2024-09-01", "price": 2040000, "psf": 1606, "sqft": 1270, "inBudget": false}, {"date": "2024-10-01", "price": 1840000, "psf": 1486, "sqft": 1237, "inBudget": false}, {"date": "2024-10-01", "price": 2108888, "psf": 1660, "sqft": 1270, "inBudget": false}, {"date": "2024-11-01", "price": 970000, "psf": 1527, "sqft": 635, "inBudget": false}, {"date": "2024-11-01", "price": 2130000, "psf": 1677, "sqft": 1270, "inBudget": false}, {"date": "2024-12-01", "price": 2670000, "psf": 1759, "sqft": 1517, "inBudget": false}, {"date": "2025-10-01", "price": 2000000, "psf": 1736, "sqft": 1151, "inBudget": true}, {"date": "2025-11-01", "price": 3250000, "psf": 1755, "sqft": 1851, "inBudget": false}], "MIRO": [{"date": "2024-10-01", "price": 3500000, "psf": 1787, "sqft": 1959, "inBudget": false}, {"date": "2025-11-01", "price": 2200000, "psf": 1635, "sqft": 1345, "inBudget": false}, {"date": "2025-12-01", "price": 1700000, "psf": 1595, "sqft": 1065, "inBudget": true}], "NEWTON 18": [{"date": "2024-09-01", "price": 2100000, "psf": 2144, "sqft": 979, "inBudget": false}, {"date": "2025-10-01", "price": 2100000, "psf": 2054, "sqft": 1022, "inBudget": false}, {"date": "2025-11-01", "price": 1990000, "psf": 2150, "sqft": 925, "inBudget": true}], "NINETEEN SHELFORD ROAD": [{"date": "2024-11-01", "price": 1868000, "psf": 1995, "sqft": 936, "inBudget": true}, {"date": "2025-01-01", "price": 1888000, "psf": 1886, "sqft": 1001, "inBudget": true}, {"date": "2025-01-01", "price": 1850000, "psf": 2071, "sqft": 893, "inBudget": false}, {"date": "2025-02-01", "price": 1200000, "psf": 1639, "sqft": 731, "inBudget": false}, {"date": "2025-08-01", "price": 1880000, "psf": 2183, "sqft": 861, "inBudget": false}, {"date": "2025-09-01", "price": 1950000, "psf": 1969, "sqft": 990, "inBudget": true}], "NOVA 88": [{"date": "2024-11-01", "price": 1500000, "psf": 1639, "sqft": 914, "inBudget": true}, {"date": "2024-12-01", "price": 1410000, "psf": 1541, "sqft": 914, "inBudget": false}, {"date": "2025-01-01", "price": 2050000, "psf": 1642, "sqft": 1248, "inBudget": false}], "ONE DUSUN RESIDENCES": [{"date": "2024-09-01", "price": 930000, "psf": 1920, "sqft": 484, "inBudget": false}, {"date": "2024-12-01", "price": 1150000, "psf": 1723, "sqft": 667, "inBudget": false}, {"date": "2024-12-01", "price": 948888, "psf": 1799, "sqft": 527, "inBudget": false}, {"date": "2025-10-01", "price": 1800000, "psf": 1900, "sqft": 947, "inBudget": true}, {"date": "2025-10-01", "price": 940000, "psf": 1782, "sqft": 527, "inBudget": false}], "ONE ST MICHAEL'S": [{"date": "2024-10-01", "price": 2039888, "psf": 1723, "sqft": 1184, "inBudget": false}, {"date": "2024-12-01", "price": 1550000, "psf": 1655, "sqft": 936, "inBudget": true}, {"date": "2025-11-01", "price": 2350000, "psf": 1882, "sqft": 1248, "inBudget": false}, {"date": "2025-11-01", "price": 2238000, "psf": 1890, "sqft": 1184, "inBudget": false}], "PALM GREEN": [{"date": "2024-12-01", "price": 1780000, "psf": 1378, "sqft": 1291, "inBudget": false}, {"date": "2025-10-01", "price": 1680000, "psf": 1486, "sqft": 1130, "inBudget": true}], "PARC HAVEN": [{"date": "2025-10-01", "price": 1550000, "psf": 1532, "sqft": 1011, "inBudget": true}, {"date": "2025-10-01", "price": 1070906, "psf": 1555, "sqft": 688, "inBudget": false}], "PARC IMPERIAL": [{"date": "2024-10-01", "price": 888000, "psf": 1793, "sqft": 495, "inBudget": false}, {"date": "2024-11-01", "price": 753000, "psf": 1841, "sqft": 409, "inBudget": false}, {"date": "2024-11-01", "price": 705000, "psf": 1926, "sqft": 365, "inBudget": false}, {"date": "2025-01-01", "price": 698000, "psf": 1907, "sqft": 365, "inBudget": false}, {"date": "2025-02-01", "price": 790000, "psf": 1984, "sqft": 398, "inBudget": false}, {"date": "2025-08-01", "price": 1648888, "psf": 1380, "sqft": 1194, "inBudget": true}], "PAYA LEBAR RESIDENCES": [{"date": "2024-09-01", "price": 2310000, "psf": 1803, "sqft": 1280, "inBudget": false}, {"date": "2024-12-01", "price": 1668000, "psf": 1913, "sqft": 871, "inBudget": false}, {"date": "2025-07-01", "price": 2350000, "psf": 1804, "sqft": 1302, "inBudget": false}, {"date": "2025-10-01", "price": 1760000, "psf": 1858, "sqft": 947, "inBudget": true}], "PINNACLE 16": [{"date": "2024-12-01", "price": 1638000, "psf": 1769, "sqft": 925, "inBudget": true}, {"date": "2025-01-01", "price": 1010000, "psf": 1738, "sqft": 581, "inBudget": false}], "QUEENSBERRY LODGE": [{"date": "2025-09-01", "price": 1620000, "psf": 1407, "sqft": 1151, "inBudget": true}], "REGAL 35": [{"date": "2024-11-01", "price": 1500000, "psf": 1255, "sqft": 1194, "inBudget": true}], "REGAL COURT": [{"date": "2024-11-01", "price": 1580000, "psf": 1347, "sqft": 1173, "inBudget": true}, {"date": "2025-02-01", "price": 1288000, "psf": 1408, "sqft": 914, "inBudget": false}], "RESIDENTIAL APARTMENTS": [{"date": "2024-10-01", "price": 1243000, "psf": 1298, "sqft": 958, "inBudget": false}, {"date": "2024-10-01", "price": 1330000, "psf": 1177, "sqft": 1130, "inBudget": false}, {"date": "2024-10-01", "price": 2280000, "psf": 1780, "sqft": 1280, "inBudget": false}, {"date": "2024-11-01", "price": 18888000, "psf": 2446, "sqft": 7722, "inBudget": false}, {"date": "2024-11-01", "price": 1300000, "psf": 1150, "sqft": 1130, "inBudget": false}, {"date": "2024-11-01", "price": 1770000, "psf": 1787, "sqft": 990, "inBudget": true}, {"date": "2024-12-01", "price": 1480000, "psf": 1206, "sqft": 1227, "inBudget": false}, {"date": "2024-12-01", "price": 1500000, "psf": 1212, "sqft": 1237, "inBudget": false}, {"date": "2024-12-01", "price": 1500000, "psf": 1212, "sqft": 1237, "inBudget": false}, {"date": "2024-12-01", "price": 6920000, "psf": 3966, "sqft": 1744, "inBudget": false}, {"date": "2024-12-01", "price": 2400000, "psf": 2123, "sqft": 1130, "inBudget": false}, {"date": "2025-01-01", "price": 3500000, "psf": 1730, "sqft": 2023, "inBudget": false}, {"date": "2025-01-01", "price": 2170000, "psf": 1193, "sqft": 1819, "inBudget": false}, {"date": "2025-08-01", "price": 1300000, "psf": 1208, "sqft": 1076, "inBudget": false}, {"date": "2025-08-01", "price": 6500000, "psf": 3741, "sqft": 1737, "inBudget": false}, {"date": "2025-09-01", "price": 3700000, "psf": 2058, "sqft": 1797, "inBudget": false}, {"date": "2025-11-01", "price": 3020000, "psf": 2806, "sqft": 1076, "inBudget": false}], "REZI 24": [{"date": "2024-11-01", "price": 980000, "psf": 1785, "sqft": 548, "inBudget": false}, {"date": "2024-12-01", "price": 1780000, "psf": 1503, "sqft": 1184, "inBudget": true}, {"date": "2024-12-01", "price": 1062000, "psf": 1762, "sqft": 602, "inBudget": false}, {"date": "2025-08-01", "price": 1168888, "psf": 1671, "sqft": 699, "inBudget": false}, {"date": "2025-08-01", "price": 1280000, "psf": 1699, "sqft": 753, "inBudget": false}, {"date": "2025-09-01", "price": 1320000, "psf": 1752, "sqft": 753, "inBudget": false}, {"date": "2025-10-01", "price": 1098000, "psf": 1672, "sqft": 656, "inBudget": false}], "RIO GARDENS": [{"date": "2024-09-01", "price": 1870000, "psf": 1565, "sqft": 1194, "inBudget": true}], "RIVERBAY": [{"date": "2024-11-01", "price": 800000, "psf": 1548, "sqft": 516, "inBudget": false}, {"date": "2025-02-01", "price": 1508000, "psf": 1592, "sqft": 947, "inBudget": true}, {"date": "2025-08-01", "price": 1543888, "psf": 1630, "sqft": 947, "inBudget": true}, {"date": "2025-10-01", "price": 798000, "psf": 1545, "sqft": 516, "inBudget": false}, {"date": "2025-10-01", "price": 1578000, "psf": 1705, "sqft": 925, "inBudget": true}], "RIVIERA 38": [{"date": "2024-11-01", "price": 1881500, "psf": 1649, "sqft": 1140, "inBudget": true}, {"date": "2025-09-01", "price": 1160000, "psf": 1562, "sqft": 742, "inBudget": false}, {"date": "2025-11-01", "price": 1250000, "psf": 1683, "sqft": 742, "inBudget": false}], "SHELFORD REGENCY": [{"date": "2024-11-01", "price": 2650000, "psf": 2069, "sqft": 1280, "inBudget": false}, {"date": "2024-12-01", "price": 2000000, "psf": 2161, "sqft": 925, "inBudget": true}, {"date": "2025-10-01", "price": 2650000, "psf": 2301, "sqft": 1151, "inBudget": false}], "SHERWOOD CONDOMINIUM": [{"date": "2024-11-01", "price": 1485000, "psf": 1550, "sqft": 958, "inBudget": false}, {"date": "2025-02-01", "price": 1790000, "psf": 1459, "sqft": 1227, "inBudget": false}, {"date": "2025-09-01", "price": 1500000, "psf": 1602, "sqft": 936, "inBudget": true}, {"date": "2025-09-01", "price": 1380000, "psf": 1545, "sqft": 893, "inBudget": false}, {"date": "2025-10-01", "price": 1333000, "psf": 1474, "sqft": 904, "inBudget": false}, {"date": "2025-11-01", "price": 1380000, "psf": 1491, "sqft": 925, "inBudget": false}], "SIGNATURE PARK": [{"date": "2024-09-01", "price": 2320000, "psf": 1711, "sqft": 1356, "inBudget": false}, {"date": "2024-09-01", "price": 1728000, "psf": 1638, "sqft": 1054, "inBudget": true}, {"date": "2024-09-01", "price": 2470000, "psf": 1738, "sqft": 1420, "inBudget": false}, {"date": "2024-10-01", "price": 2355000, "psf": 1657, "sqft": 1420, "inBudget": false}, {"date": "2024-10-01", "price": 2288000, "psf": 1687, "sqft": 1356, "inBudget": false}, {"date": "2024-10-01", "price": 1730000, "psf": 1640, "sqft": 1054, "inBudget": true}, {"date": "2024-11-01", "price": 1750000, "psf": 1694, "sqft": 1033, "inBudget": true}, {"date": "2025-01-01", "price": 2456000, "psf": 1729, "sqft": 1420, "inBudget": false}, {"date": "2025-01-01", "price": 2435000, "psf": 1740, "sqft": 1399, "inBudget": false}, {"date": "2025-01-01", "price": 2388000, "psf": 1681, "sqft": 1420, "inBudget": false}, {"date": "2025-02-01", "price": 2380000, "psf": 1714, "sqft": 1388, "inBudget": false}, {"date": "2025-02-01", "price": 2420000, "psf": 1729, "sqft": 1399, "inBudget": false}, {"date": "2025-09-01", "price": 1750000, "psf": 1676, "sqft": 1044, "inBudget": true}, {"date": "2025-09-01", "price": 3210000, "psf": 1864, "sqft": 1722, "inBudget": false}, {"date": "2025-10-01", "price": 1748888, "psf": 1658, "sqft": 1054, "inBudget": true}, {"date": "2025-10-01", "price": 2450000, "psf": 1751, "sqft": 1399, "inBudget": false}, {"date": "2025-10-01", "price": 2400000, "psf": 1756, "sqft": 1367, "inBudget": false}, {"date": "2025-11-01", "price": 1678000, "psf": 1624, "sqft": 1033, "inBudget": true}, {"date": "2025-11-01", "price": 2450000, "psf": 1724, "sqft": 1420, "inBudget": false}, {"date": "2025-11-01", "price": 1770000, "psf": 1678, "sqft": 1054, "inBudget": true}, {"date": "2025-11-01", "price": 2580000, "psf": 1844, "sqft": 1399, "inBudget": false}, {"date": "2025-11-01", "price": 2320000, "psf": 1671, "sqft": 1388, "inBudget": false}, {"date": "2025-11-01", "price": 2453000, "psf": 1753, "sqft": 1399, "inBudget": false}, {"date": "2025-12-01", "price": 2530000, "psf": 1781, "sqft": 1420, "inBudget": false}, {"date": "2025-12-01", "price": 1770000, "psf": 1713, "sqft": 1033, "inBudget": true}], "SIMS MEADOWS": [{"date": "2024-12-01", "price": 1220000, "psf": 1259, "sqft": 968, "inBudget": false}, {"date": "2025-07-01", "price": 1280000, "psf": 1321, "sqft": 968, "inBudget": false}, {"date": "2025-10-01", "price": 1500000, "psf": 1408, "sqft": 1065, "inBudget": true}], "SOUTHAVEN II": [{"date": "2024-09-01", "price": 2300000, "psf": 1751, "sqft": 1313, "inBudget": false}, {"date": "2024-10-01", "price": 2550000, "psf": 1692, "sqft": 1506, "inBudget": false}, {"date": "2024-12-01", "price": 1650000, "psf": 1580, "sqft": 1044, "inBudget": true}, {"date": "2024-12-01", "price": 3320000, "psf": 1383, "sqft": 2400, "inBudget": false}, {"date": "2024-12-01", "price": 3000000, "psf": 978, "sqft": 3067, "inBudget": false}, {"date": "2024-12-01", "price": 2300000, "psf": 1766, "sqft": 1302, "inBudget": false}, {"date": "2025-08-01", "price": 2500000, "psf": 1452, "sqft": 1722, "inBudget": false}, {"date": "2025-09-01", "price": 3050000, "psf": 994, "sqft": 3067, "inBudget": false}, {"date": "2025-09-01", "price": 2550000, "psf": 1657, "sqft": 1539, "inBudget": false}, {"date": "2025-09-01", "price": 5380000, "psf": 984, "sqft": 5468, "inBudget": false}, {"date": "2025-09-01", "price": 2750000, "psf": 1787, "sqft": 1539, "inBudget": false}, {"date": "2025-09-01", "price": 1618000, "psf": 1689, "sqft": 958, "inBudget": true}, {"date": "2025-10-01", "price": 2200000, "psf": 1548, "sqft": 1420, "inBudget": false}, {"date": "2025-11-01", "price": 2680000, "psf": 1741, "sqft": 1539, "inBudget": false}, {"date": "2025-11-01", "price": 2400000, "psf": 1664, "sqft": 1442, "inBudget": false}, {"date": "2025-11-01", "price": 1890000, "psf": 1688, "sqft": 1119, "inBudget": true}], "SPRINGDALE CONDOMINIUM": [{"date": "2024-09-01", "price": 1448000, "psf": 1564, "sqft": 925, "inBudget": false}, {"date": "2024-09-01", "price": 1880000, "psf": 1663, "sqft": 1130, "inBudget": true}, {"date": "2024-11-01", "price": 1855000, "psf": 1673, "sqft": 1108, "inBudget": true}, {"date": "2024-12-01", "price": 1855000, "psf": 1657, "sqft": 1119, "inBudget": true}, {"date": "2024-12-01", "price": 2550000, "psf": 1836, "sqft": 1388, "inBudget": false}, {"date": "2025-01-01", "price": 1990000, "psf": 1712, "sqft": 1162, "inBudget": true}, {"date": "2025-09-01", "price": 1980000, "psf": 1719, "sqft": 1151, "inBudget": true}, {"date": "2025-09-01", "price": 1928000, "psf": 1674, "sqft": 1151, "inBudget": true}, {"date": "2025-09-01", "price": 1515000, "psf": 1637, "sqft": 925, "inBudget": true}, {"date": "2025-09-01", "price": 2030000, "psf": 1763, "sqft": 1151, "inBudget": false}], "ST MICHAEL REGENCY": [{"date": "2024-10-01", "price": 1928000, "psf": 1558, "sqft": 1237, "inBudget": false}, {"date": "2025-01-01", "price": 2130000, "psf": 1706, "sqft": 1248, "inBudget": false}, {"date": "2025-11-01", "price": 1720000, "psf": 1858, "sqft": 925, "inBudget": true}], "STEVENS SUITES": [{"date": "2024-12-01", "price": 2000000, "psf": 1804, "sqft": 1108, "inBudget": true}, {"date": "2025-11-01", "price": 1340000, "psf": 1886, "sqft": 710, "inBudget": false}], "SUFFOLK PREMIER": [{"date": "2024-09-01", "price": 1800000, "psf": 1672, "sqft": 1076, "inBudget": true}, {"date": "2024-10-01", "price": 1800000, "psf": 1672, "sqft": 1076, "inBudget": true}], "SYMPHONY HEIGHTS": [{"date": "2024-09-01", "price": 2580000, "psf": 1676, "sqft": 1539, "inBudget": false}, {"date": "2024-11-01", "price": 2900000, "psf": 1761, "sqft": 1646, "inBudget": false}, {"date": "2025-08-01", "price": 1750000, "psf": 1806, "sqft": 968, "inBudget": true}, {"date": "2025-09-01", "price": 1768000, "psf": 1785, "sqft": 990, "inBudget": true}, {"date": "2025-10-01", "price": 1688000, "psf": 1634, "sqft": 1033, "inBudget": true}, {"date": "2025-10-01", "price": 1738000, "psf": 1877, "sqft": 925, "inBudget": true}, {"date": "2025-11-01", "price": 2975000, "psf": 1933, "sqft": 1539, "inBudget": false}, {"date": "2025-11-01", "price": 1728000, "psf": 1889, "sqft": 914, "inBudget": true}], "TERRENE AT BUKIT TIMAH": [{"date": "2024-09-01", "price": 1810000, "psf": 1978, "sqft": 914, "inBudget": true}, {"date": "2024-10-01", "price": 4250000, "psf": 1579, "sqft": 2691, "inBudget": false}, {"date": "2025-09-01", "price": 3150000, "psf": 2032, "sqft": 1550, "inBudget": false}, {"date": "2025-10-01", "price": 1038000, "psf": 1968, "sqft": 527, "inBudget": false}], "THE ABERDEEN": [{"date": "2024-10-01", "price": 2010000, "psf": 1543, "sqft": 1302, "inBudget": false}, {"date": "2025-01-01", "price": 1880000, "psf": 1696, "sqft": 1108, "inBudget": true}], "THE CENTRIO": [{"date": "2024-09-01", "price": 1680000, "psf": 1715, "sqft": 979, "inBudget": true}, {"date": "2024-10-01", "price": 2220000, "psf": 1825, "sqft": 1216, "inBudget": false}, {"date": "2024-11-01", "price": 1680000, "psf": 1715, "sqft": 979, "inBudget": true}], "THE CITRINE": [{"date": "2024-11-01", "price": 1530000, "psf": 1597, "sqft": 958, "inBudget": true}, {"date": "2024-12-01", "price": 1513500, "psf": 1580, "sqft": 958, "inBudget": true}, {"date": "2025-11-01", "price": 2225000, "psf": 1737, "sqft": 1280, "inBudget": false}], "THE CREEK @ BUKIT": [{"date": "2024-09-01", "price": 1700000, "psf": 1316, "sqft": 1291, "inBudget": false}, {"date": "2024-09-01", "price": 1388000, "psf": 1766, "sqft": 785, "inBudget": false}, {"date": "2024-10-01", "price": 1900000, "psf": 1898, "sqft": 1001, "inBudget": true}, {"date": "2024-11-01", "price": 2513000, "psf": 1506, "sqft": 1668, "inBudget": false}, {"date": "2025-01-01", "price": 2258000, "psf": 1763, "sqft": 1280, "inBudget": false}, {"date": "2025-08-01", "price": 2600000, "psf": 1558, "sqft": 1668, "inBudget": false}, {"date": "2025-08-01", "price": 1940000, "psf": 1609, "sqft": 1205, "inBudget": false}, {"date": "2025-10-01", "price": 2320088, "psf": 1796, "sqft": 1291, "inBudget": false}, {"date": "2025-11-01", "price": 1830000, "psf": 1977, "sqft": 925, "inBudget": true}], "THE FOLIAGE": [{"date": "2025-01-01", "price": 1650000, "psf": 1488, "sqft": 1108, "inBudget": true}], "THE GATZ": [{"date": "2025-09-01", "price": 1990000, "psf": 1886, "sqft": 1054, "inBudget": true}, {"date": "2025-11-01", "price": 1950000, "psf": 1849, "sqft": 1054, "inBudget": true}], "THE INFINITI": [{"date": "2024-09-01", "price": 2380000, "psf": 1591, "sqft": 1496, "inBudget": false}, {"date": "2024-10-01", "price": 2000000, "psf": 1536, "sqft": 1302, "inBudget": false}, {"date": "2024-10-01", "price": 1540000, "psf": 1683, "sqft": 914, "inBudget": true}, {"date": "2024-10-01", "price": 2000000, "psf": 1486, "sqft": 1345, "inBudget": false}, {"date": "2024-11-01", "price": 1908000, "psf": 1528, "sqft": 1248, "inBudget": false}, {"date": "2025-10-01", "price": 2098000, "psf": 1666, "sqft": 1259, "inBudget": false}], "THE MARQUE @ IRRAWADDY": [{"date": "2024-09-01", "price": 1790000, "psf": 1646, "sqft": 1087, "inBudget": true}, {"date": "2024-11-01", "price": 1500000, "psf": 1742, "sqft": 861, "inBudget": false}, {"date": "2025-09-01", "price": 1690000, "psf": 1635, "sqft": 1033, "inBudget": true}], "THE MAYLEA": [{"date": "2024-09-01", "price": 850000, "psf": 1717, "sqft": 495, "inBudget": false}, {"date": "2025-02-01", "price": 2000000, "psf": 1630, "sqft": 1227, "inBudget": false}, {"date": "2025-08-01", "price": 2630000, "psf": 1587, "sqft": 1657, "inBudget": false}, {"date": "2025-11-01", "price": 1635000, "psf": 1688, "sqft": 968, "inBudget": true}], "THE MONTANA": [{"date": "2024-11-01", "price": 1080000, "psf": 1930, "sqft": 559, "inBudget": false}, {"date": "2024-11-01", "price": 1200000, "psf": 2144, "sqft": 559, "inBudget": false}, {"date": "2024-12-01", "price": 1018000, "psf": 1603, "sqft": 635, "inBudget": false}, {"date": "2025-10-01", "price": 2245000, "psf": 2397, "sqft": 936, "inBudget": false}, {"date": "2025-10-01", "price": 2000000, "psf": 2111, "sqft": 947, "inBudget": true}], "THE ORIENT": [{"date": "2025-08-01", "price": 1350000, "psf": 1872, "sqft": 721, "inBudget": false}, {"date": "2025-09-01", "price": 1310000, "psf": 1816, "sqft": 721, "inBudget": false}, {"date": "2025-12-01", "price": 1940000, "psf": 1716, "sqft": 1130, "inBudget": true}], "THE PARC CONDOMINIUM": [{"date": "2024-09-01", "price": 2688300, "psf": 1892, "sqft": 1420, "inBudget": false}, {"date": "2024-09-01", "price": 1780000, "psf": 1817, "sqft": 979, "inBudget": true}, {"date": "2024-09-01", "price": 2268888, "psf": 1865, "sqft": 1216, "inBudget": false}, {"date": "2024-10-01", "price": 4700000, "psf": 1277, "sqft": 3681, "inBudget": false}, {"date": "2024-11-01", "price": 2460000, "psf": 2022, "sqft": 1216, "inBudget": false}, {"date": "2024-11-01", "price": 2473800, "psf": 1899, "sqft": 1302, "inBudget": false}, {"date": "2024-11-01", "price": 2760000, "psf": 1943, "sqft": 1420, "inBudget": false}, {"date": "2024-12-01", "price": 2900000, "psf": 1911, "sqft": 1517, "inBudget": false}, {"date": "2025-01-01", "price": 1030000, "psf": 1543, "sqft": 667, "inBudget": false}, {"date": "2025-01-01", "price": 2760000, "psf": 1943, "sqft": 1420, "inBudget": false}, {"date": "2025-01-01", "price": 2628000, "psf": 1850, "sqft": 1420, "inBudget": false}, {"date": "2025-09-01", "price": 3000000, "psf": 1991, "sqft": 1506, "inBudget": false}, {"date": "2025-10-01", "price": 2900000, "psf": 2041, "sqft": 1420, "inBudget": false}, {"date": "2025-12-01", "price": 2950000, "psf": 1944, "sqft": 1517, "inBudget": false}], "THE PEAK@BALMEG": [{"date": "2024-12-01", "price": 4360000, "psf": 1674, "sqft": 2604, "inBudget": false}, {"date": "2024-12-01", "price": 4818800, "psf": 1571, "sqft": 3067, "inBudget": false}, {"date": "2024-12-01", "price": 3300000, "psf": 1881, "sqft": 1754, "inBudget": false}, {"date": "2025-08-01", "price": 2820000, "psf": 1871, "sqft": 1506, "inBudget": false}, {"date": "2025-09-01", "price": 1965000, "psf": 1984, "sqft": 990, "inBudget": true}, {"date": "2025-10-01", "price": 3250000, "psf": 1668, "sqft": 1948, "inBudget": false}], "THE RIVERINE BY THE PARK": [{"date": "2024-10-01", "price": 2600000, "psf": 1996, "sqft": 1302, "inBudget": false}, {"date": "2025-08-01", "price": 1750000, "psf": 1787, "sqft": 979, "inBudget": true}], "THE SPRINGS": [{"date": "2025-08-01", "price": 1960000, "psf": 1937, "sqft": 1011, "inBudget": true}, {"date": "2025-09-01", "price": 2190000, "psf": 2211, "sqft": 990, "inBudget": false}, {"date": "2025-09-01", "price": 1938000, "psf": 1957, "sqft": 990, "inBudget": true}], "THE SUNNY SPRING": [{"date": "2024-10-01", "price": 1780000, "psf": 1590, "sqft": 1119, "inBudget": true}, {"date": "2024-11-01", "price": 1650000, "psf": 1614, "sqft": 1022, "inBudget": true}, {"date": "2025-01-01", "price": 2000000, "psf": 1674, "sqft": 1194, "inBudget": true}, {"date": "2025-09-01", "price": 1688000, "psf": 1686, "sqft": 1001, "inBudget": true}, {"date": "2025-10-01", "price": 1850000, "psf": 1736, "sqft": 1065, "inBudget": true}, {"date": "2025-10-01", "price": 1860000, "psf": 1678, "sqft": 1108, "inBudget": true}, {"date": "2025-11-01", "price": 1920000, "psf": 1607, "sqft": 1194, "inBudget": true}], "THE VERANDAH RESIDENCES": [{"date": "2024-10-01", "price": 970000, "psf": 2096, "sqft": 462, "inBudget": false}, {"date": "2024-11-01", "price": 1260000, "psf": 1951, "sqft": 645, "inBudget": false}, {"date": "2024-12-01", "price": 1870000, "psf": 1997, "sqft": 936, "inBudget": true}, {"date": "2024-12-01", "price": 961800, "psf": 2078, "sqft": 462, "inBudget": false}, {"date": "2025-08-01", "price": 2500000, "psf": 2002, "sqft": 1248, "inBudget": false}, {"date": "2025-08-01", "price": 1930000, "psf": 1949, "sqft": 990, "inBudget": true}, {"date": "2025-10-01", "price": 1930000, "psf": 2135, "sqft": 904, "inBudget": true}], "THE WATERINA": [{"date": "2024-10-01", "price": 1930000, "psf": 1830, "sqft": 1054, "inBudget": true}, {"date": "2024-10-01", "price": 3500000, "psf": 1634, "sqft": 2142, "inBudget": false}, {"date": "2024-12-01", "price": 2510000, "psf": 1943, "sqft": 1291, "inBudget": false}, {"date": "2025-09-01", "price": 2250000, "psf": 2111, "sqft": 1065, "inBudget": false}, {"date": "2025-09-01", "price": 2850000, "psf": 2085, "sqft": 1367, "inBudget": false}, {"date": "2025-11-01", "price": 2775000, "psf": 1803, "sqft": 1539, "inBudget": false}, {"date": "2025-11-01", "price": 2610000, "psf": 2004, "sqft": 1302, "inBudget": false}], "THOMSON EURO-ASIA": [{"date": "2024-10-01", "price": 2000000, "psf": 2111, "sqft": 947, "inBudget": true}], "TROPIKA EAST": [{"date": "2024-12-01", "price": 1600000, "psf": 1457, "sqft": 1097, "inBudget": true}, {"date": "2025-08-01", "price": 1190000, "psf": 1626, "sqft": 731, "inBudget": false}, {"date": "2025-10-01", "price": 750000, "psf": 1699, "sqft": 441, "inBudget": false}], "URBAN EDGE @ HOLLAND V": [{"date": "2025-01-01", "price": 3220000, "psf": 1813, "sqft": 1776, "inBudget": false}, {"date": "2025-09-01", "price": 1850000, "psf": 1910, "sqft": 968, "inBudget": true}], "VACANZA @ EAST": [{"date": "2024-09-01", "price": 1700000, "psf": 1662, "sqft": 1022, "inBudget": true}, {"date": "2024-11-01", "price": 830000, "psf": 1483, "sqft": 559, "inBudget": false}, {"date": "2024-12-01", "price": 856000, "psf": 1529, "sqft": 559, "inBudget": false}, {"date": "2024-12-01", "price": 860888, "psf": 1538, "sqft": 559, "inBudget": false}, {"date": "2024-12-01", "price": 1930000, "psf": 1532, "sqft": 1259, "inBudget": false}, {"date": "2025-01-01", "price": 1260000, "psf": 1561, "sqft": 807, "inBudget": false}, {"date": "2025-01-01", "price": 1477500, "psf": 1445, "sqft": 1022, "inBudget": false}, {"date": "2025-02-01", "price": 1215000, "psf": 1377, "sqft": 882, "inBudget": false}, {"date": "2025-08-01", "price": 748888, "psf": 1546, "sqft": 484, "inBudget": false}, {"date": "2025-09-01", "price": 1060000, "psf": 1448, "sqft": 731, "inBudget": false}], "VENTANA": [{"date": "2025-08-01", "price": 1535000, "psf": 1584, "sqft": 968, "inBudget": true}], "VILLAGE @ PASIR PANJANG": [{"date": "2024-10-01", "price": 1480000, "psf": 1786, "sqft": 828, "inBudget": false}, {"date": "2024-12-01", "price": 2030000, "psf": 1301, "sqft": 1560, "inBudget": false}, {"date": "2025-09-01", "price": 1808888, "psf": 1632, "sqft": 1108, "inBudget": true}], "VIZ AT HOLLAND": [{"date": "2024-10-01", "price": 1632888, "psf": 1996, "sqft": 818, "inBudget": false}, {"date": "2024-10-01", "price": 910000, "psf": 1838, "sqft": 495, "inBudget": false}, {"date": "2025-01-01", "price": 1940000, "psf": 2048, "sqft": 947, "inBudget": true}, {"date": "2025-09-01", "price": 1800000, "psf": 2200, "sqft": 818, "inBudget": false}, {"date": "2025-09-01", "price": 1653000, "psf": 2021, "sqft": 818, "inBudget": false}], "WHITEHAVEN": [{"date": "2024-09-01", "price": 1800000, "psf": 1086, "sqft": 1657, "inBudget": false}, {"date": "2024-11-01", "price": 1200000, "psf": 1138, "sqft": 1054, "inBudget": false}, {"date": "2025-01-01", "price": 1818000, "psf": 1578, "sqft": 1151, "inBudget": true}, {"date": "2025-08-01", "price": 1650000, "psf": 1065, "sqft": 1550, "inBudget": false}, {"date": "2025-11-01", "price": 1030000, "psf": 1914, "sqft": 538, "inBudget": false}]};
+const allProjectNames = ["1 KING ALBERT PARK", "ADAM PARK CONDOMINIUM", "ADAM PLACE", "ALLSWORTH PARK", "ATRIUM RESIDENCES", "AVA TOWERS", "BALESTIER POINT", "BEACON HEIGHTS", "BIRMINGHAM MANSIONS", "CALARASI", "CANAAN", "CARIBBEAN AT KEPPEL BAY", "CASA FORTUNA", "CASSIA VIEW", "CHARLESTON", "CLEMENTI PARK", "CUBE 8", "D'GALLERY", "D'LOTUS", "D'OASIA", "DE ROYALE", "DENG FU VILLE", "DOMUS", "ESTA RUBY", "FLORAVIEW", "GARDENVISTA", "GILSTEAD TWO", "GRAND CHATEAU", "GRAND REGENCY", "HARBOURLIGHTS", "HILLVIEW GREEN", "HORIZON RESIDENCES", "HUME PARK I", "HUME PARK II", "IRESIDENCES", "JUI RESIDENCES", "KAP RESIDENCES", "LAVENDER RESIDENCE", "LE CRESCENDO", "LE HILL CONDOMINIUM", "LE REVE", "LOFT @ NATHAN", "LUCIDA", "M21", "M5", "M66", "MEADOWS @ PEIRCE", "MIRO", "NEWTON 18", "NINETEEN SHELFORD ROAD", "NOVA 88", "ONE DUSUN RESIDENCES", "ONE ST MICHAEL'S", "PALM GREEN", "PARC HAVEN", "PARC IMPERIAL", "PAYA LEBAR RESIDENCES", "PINNACLE 16", "QUEENSBERRY LODGE", "REGAL 35", "REGAL COURT", "RESIDENTIAL APARTMENTS", "REZI 24", "RIO GARDENS", "RIVERBAY", "RIVIERA 38", "SHELFORD REGENCY", "SHERWOOD CONDOMINIUM", "SIGNATURE PARK", "SIMS MEADOWS", "SOUTHAVEN II", "SPRINGDALE CONDOMINIUM", "ST MICHAEL REGENCY", "STEVENS SUITES", "SUFFOLK PREMIER", "SYMPHONY HEIGHTS", "TERRENE AT BUKIT TIMAH", "THE ABERDEEN", "THE CENTRIO", "THE CITRINE", "THE CREEK @ BUKIT", "THE FOLIAGE", "THE GATZ", "THE INFINITI", "THE MARQUE @ IRRAWADDY", "THE MAYLEA", "THE MONTANA", "THE ORIENT", "THE PARC CONDOMINIUM", "THE PEAK@BALMEG", "THE RIVERINE BY THE PARK", "THE SPRINGS", "THE SUNNY SPRING", "THE VERANDAH RESIDENCES", "THE WATERINA", "THOMSON EURO-ASIA", "TROPIKA EAST", "URBAN EDGE @ HOLLAND V", "VACANZA @ EAST", "VENTANA", "VILLAGE @ PASIR PANJANG", "VIZ AT HOLLAND", "WHITEHAVEN"];
+
+// Populate datalist for trend analyser autocomplete
+(function() {
+  const dl = document.getElementById('trendProjectList');
+  allProjectNames.forEach(n => {
+    const opt = document.createElement('option');
+    opt.value = n;
+    dl.appendChild(opt);
+  });
+})();
+
+let trendChartInst = null;
+
+function onTrendInput(val) {
+  const key = val.trim().toUpperCase();
+  if (allProjectTxns[key] !== undefined) analyseProperty();
+}
+
+function analyseProperty() {
+  const raw = document.getElementById('trendSearch').value.trim();
+  const key = raw.toUpperCase();
+  const txns = allProjectTxns[key];
+
+  document.getElementById('trendMsg').style.display = 'none';
+  document.getElementById('trendNotFound').style.display = 'none';
+  document.getElementById('trendResult').style.display = 'none';
+
+  if (!txns || txns.length === 0) {
+    document.getElementById('trendNotFound').style.display = 'block';
+    return;
+  }
+
+  const psfs = txns.map(t => t.psf).filter(v => v > 0);
+  const avgPSF = Math.round(psfs.reduce((a,b) => a+b,0) / psfs.length);
+  const minPSF = Math.min(...psfs);
+  const maxPSF = Math.max(...psfs);
+  const inBudgetCount = txns.filter(t => t.inBudget).length;
+  const avgPrice = Math.round(txns.map(t => t.price).filter(v=>v>0).reduce((a,b)=>a+b,0) / txns.filter(t=>t.price>0).length);
+
+  const mid = Math.floor(psfs.length / 2);
+  const earlyAvg = mid > 0 ? psfs.slice(0, mid).reduce((a,b) => a+b,0) / mid : psfs[0];
+  const lateAvg  = psfs.slice(mid).reduce((a,b) => a+b,0) / (psfs.length - mid);
+  const trendPct = ((lateAvg - earlyAvg) / earlyAvg * 100).toFixed(1);
+  const trendPositive = parseFloat(trendPct) >= 0;
+
+  document.getElementById('trendTitle').textContent = key;
+  const badge = document.getElementById('trendBadge');
+  badge.textContent = (trendPositive ? '+' : '') + trendPct + '%';
+  badge.className = 'badge badge-pill ' + (trendPositive ? 'badge-green' : 'badge-red');
+
+  document.getElementById('trendStats').innerHTML = `
+    <div class="modal-stat"><div class="label">Total Txns</div><div class="value">${txns.length}</div></div>
+    <div class="modal-stat"><div class="label">In Budget Range</div><div class="value" style="color:var(--green)">${inBudgetCount}</div></div>
+    <div class="modal-stat"><div class="label">Avg Price</div><div class="value">$${avgPrice.toLocaleString()}</div></div>
+    <div class="modal-stat"><div class="label">Avg PSF</div><div class="value">$${avgPSF.toLocaleString()}</div></div>
+    <div class="modal-stat"><div class="label">Min PSF</div><div class="value">$${minPSF.toLocaleString()}</div></div>
+    <div class="modal-stat"><div class="label">Max PSF</div><div class="value">$${maxPSF.toLocaleString()}</div></div>
+  `;
+
+  // Group by year-month for chart
+  const grouped = {};
+  const inBudgetByYM = {};
+  txns.forEach(t => {
+    const ym = t.date.substring(0, 7);
+    if (!grouped[ym]) { grouped[ym] = []; inBudgetByYM[ym] = false; }
+    if (t.psf > 0) grouped[ym].push(t.psf);
+    if (t.inBudget) inBudgetByYM[ym] = true;
+  });
+  const labels = Object.keys(grouped).sort();
+  const avgPsfByYM = labels.map(ym =>
+    Math.round(grouped[ym].reduce((a,b)=>a+b,0) / grouped[ym].length)
+  );
+  const pointColors  = labels.map(ym => inBudgetByYM[ym] ? '#34d399' : '#22d3ee');
+  const pointRadii   = labels.map(ym => inBudgetByYM[ym] ? 6 : 3);
+
+  if (trendChartInst) trendChartInst.destroy();
+  const ctx = document.getElementById('trendChart').getContext('2d');
+  trendChartInst = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Avg Monthly PSF ($)',
+        data: avgPsfByYM,
+        borderColor: '#22d3ee',
+        backgroundColor: 'rgba(34,211,238,0.08)',
+        tension: 0.35,
+        fill: true,
+        pointBackgroundColor: pointColors,
+        pointBorderColor: pointColors,
+        pointRadius: pointRadii,
+        pointHoverRadius: 7,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { labels: { color: '#94a3b8' } },
+        tooltip: {
+          callbacks: {
+            label: ctx => ` PSF: $` + ctx.parsed.y.toLocaleString(),
+            afterLabel: ctx => inBudgetByYM[labels[ctx.dataIndex]] ? ' ✓ In budget range' : ''
+          }
+        }
+      },
+      scales: {
+        x: { ticks: { color: '#94a3b8', maxRotation: 45, autoSkip: true, maxTicksLimit: 16 }, grid: { color: '#1e293b' } },
+        y: {
+          title: { display: true, text: 'Avg PSF ($)', color: '#22d3ee' },
+          ticks: { color: '#22d3ee', callback: v => '$' + v.toLocaleString() },
+          grid: { color: '#1e293b' }
+        }
+      }
+    }
+  });
+
+  // Transaction table (most recent first, max 50)
+  const tbody = document.querySelector('#trendTxnTable tbody');
+  tbody.innerHTML = [...txns].reverse().slice(0, 50).map(t => `
+    <tr>
+      <td>${t.date}</td>
+      <td>$${t.price.toLocaleString()}</td>
+      <td>$${t.psf.toLocaleString()}</td>
+      <td>${t.sqft}</td>
+      <td>${t.inBudget ? '<span class="in-budget-dot"></span>Yes' : '<span style="color:#64748b">—</span>'}</td>
+    </tr>
+  `).join('');
+
+  document.getElementById('trendResult').style.display = 'block';
+}
+
+// ── Main chart data ────────────────────────────────────────────
+// Chart data
+const districtData = [{"district": "12.0", "count": 41, "avgPSF": 1636, "avgPrice": 1683192}, {"district": "21.0", "count": 39, "avgPSF": 1712, "avgPrice": 1767715}, {"district": "14.0", "count": 29, "avgPSF": 1642, "avgPrice": 1747742}, {"district": "11.0", "count": 20, "avgPSF": 1875, "avgPrice": 1857600}, {"district": "5.0", "count": 18, "avgPSF": 1753, "avgPrice": 1785648}, {"district": "10.0", "count": 9, "avgPSF": 1821, "avgPrice": 1834000}, {"district": "4.0", "count": 3, "avgPSF": 1907, "avgPrice": 1731667}, {"district": "20.0", "count": 2, "avgPSF": 1392, "avgPrice": 1640000}, {"district": "26.0", "count": 1, "avgPSF": 1736, "avgPrice": 2000000}];
+const yoyData = [{"year": 2024, "count": 62, "avgPSF": 1686}, {"year": 2025, "count": 100, "avgPSF": 1727}];
+const projectData = [{"name": "CLEMENTI PARK", "fullName": "CLEMENTI PARK", "gem": 75.5, "value": 86.4, "liquidity": 84.3, "trend": 81.8, "avgPSF": 1474, "avgPrice": 1730000, "txns": 2, "district": "21", "street": "SUNSET WAY", "tenure": "Freehold", "segment": "Outside Central Region", "psfDiscount": -15.2, "psfTrend": 4.5, "recentTxns": 10, "sqft": 1173, "luScore": 52.1, "luGreen": 100.0, "luBuzz": 0.0, "luEdu": 35.0, "luUpside": 64.5, "luPurity": 60.0, "luAvgGPR": 1.7, "luBreakdown": {"RESIDENTIAL": 317, "UTILITY": 2, "PARK": 4, "WATERBODY": 4, "COMMERCIAL & RESIDENTIAL": 2}, "enBloc": false, "projLat": 1.32628, "projLon": 103.76867}, {"name": "SIMS MEADOWS", "fullName": "SIMS MEADOWS", "gem": 74.5, "value": 79.6, "liquidity": 32.4, "trend": 90.1, "avgPSF": 1408, "avgPrice": 1500000, "txns": 1, "district": "14", "street": "LORONG 33 GEYLANG", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -9.3, "psfTrend": 8.4, "recentTxns": 3, "sqft": 1066, "luScore": 97.0, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 80.0, "luAvgGPR": 2.89, "luBreakdown": {"RESIDENTIAL": 295, "RESIDENTIAL / INSTITUTION": 276, "COMMERCIAL": 256, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 49, "PLACE OF WORSHIP": 4, "HOTEL": 2, "CIVIC & COMMUNITY INSTITUTION": 2, "OPEN SPACE": 5, "HEALTH & MEDICAL CARE": 4, "RESERVE SITE": 2, "COMMERCIAL & RESIDENTIAL": 2, "BUSINESS 1": 1, "WATERBODY": 2, "EDUCATIONAL INSTITUTION": 4, "PARK": 1, "UTILITY": 1}, "enBloc": false, "projLat": 1.31564, "projLon": 103.88781}, {"name": "CASA FORTUNA", "fullName": "CASA FORTUNA", "gem": 74.3, "value": 74.8, "liquidity": 48.5, "trend": 85.5, "avgPSF": 1537, "avgPrice": 1605000, "txns": 2, "district": "12", "street": "AH HOOD ROAD", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -8.4, "psfTrend": 7.2, "recentTxns": 4, "sqft": 1044, "luScore": 97.0, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 80.0, "luAvgGPR": 2.91, "luBreakdown": {"RESIDENTIAL": 128, "COMMERCIAL & RESIDENTIAL": 98, "PARK": 4, "PLACE OF WORSHIP": 5, "CIVIC & COMMUNITY INSTITUTION": 4, "SPORTS & RECREATION": 3, "HOTEL": 5, "UTILITY": 1, "WATERBODY": 4, "BUSINESS 1": 1, "EDUCATIONAL INSTITUTION": 1, "HEALTH & MEDICAL CARE": 1, "OPEN SPACE": 1}, "enBloc": true, "projLat": 1.32763, "projLon": 103.84649}, {"name": "LOFT @ NATHAN", "fullName": "LOFT @ NATHAN", "gem": 73.7, "value": 99.4, "liquidity": 32.4, "trend": 98.8, "avgPSF": 1542, "avgPrice": 1510000, "txns": 1, "district": "10", "street": "NATHAN ROAD", "tenure": "Freehold", "segment": "Core Central Region", "psfDiscount": -31.5, "psfTrend": 33.1, "recentTxns": 3, "sqft": 980, "luScore": 66.0, "luGreen": 0.0, "luBuzz": 75.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 40.0, "luAvgGPR": 2.01, "luBreakdown": {"RESIDENTIAL": 249, "COMMERCIAL & RESIDENTIAL": 8, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 2, "WATERBODY": 2, "UTILITY": 3, "CIVIC & COMMUNITY INSTITUTION": 1, "PLACE OF WORSHIP": 1}, "enBloc": false, "projLat": 1.29621, "projLon": 103.8258}, {"name": "WHITEHAVEN", "fullName": "WHITEHAVEN", "gem": 72.9, "value": 84.0, "liquidity": 56.5, "trend": 99.4, "avgPSF": 1578, "avgPrice": 1818000, "txns": 1, "district": "5", "street": "PASIR PANJANG ROAD", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -12.0, "psfTrend": 36.6, "recentTxns": 5, "sqft": 1152, "luScore": 58.3, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 0.0, "luUpside": 13.2, "luPurity": 100.0, "luAvgGPR": 2.28, "luBreakdown": {"RESIDENTIAL": 69, "RESERVE SITE": 7, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 26, "PARK": 8, "WATERBODY": 3, "BUSINESS 1": 37, "PLACE OF WORSHIP": 1, "CIVIC & COMMUNITY INSTITUTION": 2, "HEALTH & MEDICAL CARE": 1, "BUSINESS PARK": 1}, "enBloc": false, "projLat": 1.27504, "projLon": 103.79513}, {"name": "SOUTHAVEN II", "fullName": "SOUTHAVEN II", "gem": 72.6, "value": 60.5, "liquidity": 92.6, "trend": 92.0, "avgPSF": 1652, "avgPrice": 1719333, "txns": 3, "district": "21", "street": "HINDHEDE WALK", "tenure": "999 yrs lease commencing from 1877", "segment": "Outside Central Region", "psfDiscount": -4.9, "psfTrend": 10.0, "recentTxns": 16, "sqft": 1041, "luScore": 78.0, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 35.0, "luUpside": 100.0, "luPurity": 40.0, "luAvgGPR": 1.59, "luBreakdown": {"PLACE OF WORSHIP": 2, "PARK": 5, "RESIDENTIAL": 499, "OPEN SPACE": 3, "UTILITY": 3, "COMMERCIAL": 37, "COMMERCIAL & RESIDENTIAL": 1}, "enBloc": false, "projLat": 1.34648, "projLon": 103.77438}, {"name": "M5", "fullName": "M5", "gem": 70.4, "value": 98.8, "liquidity": 89.5, "trend": 9.3, "avgPSF": 1698, "avgPrice": 1718000, "txns": 1, "district": "10", "street": "JALAN MUTIARA", "tenure": "Freehold", "segment": "Core Central Region", "psfDiscount": -24.6, "psfTrend": -3.5, "recentTxns": 11, "sqft": 1012, "luScore": 100.0, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 100.0, "luAvgGPR": 2.28, "luBreakdown": {"RESIDENTIAL": 145, "COMMERCIAL & RESIDENTIAL": 14, "PLACE OF WORSHIP": 4, "OPEN SPACE": 3, "WATERBODY": 2, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 2, "PARK": 2, "EDUCATIONAL INSTITUTION": 1, "RESERVE SITE": 3, "CIVIC & COMMUNITY INSTITUTION": 1, "COMMERCIAL": 2}, "enBloc": false, "projLat": 1.29583, "projLon": 103.82877}, {"name": "LE HILL CONDOMINIUM", "fullName": "LE HILL CONDOMINIUM", "gem": 69.9, "value": 84.6, "liquidity": 48.5, "trend": 82.7, "avgPSF": 1567, "avgPrice": 1552000, "txns": 1, "district": "5", "street": "PASIR PANJANG HILL", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -12.6, "psfTrend": 4.5, "recentTxns": 4, "sqft": 990, "luScore": 69.0, "luGreen": 90.0, "luBuzz": 100.0, "luEdu": 0.0, "luUpside": 100.0, "luPurity": 40.0, "luAvgGPR": 1.53, "luBreakdown": {"RESIDENTIAL": 381, "UTILITY": 2, "PLACE OF WORSHIP": 4, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 10, "COMMERCIAL & RESIDENTIAL": 13, "PORT / AIRPORT": 1, "PARK": 3, "CIVIC & COMMUNITY INSTITUTION": 1, "RESERVE SITE": 1, "WATERBODY": 2}, "enBloc": false, "projLat": 1.28095, "projLon": 103.78614}, {"name": "M66", "fullName": "M66", "gem": 68.5, "value": 86.4, "liquidity": 32.4, "trend": 64.8, "avgPSF": 1412, "avgPrice": 1550000, "txns": 1, "district": "12", "street": "MOONSTONE LANE", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -15.8, "psfTrend": 2.9, "recentTxns": 3, "sqft": 1098, "luScore": 91.0, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 40.0, "luAvgGPR": 2.14, "luBreakdown": {"RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 82, "RESIDENTIAL": 270, "COMMERCIAL & RESIDENTIAL": 36, "COMMERCIAL": 4, "WATERBODY": 5, "PLACE OF WORSHIP": 5, "PARK": 11, "UTILITY": 3, "OPEN SPACE": 3, "CIVIC & COMMUNITY INSTITUTION": 4, "HEALTH & MEDICAL CARE": 1, "EDUCATIONAL INSTITUTION": 1, "RESERVE SITE": 2}, "enBloc": true, "projLat": 1.32789, "projLon": 103.86571}, {"name": "BEACON HEIGHTS", "fullName": "BEACON HEIGHTS", "gem": 67.2, "value": 61.8, "liquidity": 84.3, "trend": 59.6, "avgPSF": 1590, "avgPrice": 1688000, "txns": 6, "district": "12", "street": "MAR THOMA ROAD", "tenure": "999 yrs lease commencing from 1882", "segment": "Rest of Central Region", "psfDiscount": -5.2, "psfTrend": 2.2, "recentTxns": 10, "sqft": 1062, "luScore": 80.0, "luGreen": 100.0, "luBuzz": 0.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 100.0, "luAvgGPR": 2.05, "luBreakdown": {"RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 43, "RESIDENTIAL": 223, "COMMERCIAL & RESIDENTIAL": 13, "WATERBODY": 5, "PARK": 10, "OPEN SPACE": 3, "PLACE OF WORSHIP": 4, "CIVIC & COMMUNITY INSTITUTION": 4, "EDUCATIONAL INSTITUTION": 3}, "enBloc": true, "projLat": 1.32771, "projLon": 103.86261}, {"name": "FLORAVIEW", "fullName": "FLORAVIEW", "gem": 67.0, "value": 96.3, "liquidity": 75.0, "trend": 42.9, "avgPSF": 1392, "avgPrice": 1640000, "txns": 2, "district": "20", "street": "ANG MO KIO STREET 66", "tenure": "Freehold", "segment": "Outside Central Region", "psfDiscount": -22.8, "psfTrend": 1.1, "recentTxns": 8, "sqft": 1179, "luScore": 40.4, "luGreen": 30.0, "luBuzz": 100.0, "luEdu": 0.0, "luUpside": 9.7, "luPurity": 80.0, "luAvgGPR": 2.05, "luBreakdown": {"RESIDENTIAL": 146, "WATERBODY": 2, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 5, "BUSINESS 1": 9, "BUSINESS 2": 1, "PARK": 1, "RESERVE SITE": 1}, "enBloc": false, "projLat": 1.39205, "projLon": 103.85024}, {"name": "CASSIA VIEW", "fullName": "CASSIA VIEW", "gem": 66.1, "value": 43.2, "liquidity": 48.5, "trend": 84.0, "avgPSF": 1528, "avgPrice": 1760000, "txns": 1, "district": "14", "street": "GUILLEMARD ROAD", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -1.5, "psfTrend": 6.4, "recentTxns": 4, "sqft": 1152, "luScore": 98.0, "luGreen": 90.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 100.0, "luAvgGPR": 2.84, "luBreakdown": {"RESIDENTIAL": 88, "COMMERCIAL": 178, "COMMERCIAL / INSTITUTION": 451, "RESIDENTIAL / INSTITUTION": 408, "COMMERCIAL & RESIDENTIAL": 5, "PARK": 1, "SPORTS & RECREATION": 2, "PLACE OF WORSHIP": 1, "CIVIC & COMMUNITY INSTITUTION": 2, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 4}, "enBloc": false, "projLat": 1.3102, "projLon": 103.88114}, {"name": "REZI 24", "fullName": "REZI 24", "gem": 65.4, "value": 53.4, "liquidity": 67.9, "trend": 42.0, "avgPSF": 1503, "avgPrice": 1780000, "txns": 1, "district": "14", "street": "LORONG 24 GEYLANG", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -3.2, "psfTrend": 0.9, "recentTxns": 7, "sqft": 1184, "luScore": 100.0, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 100.0, "luAvgGPR": 2.84, "luBreakdown": {"RESIDENTIAL / INSTITUTION": 527, "RESIDENTIAL": 243, "BUSINESS 1": 60, "COMMERCIAL & RESIDENTIAL": 5, "COMMERCIAL": 216, "COMMERCIAL / INSTITUTION": 207, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 33, "CIVIC & COMMUNITY INSTITUTION": 3, "OPEN SPACE": 5, "PLACE OF WORSHIP": 4, "SPORTS & RECREATION": 1, "EDUCATIONAL INSTITUTION": 1, "RESERVE SITE": 1}, "enBloc": false, "projLat": 1.31316, "projLon": 103.8833}, {"name": "RESIDENTIAL APARTMENTS", "fullName": "RESIDENTIAL APARTMENTS", "gem": 65.2, "value": 19.4, "liquidity": 93.8, "trend": 100.0, "avgPSF": 1787, "avgPrice": 1770000, "txns": 1, "district": "12", "street": "ST. GEORGE'S ROAD", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": 6.5, "psfTrend": 47.7, "recentTxns": 17, "sqft": 990, "luScore": 100.0, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 100.0, "luAvgGPR": 2.02, "luBreakdown": {"RESIDENTIAL": 196, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 29, "COMMERCIAL & RESIDENTIAL": 40, "PARK": 10, "PLACE OF WORSHIP": 4, "WATERBODY": 4, "EDUCATIONAL INSTITUTION": 2, "CIVIC & COMMUNITY INSTITUTION": 6, "COMMERCIAL": 1, "OPEN SPACE": 2}, "enBloc": true, "projLat": 1.32225, "projLon": 103.86311}, {"name": "D'LOTUS", "fullName": "D'LOTUS", "gem": 64.7, "value": 55.3, "liquidity": 48.5, "trend": 71.6, "avgPSF": 1611, "avgPrice": 1716667, "txns": 3, "district": "12", "street": "LORONG AMPAS", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -4.0, "psfTrend": 3.5, "recentTxns": 4, "sqft": 1066, "luScore": 98.0, "luGreen": 90.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 100.0, "luAvgGPR": 2.89, "luBreakdown": {"COMMERCIAL & RESIDENTIAL": 89, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 27, "PARK": 3, "RESIDENTIAL": 199, "BUSINESS 1": 15, "CIVIC & COMMUNITY INSTITUTION": 3, "HOTEL": 7, "HEALTH & MEDICAL CARE": 3, "PLACE OF WORSHIP": 7, "WATERBODY": 3, "RESERVE SITE": 1, "COMMERCIAL": 1}, "enBloc": true, "projLat": 1.32582, "projLon": 103.85346}, {"name": "THE SPRINGS", "fullName": "THE SPRINGS", "gem": 63.6, "value": 73.5, "liquidity": 32.4, "trend": 88.0, "avgPSF": 1947, "avgPrice": 1949000, "txns": 2, "district": "11", "street": "MOULMEIN RISE", "tenure": "Freehold", "segment": "Core Central Region", "psfDiscount": -7.8, "psfTrend": 7.6, "recentTxns": 3, "sqft": 1001, "luScore": 100.0, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 100.0, "luAvgGPR": 2.32, "luBreakdown": {"RESIDENTIAL": 153, "COMMERCIAL": 6, "HEALTH & MEDICAL CARE": 11, "PLACE OF WORSHIP": 7, "CIVIC & COMMUNITY INSTITUTION": 4, "WHITE": 3, "EDUCATIONAL INSTITUTION": 6, "PARK": 4, "OPEN SPACE": 1, "HOTEL": 2}, "enBloc": true, "projLat": 1.31933, "projLon": 103.84659}, {"name": "THE CITRINE", "fullName": "THE CITRINE", "gem": 63.1, "value": 63.0, "liquidity": 32.4, "trend": 75.0, "avgPSF": 1588, "avgPrice": 1521750, "txns": 2, "district": "12", "street": "JALAN DATOH", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -5.3, "psfTrend": 3.9, "recentTxns": 3, "sqft": 958, "luScore": 95.0, "luGreen": 90.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 80.0, "luAvgGPR": 2.84, "luBreakdown": {"RESIDENTIAL": 167, "COMMERCIAL & RESIDENTIAL": 65, "PLACE OF WORSHIP": 3, "OPEN SPACE": 2, "CIVIC & COMMUNITY INSTITUTION": 2, "RESERVE SITE": 1, "HOTEL": 5, "PARK": 1, "WATERBODY": 2, "EDUCATIONAL INSTITUTION": 1, "HEALTH & MEDICAL CARE": 1, "UTILITY": 1}, "enBloc": true, "projLat": 1.32802, "projLon": 103.84298}, {"name": "REGAL COURT", "fullName": "REGAL COURT", "gem": 63.0, "value": 91.4, "liquidity": 15.1, "trend": 29.6, "avgPSF": 1347, "avgPrice": 1580000, "txns": 1, "district": "12", "street": "KIM KEAT ROAD", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -19.7, "psfTrend": 0.0, "recentTxns": 2, "sqft": 1173, "luScore": 98.0, "luGreen": 90.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 100.0, "luAvgGPR": 2.89, "luBreakdown": {"COMMERCIAL & RESIDENTIAL": 94, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 27, "PARK": 3, "RESIDENTIAL": 204, "BUSINESS 1": 15, "CIVIC & COMMUNITY INSTITUTION": 3, "HOTEL": 8, "HEALTH & MEDICAL CARE": 3, "PLACE OF WORSHIP": 7, "WATERBODY": 3, "RESERVE SITE": 1, "COMMERCIAL": 1}, "enBloc": true, "projLat": 1.32456, "projLon": 103.85311}, {"name": "TROPIKA EAST", "fullName": "TROPIKA EAST", "gem": 62.5, "value": 68.5, "liquidity": 32.4, "trend": 96.9, "avgPSF": 1457, "avgPrice": 1600000, "txns": 1, "district": "14", "street": "FOO KIM LIN ROAD", "tenure": "Freehold", "segment": "Outside Central Region", "psfDiscount": -6.1, "psfTrend": 14.1, "recentTxns": 3, "sqft": 1098, "luScore": 52.1, "luGreen": 100.0, "luBuzz": 0.0, "luEdu": 100.0, "luUpside": 0.4, "luPurity": 80.0, "luAvgGPR": 1.43, "luBreakdown": {"RESIDENTIAL": 445, "WATERBODY": 3, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 3, "PARK": 5, "CIVIC & COMMUNITY INSTITUTION": 1, "PLACE OF WORSHIP": 1, "UTILITY": 1, "OPEN SPACE": 1}, "enBloc": false, "projLat": 1.32863, "projLon": 103.90701}, {"name": "BALESTIER POINT", "fullName": "BALESTIER POINT", "gem": 62.1, "value": 92.0, "liquidity": 15.1, "trend": 29.6, "avgPSF": 1345, "avgPrice": 1520000, "txns": 1, "district": "12", "street": "BALESTIER ROAD", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -19.8, "psfTrend": 0.0, "recentTxns": 2, "sqft": 1130, "luScore": 97.0, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 80.0, "luAvgGPR": 2.9, "luBreakdown": {"RESIDENTIAL": 183, "COMMERCIAL & RESIDENTIAL": 97, "PARK": 4, "PLACE OF WORSHIP": 5, "CIVIC & COMMUNITY INSTITUTION": 5, "RESERVE SITE": 1, "HOTEL": 5, "UTILITY": 1, "HEALTH & MEDICAL CARE": 3, "SPORTS & RECREATION": 1, "WATERBODY": 3, "BUSINESS 1": 1, "EDUCATIONAL INSTITUTION": 1, "OPEN SPACE": 1}, "enBloc": true, "projLat": 1.32656, "projLon": 103.84594}, {"name": "QUEENSBERRY LODGE", "fullName": "QUEENSBERRY LODGE", "gem": 61.9, "value": 100.0, "liquidity": 4.6, "trend": 29.6, "avgPSF": 1407, "avgPrice": 1620000, "txns": 1, "district": "10", "street": "SHANGHAI ROAD", "tenure": "Freehold", "segment": "Core Central Region", "psfDiscount": -37.5, "psfTrend": 0.0, "recentTxns": 1, "sqft": 1152, "luScore": 97.0, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 80.0, "luAvgGPR": 2.24, "luBreakdown": {"RESIDENTIAL": 145, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 4, "COMMERCIAL & RESIDENTIAL": 14, "PLACE OF WORSHIP": 4, "OPEN SPACE": 3, "WATERBODY": 4, "PARK": 2, "EDUCATIONAL INSTITUTION": 1, "RESERVE SITE": 2, "CIVIC & COMMUNITY INSTITUTION": 1, "UTILITY": 1, "COMMERCIAL": 2}, "enBloc": false, "projLat": 1.29461, "projLon": 103.828}, {"name": "PARC IMPERIAL", "fullName": "PARC IMPERIAL", "gem": 60.4, "value": 96.9, "liquidity": 61.7, "trend": 8.0, "avgPSF": 1380, "avgPrice": 1648888, "txns": 1, "district": "5", "street": "PASIR PANJANG ROAD", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -23.0, "psfTrend": -5.2, "recentTxns": 6, "sqft": 1195, "luScore": 58.3, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 0.0, "luUpside": 13.2, "luPurity": 100.0, "luAvgGPR": 2.28, "luBreakdown": {"RESIDENTIAL": 69, "RESERVE SITE": 7, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 26, "PARK": 8, "WATERBODY": 3, "BUSINESS 1": 37, "PLACE OF WORSHIP": 1, "CIVIC & COMMUNITY INSTITUTION": 2, "HEALTH & MEDICAL CARE": 1, "BUSINESS PARK": 1}, "enBloc": false, "projLat": 1.27504, "projLon": 103.79513}, {"name": "REGAL 35", "fullName": "REGAL 35", "gem": 59.5, "value": 90.7, "liquidity": 4.6, "trend": 29.6, "avgPSF": 1255, "avgPrice": 1500000, "txns": 1, "district": "14", "street": "LORONG 35 GEYLANG", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -19.1, "psfTrend": 0.0, "recentTxns": 1, "sqft": 1195, "luScore": 97.0, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 80.0, "luAvgGPR": 2.88, "luBreakdown": {"RESIDENTIAL": 251, "RESIDENTIAL / INSTITUTION": 247, "COMMERCIAL": 224, "BUSINESS 1": 3, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 23, "PLACE OF WORSHIP": 6, "HOTEL": 2, "CIVIC & COMMUNITY INSTITUTION": 2, "HEALTH & MEDICAL CARE": 4, "RESERVE SITE": 2, "COMMERCIAL & RESIDENTIAL": 2, "OPEN SPACE": 4, "WATERBODY": 3, "EDUCATIONAL INSTITUTION": 4, "PARK": 3, "UTILITY": 1}, "enBloc": false, "projLat": 1.31595, "projLon": 103.88869}, {"name": "ONE ST MICHAEL'S", "fullName": "ONE ST MICHAEL'S", "gem": 58.8, "value": 41.4, "liquidity": 48.5, "trend": 94.4, "avgPSF": 1655, "avgPrice": 1550000, "txns": 1, "district": "12", "street": "ST. MICHAEL'S ROAD", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -1.3, "psfTrend": 11.7, "recentTxns": 4, "sqft": 936, "luScore": 80.0, "luGreen": 100.0, "luBuzz": 0.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 100.0, "luAvgGPR": 2.14, "luBreakdown": {"RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 71, "RESIDENTIAL": 264, "COMMERCIAL & RESIDENTIAL": 43, "COMMERCIAL": 3, "WATERBODY": 6, "PARK": 11, "OPEN SPACE": 4, "PLACE OF WORSHIP": 4, "EDUCATIONAL INSTITUTION": 3, "CIVIC & COMMUNITY INSTITUTION": 5}, "enBloc": false, "projLat": 1.32661, "projLon": 103.86297}, {"name": "SPRINGDALE CONDOMINIUM", "fullName": "SPRINGDALE CONDOMINIUM", "gem": 58.7, "value": 54.1, "liquidity": 84.3, "trend": 47.5, "avgPSF": 1676, "avgPrice": 1857571, "txns": 7, "district": "21", "street": "HINDHEDE WALK", "tenure": "999 yrs lease commencing from 1877", "segment": "Outside Central Region", "psfDiscount": -3.5, "psfTrend": 1.3, "recentTxns": 10, "sqft": 1107, "luScore": 78.0, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 35.0, "luUpside": 100.0, "luPurity": 40.0, "luAvgGPR": 1.59, "luBreakdown": {"PLACE OF WORSHIP": 2, "PARK": 5, "RESIDENTIAL": 499, "OPEN SPACE": 3, "UTILITY": 3, "COMMERCIAL": 37, "COMMERCIAL & RESIDENTIAL": 1}, "enBloc": false, "projLat": 1.34648, "projLon": 103.77438}, {"name": "RIVERBAY", "fullName": "RIVERBAY", "gem": 58.5, "value": 48.4, "liquidity": 56.5, "trend": 73.5, "avgPSF": 1642, "avgPrice": 1543296, "txns": 3, "district": "12", "street": "MAR THOMA ROAD", "tenure": "999 yrs lease commencing from 1882", "segment": "Rest of Central Region", "psfDiscount": -2.1, "psfTrend": 3.6, "recentTxns": 5, "sqft": 940, "luScore": 80.0, "luGreen": 100.0, "luBuzz": 0.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 100.0, "luAvgGPR": 2.05, "luBreakdown": {"RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 43, "RESIDENTIAL": 223, "COMMERCIAL & RESIDENTIAL": 13, "WATERBODY": 5, "PARK": 10, "OPEN SPACE": 3, "PLACE OF WORSHIP": 4, "CIVIC & COMMUNITY INSTITUTION": 4, "EDUCATIONAL INSTITUTION": 3}, "enBloc": true, "projLat": 1.32771, "projLon": 103.86261}, {"name": "THE PARC CONDOMINIUM", "fullName": "THE PARC CONDOMINIUM", "gem": 58.2, "value": 33.3, "liquidity": 91.4, "trend": 75.9, "avgPSF": 1817, "avgPrice": 1780000, "txns": 1, "district": "5", "street": "WEST COAST WALK", "tenure": "Freehold", "segment": "Outside Central Region", "psfDiscount": 1.4, "psfTrend": 4.0, "recentTxns": 14, "sqft": 980, "luScore": 87.6, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 86.2, "luPurity": 40.0, "luAvgGPR": 3.15, "luBreakdown": {"RESIDENTIAL": 294, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 19, "UTILITY": 3, "COMMERCIAL & RESIDENTIAL": 2, "HEALTH & MEDICAL CARE": 2, "PARK": 5, "PLACE OF WORSHIP": 1, "COMMERCIAL": 2, "WATERBODY": 1, "SPORTS & RECREATION": 2, "OPEN SPACE": 2, "EDUCATIONAL INSTITUTION": 2}, "enBloc": false, "projLat": 1.31052, "projLon": 103.76363}, {"name": "VIZ AT HOLLAND", "fullName": "VIZ AT HOLLAND", "gem": 57.6, "value": 78.4, "liquidity": 56.5, "trend": 90.7, "avgPSF": 2048, "avgPrice": 1940000, "txns": 1, "district": "10", "street": "QUEENSWAY", "tenure": "Freehold", "segment": "Core Central Region", "psfDiscount": -9.1, "psfTrend": 9.0, "recentTxns": 5, "sqft": 947, "luScore": 51.5, "luGreen": 100.0, "luBuzz": 0.0, "luEdu": 0.0, "luUpside": 90.0, "luPurity": 60.0, "luAvgGPR": 3.7, "luBreakdown": {"RESIDENTIAL": 6, "UTILITY": 2, "OPEN SPACE": 1, "PARK": 8, "WATERBODY": 3, "RESERVE SITE": 1, "HEALTH & MEDICAL CARE": 2, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 1, "CIVIC & COMMUNITY INSTITUTION": 1}, "enBloc": false, "projLat": 1.28852, "projLon": 103.79891}, {"name": "SIGNATURE PARK", "fullName": "SIGNATURE PARK", "gem": 57.0, "value": 57.3, "liquidity": 96.6, "trend": 55.2, "avgPSF": 1665, "avgPrice": 1740611, "txns": 8, "district": "21", "street": "TOH TUCK ROAD", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -4.2, "psfTrend": 2.0, "recentTxns": 25, "sqft": 1045, "luScore": 34.9, "luGreen": 90.0, "luBuzz": 0.0, "luEdu": 70.0, "luUpside": 11.5, "luPurity": 0.0, "luAvgGPR": 2.17, "luBreakdown": {"RESIDENTIAL": 602, "UTILITY": 9, "RESERVE SITE": 2, "BUSINESS 1": 6, "PARK": 3, "EDUCATIONAL INSTITUTION": 1}, "enBloc": false, "projLat": 1.33923, "projLon": 103.76371}, {"name": "DOMUS", "fullName": "DOMUS", "gem": 56.4, "value": 40.7, "liquidity": 32.4, "trend": 98.1, "avgPSF": 1658, "avgPrice": 1660000, "txns": 1, "district": "12", "street": "IRRAWADDY ROAD", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -1.2, "psfTrend": 29.2, "recentTxns": 3, "sqft": 1001, "luScore": 83.0, "luGreen": 60.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 40.0, "luAvgGPR": 2.1, "luBreakdown": {"COMMERCIAL": 6, "RESIDENTIAL": 459, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 3, "CIVIC & COMMUNITY INSTITUTION": 4, "PLACE OF WORSHIP": 3, "WHITE": 3, "RESERVE SITE": 1, "EDUCATIONAL INSTITUTION": 3, "HEALTH & MEDICAL CARE": 5, "PARK": 2, "UTILITY": 3, "HOTEL": 3}, "enBloc": true, "projLat": 1.32071, "projLon": 103.8426}];
+const projectTxns = {"CLEMENTI PARK": [{"date": "2024-11-01", "price": 2100000, "psf": 1561, "sqft": 1345}, {"date": "2024-12-01", "price": 2560000, "psf": 1486, "sqft": 1722}, {"date": "2024-12-01", "price": 1680000, "psf": 1445, "sqft": 1162}, {"date": "2025-08-01", "price": 2320000, "psf": 1400, "sqft": 1657}, {"date": "2025-08-01", "price": 1780000, "psf": 1503, "sqft": 1184}, {"date": "2025-08-01", "price": 3080000, "psf": 1644, "sqft": 1872}, {"date": "2025-08-01", "price": 3120000, "psf": 1374, "sqft": 2271}, {"date": "2025-08-01", "price": 2060000, "psf": 1531, "sqft": 1345}, {"date": "2025-09-01", "price": 2880000, "psf": 1641, "sqft": 1754}, {"date": "2025-10-01", "price": 2880000, "psf": 1538, "sqft": 1872}], "SIMS MEADOWS": [{"date": "2024-12-01", "price": 1220000, "psf": 1259, "sqft": 968}, {"date": "2025-07-01", "price": 1280000, "psf": 1321, "sqft": 968}, {"date": "2025-10-01", "price": 1500000, "psf": 1408, "sqft": 1065}], "CASA FORTUNA": [{"date": "2024-11-01", "price": 1610000, "psf": 1542, "sqft": 1044}, {"date": "2024-12-01", "price": 1600000, "psf": 1532, "sqft": 1044}, {"date": "2025-08-01", "price": 835000, "psf": 1650, "sqft": 505}, {"date": "2025-11-01", "price": 832500, "psf": 1646, "sqft": 505}], "LOFT @ NATHAN": [{"date": "2024-10-01", "price": 1510000, "psf": 1542, "sqft": 979}, {"date": "2025-01-01", "price": 910000, "psf": 2013, "sqft": 452}, {"date": "2025-09-01", "price": 788000, "psf": 2092, "sqft": 376}], "WHITEHAVEN": [{"date": "2024-09-01", "price": 1800000, "psf": 1086, "sqft": 1657}, {"date": "2024-11-01", "price": 1200000, "psf": 1138, "sqft": 1054}, {"date": "2025-01-01", "price": 1818000, "psf": 1578, "sqft": 1151}, {"date": "2025-08-01", "price": 1650000, "psf": 1065, "sqft": 1550}, {"date": "2025-11-01", "price": 1030000, "psf": 1914, "sqft": 538}], "SOUTHAVEN II": [{"date": "2024-09-01", "price": 2300000, "psf": 1751, "sqft": 1313}, {"date": "2024-10-01", "price": 2550000, "psf": 1692, "sqft": 1506}, {"date": "2024-12-01", "price": 1650000, "psf": 1580, "sqft": 1044}, {"date": "2024-12-01", "price": 3320000, "psf": 1383, "sqft": 2400}, {"date": "2024-12-01", "price": 3000000, "psf": 978, "sqft": 3067}, {"date": "2024-12-01", "price": 2300000, "psf": 1766, "sqft": 1302}, {"date": "2025-08-01", "price": 2500000, "psf": 1452, "sqft": 1722}, {"date": "2025-09-01", "price": 3050000, "psf": 994, "sqft": 3067}, {"date": "2025-09-01", "price": 2550000, "psf": 1657, "sqft": 1539}, {"date": "2025-09-01", "price": 5380000, "psf": 984, "sqft": 5468}, {"date": "2025-09-01", "price": 2750000, "psf": 1787, "sqft": 1539}, {"date": "2025-09-01", "price": 1618000, "psf": 1689, "sqft": 958}, {"date": "2025-10-01", "price": 2200000, "psf": 1548, "sqft": 1420}, {"date": "2025-11-01", "price": 2680000, "psf": 1741, "sqft": 1539}, {"date": "2025-11-01", "price": 2400000, "psf": 1664, "sqft": 1442}, {"date": "2025-11-01", "price": 1890000, "psf": 1688, "sqft": 1119}], "M5": [{"date": "2024-10-01", "price": 925000, "psf": 2096, "sqft": 441}, {"date": "2024-11-01", "price": 940000, "psf": 2130, "sqft": 441}, {"date": "2024-12-01", "price": 1540000, "psf": 2044, "sqft": 753}, {"date": "2024-12-01", "price": 1515000, "psf": 2040, "sqft": 742}, {"date": "2024-12-01", "price": 1578500, "psf": 2095, "sqft": 753}, {"date": "2024-12-01", "price": 1489000, "psf": 2005, "sqft": 742}, {"date": "2025-01-01", "price": 1548000, "psf": 2084, "sqft": 742}, {"date": "2025-08-01", "price": 935000, "psf": 2119, "sqft": 441}, {"date": "2025-10-01", "price": 1566300, "psf": 2109, "sqft": 742}, {"date": "2025-11-01", "price": 1535000, "psf": 2037, "sqft": 753}, {"date": "2025-12-01", "price": 1718000, "psf": 1698, "sqft": 1011}], "LE HILL CONDOMINIUM": [{"date": "2024-10-01", "price": 1765000, "psf": 1355, "sqft": 1302}, {"date": "2025-01-01", "price": 1470000, "psf": 1484, "sqft": 990}, {"date": "2025-02-01", "price": 1868000, "psf": 1400, "sqft": 1334}, {"date": "2025-08-01", "price": 1552000, "psf": 1567, "sqft": 990}], "M66": [{"date": "2024-09-01", "price": 1550000, "psf": 1412, "sqft": 1097}, {"date": "2024-11-01", "price": 990000, "psf": 1586, "sqft": 624}, {"date": "2025-09-01", "price": 2030000, "psf": 1319, "sqft": 1539}], "BEACON HEIGHTS": [{"date": "2024-10-01", "price": 1500000, "psf": 1620, "sqft": 925}, {"date": "2024-11-01", "price": 1628000, "psf": 1512, "sqft": 1076}, {"date": "2024-11-01", "price": 995000, "psf": 1491, "sqft": 667}, {"date": "2024-11-01", "price": 1350000, "psf": 1511, "sqft": 893}, {"date": "2024-12-01", "price": 1710000, "psf": 1589, "sqft": 1076}, {"date": "2025-08-01", "price": 1850000, "psf": 1669, "sqft": 1108}, {"date": "2025-09-01", "price": 1740000, "psf": 1569, "sqft": 1108}, {"date": "2025-09-01", "price": 1410000, "psf": 1523, "sqft": 925}, {"date": "2025-09-01", "price": 1700000, "psf": 1579, "sqft": 1076}, {"date": "2025-10-01", "price": 1038000, "psf": 1555, "sqft": 667}], "FLORAVIEW": [{"date": "2024-10-01", "price": 1680000, "psf": 1419, "sqft": 1184}, {"date": "2024-11-01", "price": 1098000, "psf": 1417, "sqft": 775}, {"date": "2025-01-01", "price": 962888, "psf": 1443, "sqft": 667}, {"date": "2025-02-01", "price": 1200000, "psf": 1593, "sqft": 753}, {"date": "2025-08-01", "price": 1100000, "psf": 1525, "sqft": 721}, {"date": "2025-08-01", "price": 855000, "psf": 1444, "sqft": 592}, {"date": "2025-10-01", "price": 1140000, "psf": 1605, "sqft": 710}, {"date": "2025-12-01", "price": 1600000, "psf": 1364, "sqft": 1173}], "CASSIA VIEW": [{"date": "2024-10-01", "price": 1786000, "psf": 1481, "sqft": 1205}, {"date": "2024-10-01", "price": 1777000, "psf": 1474, "sqft": 1205}, {"date": "2024-10-01", "price": 1760000, "psf": 1528, "sqft": 1151}, {"date": "2025-08-01", "price": 1950000, "psf": 1617, "sqft": 1205}], "REZI 24": [{"date": "2024-11-01", "price": 980000, "psf": 1785, "sqft": 548}, {"date": "2024-12-01", "price": 1780000, "psf": 1503, "sqft": 1184}, {"date": "2024-12-01", "price": 1062000, "psf": 1762, "sqft": 602}, {"date": "2025-08-01", "price": 1168888, "psf": 1671, "sqft": 699}, {"date": "2025-08-01", "price": 1280000, "psf": 1699, "sqft": 753}, {"date": "2025-09-01", "price": 1320000, "psf": 1752, "sqft": 753}, {"date": "2025-10-01", "price": 1098000, "psf": 1672, "sqft": 656}], "RESIDENTIAL APARTMENTS": [{"date": "2024-10-01", "price": 1243000, "psf": 1298, "sqft": 958}, {"date": "2024-10-01", "price": 1330000, "psf": 1177, "sqft": 1130}, {"date": "2024-10-01", "price": 2280000, "psf": 1780, "sqft": 1280}, {"date": "2024-11-01", "price": 18888000, "psf": 2446, "sqft": 7722}, {"date": "2024-11-01", "price": 1300000, "psf": 1150, "sqft": 1130}, {"date": "2024-11-01", "price": 1770000, "psf": 1787, "sqft": 990}, {"date": "2024-12-01", "price": 1480000, "psf": 1206, "sqft": 1227}, {"date": "2024-12-01", "price": 1500000, "psf": 1212, "sqft": 1237}, {"date": "2024-12-01", "price": 1500000, "psf": 1212, "sqft": 1237}, {"date": "2024-12-01", "price": 6920000, "psf": 3966, "sqft": 1744}, {"date": "2024-12-01", "price": 2400000, "psf": 2123, "sqft": 1130}, {"date": "2025-01-01", "price": 3500000, "psf": 1730, "sqft": 2023}, {"date": "2025-01-01", "price": 2170000, "psf": 1193, "sqft": 1819}, {"date": "2025-08-01", "price": 1300000, "psf": 1208, "sqft": 1076}, {"date": "2025-08-01", "price": 6500000, "psf": 3741, "sqft": 1737}, {"date": "2025-09-01", "price": 3700000, "psf": 2058, "sqft": 1797}, {"date": "2025-11-01", "price": 3020000, "psf": 2806, "sqft": 1076}], "D'LOTUS": [{"date": "2024-10-01", "price": 1650000, "psf": 1548, "sqft": 1065}, {"date": "2025-08-01", "price": 1750000, "psf": 1642, "sqft": 1065}, {"date": "2025-09-01", "price": 1750000, "psf": 1642, "sqft": 1065}, {"date": "2025-11-01", "price": 1340000, "psf": 1660, "sqft": 807}], "THE SPRINGS": [{"date": "2025-08-01", "price": 1960000, "psf": 1937, "sqft": 1011}, {"date": "2025-09-01", "price": 2190000, "psf": 2211, "sqft": 990}, {"date": "2025-09-01", "price": 1938000, "psf": 1957, "sqft": 990}], "THE CITRINE": [{"date": "2024-11-01", "price": 1530000, "psf": 1597, "sqft": 958}, {"date": "2024-12-01", "price": 1513500, "psf": 1580, "sqft": 958}, {"date": "2025-11-01", "price": 2225000, "psf": 1737, "sqft": 1280}], "REGAL COURT": [{"date": "2024-11-01", "price": 1580000, "psf": 1347, "sqft": 1173}, {"date": "2025-02-01", "price": 1288000, "psf": 1408, "sqft": 914}], "TROPIKA EAST": [{"date": "2024-12-01", "price": 1600000, "psf": 1457, "sqft": 1097}, {"date": "2025-08-01", "price": 1190000, "psf": 1626, "sqft": 731}, {"date": "2025-10-01", "price": 750000, "psf": 1699, "sqft": 441}], "BALESTIER POINT": [{"date": "2025-10-01", "price": 1520000, "psf": 1345, "sqft": 1130}, {"date": "2025-10-01", "price": 1900000, "psf": 1161, "sqft": 1636}], "QUEENSBERRY LODGE": [{"date": "2025-09-01", "price": 1620000, "psf": 1407, "sqft": 1151}], "PARC IMPERIAL": [{"date": "2024-10-01", "price": 888000, "psf": 1793, "sqft": 495}, {"date": "2024-11-01", "price": 753000, "psf": 1841, "sqft": 409}, {"date": "2024-11-01", "price": 705000, "psf": 1926, "sqft": 365}, {"date": "2025-01-01", "price": 698000, "psf": 1907, "sqft": 365}, {"date": "2025-02-01", "price": 790000, "psf": 1984, "sqft": 398}, {"date": "2025-08-01", "price": 1648888, "psf": 1380, "sqft": 1194}], "REGAL 35": [{"date": "2024-11-01", "price": 1500000, "psf": 1255, "sqft": 1194}], "ONE ST MICHAEL'S": [{"date": "2024-10-01", "price": 2039888, "psf": 1723, "sqft": 1184}, {"date": "2024-12-01", "price": 1550000, "psf": 1655, "sqft": 936}, {"date": "2025-11-01", "price": 2350000, "psf": 1882, "sqft": 1248}, {"date": "2025-11-01", "price": 2238000, "psf": 1890, "sqft": 1184}], "SPRINGDALE CONDOMINIUM": [{"date": "2024-09-01", "price": 1448000, "psf": 1564, "sqft": 925}, {"date": "2024-09-01", "price": 1880000, "psf": 1663, "sqft": 1130}, {"date": "2024-11-01", "price": 1855000, "psf": 1673, "sqft": 1108}, {"date": "2024-12-01", "price": 1855000, "psf": 1657, "sqft": 1119}, {"date": "2024-12-01", "price": 2550000, "psf": 1836, "sqft": 1388}, {"date": "2025-01-01", "price": 1990000, "psf": 1712, "sqft": 1162}, {"date": "2025-09-01", "price": 1980000, "psf": 1719, "sqft": 1151}, {"date": "2025-09-01", "price": 1928000, "psf": 1674, "sqft": 1151}, {"date": "2025-09-01", "price": 1515000, "psf": 1637, "sqft": 925}, {"date": "2025-09-01", "price": 2030000, "psf": 1763, "sqft": 1151}], "RIVERBAY": [{"date": "2024-11-01", "price": 800000, "psf": 1548, "sqft": 516}, {"date": "2025-02-01", "price": 1508000, "psf": 1592, "sqft": 947}, {"date": "2025-08-01", "price": 1543888, "psf": 1630, "sqft": 947}, {"date": "2025-10-01", "price": 798000, "psf": 1545, "sqft": 516}, {"date": "2025-10-01", "price": 1578000, "psf": 1705, "sqft": 925}], "THE PARC CONDOMINIUM": [{"date": "2024-09-01", "price": 2688300, "psf": 1892, "sqft": 1420}, {"date": "2024-09-01", "price": 1780000, "psf": 1817, "sqft": 979}, {"date": "2024-09-01", "price": 2268888, "psf": 1865, "sqft": 1216}, {"date": "2024-10-01", "price": 4700000, "psf": 1277, "sqft": 3681}, {"date": "2024-11-01", "price": 2460000, "psf": 2022, "sqft": 1216}, {"date": "2024-11-01", "price": 2473800, "psf": 1899, "sqft": 1302}, {"date": "2024-11-01", "price": 2760000, "psf": 1943, "sqft": 1420}, {"date": "2024-12-01", "price": 2900000, "psf": 1911, "sqft": 1517}, {"date": "2025-01-01", "price": 1030000, "psf": 1543, "sqft": 667}, {"date": "2025-01-01", "price": 2760000, "psf": 1943, "sqft": 1420}, {"date": "2025-01-01", "price": 2628000, "psf": 1850, "sqft": 1420}, {"date": "2025-09-01", "price": 3000000, "psf": 1991, "sqft": 1506}, {"date": "2025-10-01", "price": 2900000, "psf": 2041, "sqft": 1420}, {"date": "2025-12-01", "price": 2950000, "psf": 1944, "sqft": 1517}], "VIZ AT HOLLAND": [{"date": "2024-10-01", "price": 1632888, "psf": 1996, "sqft": 818}, {"date": "2024-10-01", "price": 910000, "psf": 1838, "sqft": 495}, {"date": "2025-01-01", "price": 1940000, "psf": 2048, "sqft": 947}, {"date": "2025-09-01", "price": 1800000, "psf": 2200, "sqft": 818}, {"date": "2025-09-01", "price": 1653000, "psf": 2021, "sqft": 818}], "SIGNATURE PARK": [{"date": "2024-09-01", "price": 2320000, "psf": 1711, "sqft": 1356}, {"date": "2024-09-01", "price": 1728000, "psf": 1638, "sqft": 1054}, {"date": "2024-09-01", "price": 2470000, "psf": 1738, "sqft": 1420}, {"date": "2024-10-01", "price": 2355000, "psf": 1657, "sqft": 1420}, {"date": "2024-10-01", "price": 2288000, "psf": 1687, "sqft": 1356}, {"date": "2024-10-01", "price": 1730000, "psf": 1640, "sqft": 1054}, {"date": "2024-11-01", "price": 1750000, "psf": 1694, "sqft": 1033}, {"date": "2025-01-01", "price": 2456000, "psf": 1729, "sqft": 1420}, {"date": "2025-01-01", "price": 2435000, "psf": 1740, "sqft": 1399}, {"date": "2025-01-01", "price": 2388000, "psf": 1681, "sqft": 1420}, {"date": "2025-02-01", "price": 2380000, "psf": 1714, "sqft": 1388}, {"date": "2025-02-01", "price": 2420000, "psf": 1729, "sqft": 1399}, {"date": "2025-09-01", "price": 1750000, "psf": 1676, "sqft": 1044}, {"date": "2025-09-01", "price": 3210000, "psf": 1864, "sqft": 1722}, {"date": "2025-10-01", "price": 1748888, "psf": 1658, "sqft": 1054}, {"date": "2025-10-01", "price": 2450000, "psf": 1751, "sqft": 1399}, {"date": "2025-10-01", "price": 2400000, "psf": 1756, "sqft": 1367}, {"date": "2025-11-01", "price": 1678000, "psf": 1624, "sqft": 1033}, {"date": "2025-11-01", "price": 2450000, "psf": 1724, "sqft": 1420}, {"date": "2025-11-01", "price": 1770000, "psf": 1678, "sqft": 1054}, {"date": "2025-11-01", "price": 2580000, "psf": 1844, "sqft": 1399}, {"date": "2025-11-01", "price": 2320000, "psf": 1671, "sqft": 1388}, {"date": "2025-11-01", "price": 2453000, "psf": 1753, "sqft": 1399}, {"date": "2025-12-01", "price": 2530000, "psf": 1781, "sqft": 1420}, {"date": "2025-12-01", "price": 1770000, "psf": 1713, "sqft": 1033}], "DOMUS": [{"date": "2024-09-01", "price": 3880000, "psf": 1392, "sqft": 2787}, {"date": "2025-08-01", "price": 1660000, "psf": 1658, "sqft": 1001}, {"date": "2025-08-01", "price": 2650000, "psf": 1939, "sqft": 1367}]};
+
+let priceChart = null;
+let luRadarChart = null;
+
+// ── Land Use zone colour palette ──────────────────────────────────
+const LU_COLOURS = {
+  'PARK': '#34d399', 'OPEN SPACE': '#6ee7b7', 'BEACH AREA': '#a7f3d0',
+  'SPORTS & RECREATION': '#10b981',
+  'RESIDENTIAL': '#60a5fa', 'RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY': '#93c5fd',
+  'RESIDENTIAL / INSTITUTION': '#bfdbfe',
+  'COMMERCIAL': '#f59e0b', 'COMMERCIAL & RESIDENTIAL': '#fbbf24',
+  'COMMERCIAL / INSTITUTION': '#fde68a',
+  'WHITE': '#e879f9', 'HOTEL': '#d8b4fe',
+  'EDUCATIONAL INSTITUTION': '#fb923c',
+  'BUSINESS 1': '#94a3b8', 'BUSINESS 2': '#64748b',
+  'UTILITY': '#475569', 'CEMETERY': '#374151',
+  'CIVIC & COMMUNITY INSTITUTION': '#67e8f9',
+  'HEALTH & MEDICAL CARE': '#38bdf8',
+  'PLACE OF WORSHIP': '#c4b5fd',
+  'RESERVE SITE': '#6b7280',
+};
+function luColour(lu) {
+  return LU_COLOURS[lu] || '#94a3b8';
+}
+
+function renderBarChart(containerId, data, labelKey, valueKey, fillClass) {
+  const el = document.getElementById(containerId);
+  if (!data.length) { el.innerHTML = '<p style="color:#94a3b8;font-size:0.8rem;">No data</p>'; return; }
+  const maxVal = Math.max(...data.map(d => d[valueKey]));
+  const top10 = data.slice(0, 12);
+  el.innerHTML = top10.map(d => {
+    const pct = (d[valueKey] / maxVal * 100).toFixed(0);
+    return `<div class="bar-row">
+      <span class="bar-label">${d[labelKey]}</span>
+      <div class="bar-track">
+        <div class="bar-fill ${fillClass}" style="width:${pct}%">${d[valueKey]}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+renderBarChart('districtChart', districtData, 'district', 'count', 'bar-fill-accent');
+renderBarChart('yearChart', yoyData, 'year', 'count', 'bar-fill-purple');
+
+// Modal functions
+function openModal(projectName, idx) {
+  const proj = projectData[idx];
+  const txns = projectTxns[projectName] || [];
+
+  document.getElementById('modalTitle').textContent = projectName;
+  document.getElementById('modalSubtitle').textContent = `D${proj.district} · ${proj.street} · ${proj.tenure}`;
+
+  // Stats
+  document.getElementById('modalStats').innerHTML = `
+    <div class="modal-stat"><div class="label">Gem Score</div><div class="value">${proj.gem}</div></div>
+    <div class="modal-stat"><div class="label">Avg Price</div><div class="value">$${proj.avgPrice.toLocaleString()}</div></div>
+    <div class="modal-stat"><div class="label">Avg PSF</div><div class="value">$${proj.avgPSF}</div></div>
+    <div class="modal-stat"><div class="label">PSF Discount</div><div class="value">${proj.psfDiscount > 0 ? '+' : ''}${proj.psfDiscount}%</div></div>
+    <div class="modal-stat"><div class="label">PSF Trend</div><div class="value">${proj.psfTrend > 0 ? '+' : ''}${proj.psfTrend}%</div></div>
+    <div class="modal-stat"><div class="label">Total Txns</div><div class="value">${proj.txns}</div></div>
+  `;
+
+  // Transaction table
+  const tbody = document.querySelector('#txnTable tbody');
+  tbody.innerHTML = txns.slice(-20).reverse().map(t => `
+    <tr>
+      <td>${t.date}</td>
+      <td>$${t.price.toLocaleString()}</td>
+      <td>$${t.psf}</td>
+      <td>${t.sqft}</td>
+    </tr>
+  `).join('');
+
+  // Chart
+  if (priceChart) priceChart.destroy();
+  const ctx = document.getElementById('priceChart').getContext('2d');
+
+  // Group by year-month for cleaner chart
+  const grouped = {};
+  txns.forEach(t => {
+    const ym = t.date.substring(0, 7);
+    if (!grouped[ym]) grouped[ym] = [];
+    grouped[ym].push(t.psf);
+  });
+  const labels = Object.keys(grouped).sort();
+  const avgPsf = labels.map(ym => {
+    const vals = grouped[ym];
+    return Math.round(vals.reduce((a,b) => a+b, 0) / vals.length);
+  });
+  const prices = labels.map(ym => {
+    const txnsInMonth = txns.filter(t => t.date.startsWith(ym));
+    const avgPrice = txnsInMonth.reduce((a,b) => a + b.price, 0) / txnsInMonth.length;
+    return Math.round(avgPrice);
+  });
+
+  priceChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Avg PSF ($)',
+          data: avgPsf,
+          borderColor: '#22d3ee',
+          backgroundColor: 'rgba(34,211,238,0.1)',
+          tension: 0.3,
+          yAxisID: 'y',
+        },
+        {
+          label: 'Avg Price ($)',
+          data: prices,
+          borderColor: '#a78bfa',
+          backgroundColor: 'rgba(167,139,250,0.1)',
+          tension: 0.3,
+          yAxisID: 'y1',
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { labels: { color: '#94a3b8' } }
+      },
+      scales: {
+        x: { ticks: { color: '#94a3b8', maxRotation: 45 }, grid: { color: '#1e293b' } },
+        y: {
+          type: 'linear', position: 'left',
+          title: { display: true, text: 'PSF ($)', color: '#22d3ee' },
+          ticks: { color: '#22d3ee' }, grid: { color: '#1e293b' }
+        },
+        y1: {
+          type: 'linear', position: 'right',
+          title: { display: true, text: 'Price ($)', color: '#a78bfa' },
+          ticks: { color: '#a78bfa' }, grid: { drawOnChartArea: false }
+        }
+      }
+    }
+  });
+
+  // ── Land Use Radar ──────────────────────────────────────────────
+  const luSec = document.getElementById('modalLUSection');
+  if (proj.luScore !== null && proj.luScore !== undefined) {
+    luSec.style.display = 'block';
+
+    // Dimension cards
+    const dims = [
+      { label:'🌿 Green Space',   val: proj.luGreen,   colour:'#34d399' },
+      { label:'🏪 Urban Buzz',    val: proj.luBuzz,    colour:'#f59e0b' },
+      { label:'🏫 Education',     val: proj.luEdu,     colour:'#fb923c' },
+      { label:'🚀 Future Upside', val: proj.luUpside,  colour:'#e879f9' },
+      { label:'✅ Purity',        val: proj.luPurity,  colour:'#60a5fa' },
+    ];
+    document.getElementById('luDimGrid').innerHTML = dims.map(d => `
+      <div class="lu-dim">
+        <div class="label">${d.label}</div>
+        <div class="value" style="color:${d.colour}">${d.val}</div>
+      </div>`).join('');
+
+    // Radar chart
+    if (luRadarChart) luRadarChart.destroy();
+    const rCtx = document.getElementById('luRadarChart').getContext('2d');
+    luRadarChart = new Chart(rCtx, {
+      type: 'radar',
+      data: {
+        labels: ['Green Space','Urban Buzz','Education','Future Upside','Purity'],
+        datasets: [{
+          label: proj.fullName || proj.name,
+          data: [proj.luGreen, proj.luBuzz, proj.luEdu, proj.luUpside, proj.luPurity],
+          borderColor: '#22d3ee',
+          backgroundColor: 'rgba(34,211,238,0.15)',
+          pointBackgroundColor: '#22d3ee',
+          pointRadius: 4,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: { r: {
+          min: 0, max: 100,
+          ticks: { color:'#94a3b8', stepSize:25, backdropColor:'transparent' },
+          grid: { color:'#1e293b' },
+          pointLabels: { color:'#94a3b8', font:{ size:11 } },
+        } },
+        plugins: { legend: { display:false } }
+      }
+    });
+
+    // Land use breakdown donut (nearby zone types at 500 m)
+    const bdKeys = Object.keys(proj.luBreakdown || {}).sort((a,b) => proj.luBreakdown[b]-proj.luBreakdown[a]).slice(0,8);
+    const bdVals = bdKeys.map(k => proj.luBreakdown[k]);
+    document.getElementById('luBreakdownList').innerHTML =
+      '<div style="font-size:0.68rem;color:#64748b;margin-bottom:0.3rem;text-transform:uppercase;letter-spacing:0.5px;">Top zones within 500 m</div>' +
+      bdKeys.map((k,i) => `
+        <div style="display:flex;align-items:center;gap:6px;margin:2px 0;">
+          <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${luColour(k)};flex-shrink:0;"></span>
+          <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${k}</span>
+          <span style="font-family:'Space Mono',monospace;color:var(--accent)">${bdVals[i]}</span>
+        </div>`).join('');
+
+    // En-bloc alert
+    document.getElementById('enBlocAlert').style.display = proj.enBloc ? 'block' : 'none';
+
+    // GPR note
+    if (proj.luAvgGPR) {
+      document.getElementById('luBreakdownList').innerHTML +=
+        `<div style="margin-top:0.5rem;font-size:0.7rem;color:#64748b;">Avg nearby GPR: <span style="color:var(--accent2);font-family:'Space Mono',monospace;">${proj.luAvgGPR}</span></div>`;
+    }
+  } else {
+    luSec.style.display = 'none';
+  }
+
+  document.getElementById('projectModal').classList.add('active');
+}
+
+function closeModal() {
+  document.getElementById('projectModal').classList.remove('active');
+}
+
+// Close modal on overlay click
+document.getElementById('projectModal').addEventListener('click', (e) => {
+  if (e.target.id === 'projectModal') closeModal();
+});
+
+// Close modal on Escape key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeModal();
+});
+
+// Table row click handlers
+document.querySelectorAll('#mainTable tbody tr.clickable').forEach(row => {
+  row.addEventListener('click', () => {
+    const projectName = row.dataset.project;
+    const idx = parseInt(row.dataset.idx);
+    openModal(projectName, idx);
+  });
+});
+
+// Table sorting
+document.querySelectorAll('#mainTable th').forEach(th => {
+  th.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const table = document.getElementById('mainTable');
+    const tbody = table.querySelector('tbody');
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    const col = parseInt(th.dataset.col);
+    const asc = !th.classList.contains('sorted-asc');
+
+    table.querySelectorAll('th').forEach(h => h.classList.remove('sorted-asc','sorted-desc'));
+    th.classList.add(asc ? 'sorted-asc' : 'sorted-desc');
+
+    rows.sort((a, b) => {
+      let va = a.children[col].textContent.trim();
+      let vb = b.children[col].textContent.trim();
+      const na = parseFloat(va.replace(/[^\d.\-]/g, ''));
+      const nb = parseFloat(vb.replace(/[^\d.\-]/g, ''));
+      if (!isNaN(na) && !isNaN(nb)) return asc ? na - nb : nb - na;
+      return asc ? va.localeCompare(vb) : vb.localeCompare(va);
+    });
+    rows.forEach(r => tbody.appendChild(r));
+  });
+});
+</script>
+</body>
+</html>
