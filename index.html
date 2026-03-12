@@ -306,35 +306,25 @@
       <div class="value">$1,715</div>
     </div>
     <div class="stat-card">
-      <div class="label">Top Gem Score</div>
-      <div class="value">78/100</div>
+      <div class="label">Top PRISM</div>
+      <div class="value">71/100</div>
     </div>
   </div>
 
   <div class="strategy">
-    <strong>🧠 How the "Hidden Gem" Score Works</strong><br><br>
-    <div class="layer"><span class="tag">28%</span> <strong>Value:</strong> Buying below district median PSF — paying less than neighbours</div>
-    <div class="layer"><span class="tag">22%</span> <strong>Liquidity:</strong> Recent transaction volume — easy to sell when you want to upgrade</div>
-    <div class="layer"><span class="tag">20%</span> <strong>Resalability:</strong> 4-component score: size bracket (89%→95%+ profit rate), appreciation handicap, buyer pool depth, and <em>transaction velocity</em> — encodes ST article + Stacked Homes "1 txn in 10 yrs" illiquidity patterns</div>
-    <div class="layer"><span class="tag">18%</span> <strong>Trend:</strong> Appreciation-adjusted PSF trajectory — discounted for units below 1,000 sqft per ST-reported 3% vs 5–8%/yr size differential</div>
-    <div class="layer"><span class="tag">12%</span> <strong>Size Efficiency:</strong> More sqft per dollar — maximising living space</div>
-    <div class="layer"><span class="tag">+15%</span> <strong>Location Intel:</strong> MasterPlan 2025 blended at project level — parks, schools, commercial vitality &amp; upside zones</div>
-  </div>
-
-  <div class="strategy" style="margin-top:1rem;">
-    <strong>🗺️ Location Intelligence (MasterPlan 2025)</strong><br><br>
-    <div class="layer"><span class="tag" style="background:rgba(52,211,153,0.15);color:#34d399;">🌿 Green</span> <strong>Green Space:</strong> Parks, open space &amp; sports within 500 m — premium liveability signal</div>
-    <div class="layer"><span class="tag" style="background:rgba(245,158,11,0.15);color:#f59e0b;">🏪 Buzz</span> <strong>Urban Vitality:</strong> Commercial zones within 300 m — walkable convenience &amp; F&amp;B</div>
-    <div class="layer"><span class="tag" style="background:rgba(251,146,60,0.15);color:#fb923c;">🏫 Edu</span> <strong>Education Access:</strong> Schools within 1 km — significant price premium driver in Singapore</div>
-    <div class="layer"><span class="tag" style="background:rgba(232,121,249,0.15);color:#e879f9;">🚀 Upside</span> <strong>Future Upside:</strong> WHITE &amp; COMMERCIAL &amp; RESIDENTIAL zones within 800 m — intensification &amp; en-bloc catalyst</div>
-    <div class="layer"><span class="tag" style="background:rgba(96,165,250,0.15);color:#60a5fa;">✅ Pure</span> <strong>Neighbourhood Purity:</strong> Low industrial / utility zone density — quality living environment</div>
+    <strong>🎯 PRISM_rev — Revised Property Return Intelligence Scoring Model</strong><br>
+    <div style="margin:0.7rem 0;padding:0.8rem 1rem;background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.2);border-radius:8px;font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--accent2);">
+      PRISM_rev(p) = 0.25·AVA + 0.20·MLR + 0.15·DM + 0.15·NTC + 0.15·ESQ + 0.10·YR
+    </div>
+    <div class="layer"><span class="tag">AVA 25%</span> <strong>Adjusted Value Alpha:</strong> PSF vs size-band-adjusted district peers (150 sqft bands) — eliminates unfair comparison of large vs small units. Value trap guard: &gt;25% discount penalised 40%.</div>
+    <div class="layer"><span class="tag">MLR 20%</span> <strong>Market Liquidity &amp; Resalability:</strong> Merged component (60% unit resalability + 40% market depth) — eliminates double-counting of illiquidity that existed in old RI+ML separation.</div>
+    <div class="layer"><span class="tag">DM  15%</span> <strong>Dynamic Momentum:</strong> PSF appreciation trend with data-derived segment multiplier — replaces hardcoded CCR 0.57 penalty with live-computed relative performance per market segment.</div>
+    <div class="layer"><span class="tag">NTC 15%</span> <strong>Non-linear Transit Connectivity:</strong> Logistic sigmoid decay centred at 480 m (psychological ~6 min cliff) — reflects real buyer behaviour: steep drop at 400–550 m, flat below 300 m and above 650 m.</div>
+    <div class="layer"><span class="tag">ESQ 15%</span> <strong>Enhanced Spatial Quality:</strong> 70% MasterPlan 2025 land use (Green/Buzz/Education/Upside/Purity) + 30% actual primary school proximity (elite SAP/autonomous schools weighted 2×).</div>
+    <div class="layer"><span class="tag">YR  10%</span> <strong>Yield Representation:</strong> Estimated gross rental yield = sqft × region rental PSF × 12 / price. Anchors valuation to income potential — prevents overpaying for trophy assets with no rental upside.</div>
     <div style="margin-top:0.8rem;font-size:0.82rem;">
       <span class="enbloc-badge" style="font-size:0.72rem;">EN-BLOC▲</span>
-      Projects flagged <strong style="color:#f59e0b;">EN-BLOC▲</strong> are freehold with ≥2 WHITE / C&amp;R zones within 800 m — historically the highest-correlation indicator of successful en-bloc redevelopment.
-    </div>
-    <div style="margin-top:0.5rem;font-size:0.82rem;">
-      <span class="thin-badge" style="font-size:0.72rem;">THIN</span>
-      Projects flagged <strong style="color:var(--red);">THIN</strong> have &lt;1 transaction/year historically — boutique condos, CCR wealth-storage assets, or niche walk-ups. Expect a longer exit window (Stacked Homes research).
+      Freehold + top-quartile WHITE/C&amp;R density within 800 m (p75 threshold) — strongest en-bloc catalyst signal.
     </div>
   </div>
 
@@ -346,7 +336,7 @@
           <th data-col="0">#</th>
           <th data-col="1">Project</th>
           <th data-col="2">District</th>
-          <th data-col="3">Gem Score</th>
+          <th data-col="3">PRISM ▼</th>
           <th data-col="4">Avg Price</th>
           <th data-col="5">Avg PSF</th>
           <th data-col="6">PSF Discount</th>
@@ -360,418 +350,19 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="clickable" data-project="CLEMENTI PARK" data-idx="0">
+        <tr class="clickable" data-project="DOMUS" data-idx="0">
           <td class="rank-cell">1</td>
-          <td><strong>CLEMENTI PARK</strong></td>
-          <td>D21</td>
-          <td>
-            <div style="display:flex;align-items:center;gap:6px;">
-              <div class="gem-bar"><div class="gem-bar-fill" style="width:77.7%"></div></div>
-              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">77.7</span>
-            </div>
-          </td>
-          <td>$1,730,000</td>
-          <td>$1,474</td>
-          <td><span class="badge badge-green">-15.2%</span></td>
-          <td><span class="badge badge-green">+4.5%</span></td>
-          <td>2</td>
-          <td>1173</td>
-          <td style="font-size:0.72rem;">Freehold</td>
-          <td><span class="lu-pill lu-mid">52.1</span></td>
-          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">1.70</td>
-          <td style="font-size:0.72rem;color:var(--text-dim);">SUNSET WAY</td>
-        </tr>
-        <tr class="clickable" data-project="WHITEHAVEN" data-idx="1">
-          <td class="rank-cell">2</td>
-          <td><strong>WHITEHAVEN</strong></td>
-          <td>D5</td>
-          <td>
-            <div style="display:flex;align-items:center;gap:6px;">
-              <div class="gem-bar"><div class="gem-bar-fill" style="width:75.7%"></div></div>
-              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">75.7</span>
-            </div>
-          </td>
-          <td>$1,818,000</td>
-          <td>$1,578</td>
-          <td><span class="badge badge-green">-12.0%</span></td>
-          <td><span class="badge badge-green">+36.6%</span></td>
-          <td>1</td>
-          <td>1152</td>
-          <td style="font-size:0.72rem;">Freehold</td>
-          <td><span class="lu-pill lu-mid">58.3</span></td>
-          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.28</td>
-          <td style="font-size:0.72rem;color:var(--text-dim);">PASIR PANJANG ROAD</td>
-        </tr>
-        <tr class="clickable" data-project="CASA FORTUNA" data-idx="2">
-          <td class="rank-cell">3</td>
-          <td><strong>CASA FORTUNA</strong> <span class="enbloc-badge">EN-BLOC▲</span></td>
+          <td><strong>DOMUS</strong> <span class="enbloc-badge">EN-BLOC▲</span></td>
           <td>D12</td>
-          <td>
-            <div style="display:flex;align-items:center;gap:6px;">
-              <div class="gem-bar"><div class="gem-bar-fill" style="width:74.0%"></div></div>
-              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">74.0</span>
-            </div>
-          </td>
-          <td>$1,605,000</td>
-          <td>$1,537</td>
-          <td><span class="badge badge-green">-8.4%</span></td>
-          <td><span class="badge badge-green">+7.2%</span></td>
-          <td>2</td>
-          <td>1044</td>
-          <td style="font-size:0.72rem;">Freehold</td>
-          <td><span class="lu-pill lu-high">97.0</span></td>
-          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.91</td>
-          <td style="font-size:0.72rem;color:var(--text-dim);">AH HOOD ROAD</td>
-        </tr>
-        <tr class="clickable" data-project="SOUTHAVEN II" data-idx="3">
-          <td class="rank-cell">4</td>
-          <td><strong>SOUTHAVEN II</strong></td>
-          <td>D21</td>
-          <td>
-            <div style="display:flex;align-items:center;gap:6px;">
-              <div class="gem-bar"><div class="gem-bar-fill" style="width:71.9%"></div></div>
-              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">71.9</span>
-            </div>
-          </td>
-          <td>$1,719,333</td>
-          <td>$1,652</td>
-          <td><span class="badge badge-green">-4.9%</span></td>
-          <td><span class="badge badge-green">+10.0%</span></td>
-          <td>3</td>
-          <td>1041</td>
-          <td style="font-size:0.72rem;">999 yrs lease commen</td>
-          <td><span class="lu-pill lu-high">78.0</span></td>
-          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">1.59</td>
-          <td style="font-size:0.72rem;color:var(--text-dim);">HINDHEDE WALK</td>
-        </tr>
-        <tr class="clickable" data-project="THE WATERLINE" data-idx="4">
-          <td class="rank-cell">5</td>
-          <td><strong>THE WATERLINE</strong></td>
-          <td>D19</td>
           <td>
             <div style="display:flex;align-items:center;gap:6px;">
               <div class="gem-bar"><div class="gem-bar-fill" style="width:70.7%"></div></div>
               <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">70.7</span>
             </div>
           </td>
-          <td>$1,716,944</td>
-          <td>$1,470</td>
-          <td><span class="badge badge-green">-8.4%</span></td>
-          <td><span class="badge badge-green">+5.5%</span></td>
-          <td>2</td>
-          <td>1168</td>
-          <td style="font-size:0.72rem;">Freehold</td>
-          <td><span class="lu-pill lu-high">77.1</span></td>
-          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">1.41</td>
-          <td style="font-size:0.72rem;color:var(--text-dim);">POH HUAT ROAD WEST</td>
-        </tr>
-        <tr class="clickable" data-project="M5" data-idx="5">
-          <td class="rank-cell">6</td>
-          <td><strong>M5</strong></td>
-          <td>D10</td>
-          <td>
-            <div style="display:flex;align-items:center;gap:6px;">
-              <div class="gem-bar"><div class="gem-bar-fill" style="width:68.6%"></div></div>
-              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">68.6</span>
-            </div>
-          </td>
-          <td>$1,718,000</td>
-          <td>$1,698</td>
-          <td><span class="badge badge-green">-24.6%</span></td>
-          <td><span class="badge badge-amber">-3.5%</span></td>
-          <td>1</td>
-          <td>1012</td>
-          <td style="font-size:0.72rem;">Freehold</td>
-          <td><span class="lu-pill lu-high">100.0</span></td>
-          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.28</td>
-          <td style="font-size:0.72rem;color:var(--text-dim);">JALAN MUTIARA</td>
-        </tr>
-        <tr class="clickable" data-project="BEACON HEIGHTS" data-idx="6">
-          <td class="rank-cell">7</td>
-          <td><strong>BEACON HEIGHTS</strong> <span class="enbloc-badge">EN-BLOC▲</span></td>
-          <td>D12</td>
-          <td>
-            <div style="display:flex;align-items:center;gap:6px;">
-              <div class="gem-bar"><div class="gem-bar-fill" style="width:67.6%"></div></div>
-              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">67.6</span>
-            </div>
-          </td>
-          <td>$1,688,000</td>
-          <td>$1,590</td>
-          <td><span class="badge badge-green">-5.2%</span></td>
-          <td><span class="badge badge-green">+2.2%</span></td>
-          <td>6</td>
-          <td>1062</td>
-          <td style="font-size:0.72rem;">999 yrs lease commen</td>
-          <td><span class="lu-pill lu-high">80.0</span></td>
-          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.05</td>
-          <td style="font-size:0.72rem;color:var(--text-dim);">MAR THOMA ROAD</td>
-        </tr>
-        <tr class="clickable" data-project="M66" data-idx="7">
-          <td class="rank-cell">8</td>
-          <td><strong>M66</strong> <span class="enbloc-badge">EN-BLOC▲</span></td>
-          <td>D12</td>
-          <td>
-            <div style="display:flex;align-items:center;gap:6px;">
-              <div class="gem-bar"><div class="gem-bar-fill" style="width:67.6%"></div></div>
-              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">67.6</span>
-            </div>
-          </td>
-          <td>$1,550,000</td>
-          <td>$1,412</td>
-          <td><span class="badge badge-green">-15.8%</span></td>
-          <td><span class="badge badge-green">+2.9%</span></td>
-          <td>1</td>
-          <td>1098</td>
-          <td style="font-size:0.72rem;">Freehold</td>
-          <td><span class="lu-pill lu-high">91.0</span></td>
-          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.14</td>
-          <td style="font-size:0.72rem;color:var(--text-dim);">MOONSTONE LANE</td>
-        </tr>
-        <tr class="clickable" data-project="FLORAVIEW" data-idx="8">
-          <td class="rank-cell">9</td>
-          <td><strong>FLORAVIEW</strong></td>
-          <td>D20</td>
-          <td>
-            <div style="display:flex;align-items:center;gap:6px;">
-              <div class="gem-bar"><div class="gem-bar-fill" style="width:67.5%"></div></div>
-              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">67.5</span>
-            </div>
-          </td>
-          <td>$1,640,000</td>
-          <td>$1,392</td>
-          <td><span class="badge badge-green">-22.8%</span></td>
-          <td><span class="badge badge-green">+1.1%</span></td>
-          <td>2</td>
-          <td>1179</td>
-          <td style="font-size:0.72rem;">Freehold</td>
-          <td><span class="lu-pill lu-mid">40.4</span></td>
-          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.05</td>
-          <td style="font-size:0.72rem;color:var(--text-dim);">ANG MO KIO STREET 66</td>
-        </tr>
-        <tr class="clickable" data-project="D\'LOTUS" data-idx="9">
-          <td class="rank-cell">10</td>
-          <td><strong>D'LOTUS</strong> <span class="enbloc-badge">EN-BLOC▲</span></td>
-          <td>D12</td>
-          <td>
-            <div style="display:flex;align-items:center;gap:6px;">
-              <div class="gem-bar"><div class="gem-bar-fill" style="width:63.5%"></div></div>
-              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">63.5</span>
-            </div>
-          </td>
-          <td>$1,716,667</td>
-          <td>$1,611</td>
-          <td><span class="badge badge-green">-4.0%</span></td>
-          <td><span class="badge badge-green">+3.5%</span></td>
-          <td>3</td>
-          <td>1066</td>
-          <td style="font-size:0.72rem;">Freehold</td>
-          <td><span class="lu-pill lu-high">98.0</span></td>
-          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.89</td>
-          <td style="font-size:0.72rem;color:var(--text-dim);">LORONG AMPAS</td>
-        </tr>
-        <tr class="clickable" data-project="LOFT @ NATHAN" data-idx="10">
-          <td class="rank-cell">11</td>
-          <td><strong>LOFT @ NATHAN</strong></td>
-          <td>D10</td>
-          <td>
-            <div style="display:flex;align-items:center;gap:6px;">
-              <div class="gem-bar"><div class="gem-bar-fill" style="width:62.0%"></div></div>
-              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">62.0</span>
-            </div>
-          </td>
-          <td>$1,510,000</td>
-          <td>$1,542</td>
-          <td><span class="badge badge-green">-31.5%</span></td>
-          <td><span class="badge badge-green">+33.1%</span></td>
-          <td>1</td>
-          <td>980</td>
-          <td style="font-size:0.72rem;">Freehold</td>
-          <td><span class="lu-pill lu-high">66.0</span></td>
-          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.01</td>
-          <td style="font-size:0.72rem;color:var(--text-dim);">NATHAN ROAD</td>
-        </tr>
-        <tr class="clickable" data-project="SPRINGDALE CONDOMINIUM" data-idx="11">
-          <td class="rank-cell">12</td>
-          <td><strong>SPRINGDALE CONDOMINIUM</strong></td>
-          <td>D21</td>
-          <td>
-            <div style="display:flex;align-items:center;gap:6px;">
-              <div class="gem-bar"><div class="gem-bar-fill" style="width:61.6%"></div></div>
-              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">61.6</span>
-            </div>
-          </td>
-          <td>$1,857,571</td>
-          <td>$1,676</td>
-          <td><span class="badge badge-green">-3.5%</span></td>
-          <td><span class="badge badge-green">+1.3%</span></td>
-          <td>7</td>
-          <td>1107</td>
-          <td style="font-size:0.72rem;">999 yrs lease commen</td>
-          <td><span class="lu-pill lu-high">78.0</span></td>
-          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">1.59</td>
-          <td style="font-size:0.72rem;color:var(--text-dim);">HINDHEDE WALK</td>
-        </tr>
-        <tr class="clickable" data-project="LE HILL CONDOMINIUM" data-idx="12">
-          <td class="rank-cell">13</td>
-          <td><strong>LE HILL CONDOMINIUM</strong></td>
-          <td>D5</td>
-          <td>
-            <div style="display:flex;align-items:center;gap:6px;">
-              <div class="gem-bar"><div class="gem-bar-fill" style="width:61.4%"></div></div>
-              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">61.4</span>
-            </div>
-          </td>
-          <td>$1,552,000</td>
-          <td>$1,567</td>
-          <td><span class="badge badge-green">-12.6%</span></td>
-          <td><span class="badge badge-green">+4.5%</span></td>
-          <td>1</td>
-          <td>990</td>
-          <td style="font-size:0.72rem;">Freehold</td>
-          <td><span class="lu-pill lu-high">69.0</span></td>
-          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">1.53</td>
-          <td style="font-size:0.72rem;color:var(--text-dim);">PASIR PANJANG HILL</td>
-        </tr>
-        <tr class="clickable" data-project="REGAL COURT" data-idx="13">
-          <td class="rank-cell">14</td>
-          <td><strong>REGAL COURT</strong> <span class="enbloc-badge">EN-BLOC▲</span></td>
-          <td>D12</td>
-          <td>
-            <div style="display:flex;align-items:center;gap:6px;">
-              <div class="gem-bar"><div class="gem-bar-fill" style="width:60.2%"></div></div>
-              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">60.2</span>
-            </div>
-          </td>
-          <td>$1,580,000</td>
-          <td>$1,347</td>
-          <td><span class="badge badge-green">-19.7%</span></td>
-          <td><span class="badge badge-amber">0.0%</span></td>
-          <td>1</td>
-          <td>1173</td>
-          <td style="font-size:0.72rem;">Freehold</td>
-          <td><span class="lu-pill lu-high">98.0</span></td>
-          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.89</td>
-          <td style="font-size:0.72rem;color:var(--text-dim);">KIM KEAT ROAD</td>
-        </tr>
-        <tr class="clickable" data-project="BALESTIER POINT" data-idx="14">
-          <td class="rank-cell">15</td>
-          <td><strong>BALESTIER POINT</strong> <span class="enbloc-badge">EN-BLOC▲</span></td>
-          <td>D12</td>
-          <td>
-            <div style="display:flex;align-items:center;gap:6px;">
-              <div class="gem-bar"><div class="gem-bar-fill" style="width:59.6%"></div></div>
-              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">59.6</span>
-            </div>
-          </td>
-          <td>$1,520,000</td>
-          <td>$1,345</td>
-          <td><span class="badge badge-green">-19.8%</span></td>
-          <td><span class="badge badge-amber">0.0%</span></td>
-          <td>1</td>
-          <td>1130</td>
-          <td style="font-size:0.72rem;">Freehold</td>
-          <td><span class="lu-pill lu-high">97.0</span></td>
-          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.90</td>
-          <td style="font-size:0.72rem;color:var(--text-dim);">BALESTIER ROAD</td>
-        </tr>
-        <tr class="clickable" data-project="THE SPRINGS" data-idx="15">
-          <td class="rank-cell">16</td>
-          <td><strong>THE SPRINGS</strong> <span class="enbloc-badge">EN-BLOC▲</span></td>
-          <td>D11</td>
-          <td>
-            <div style="display:flex;align-items:center;gap:6px;">
-              <div class="gem-bar"><div class="gem-bar-fill" style="width:59.5%"></div></div>
-              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">59.5</span>
-            </div>
-          </td>
-          <td>$1,949,000</td>
-          <td>$1,947</td>
-          <td><span class="badge badge-green">-7.8%</span></td>
-          <td><span class="badge badge-green">+7.6%</span></td>
-          <td>2</td>
-          <td>1001</td>
-          <td style="font-size:0.72rem;">Freehold</td>
-          <td><span class="lu-pill lu-high">100.0</span></td>
-          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.32</td>
-          <td style="font-size:0.72rem;color:var(--text-dim);">MOULMEIN RISE</td>
-        </tr>
-        <tr class="clickable" data-project="PARC IMPERIAL" data-idx="16">
-          <td class="rank-cell">17</td>
-          <td><strong>PARC IMPERIAL</strong></td>
-          <td>D5</td>
-          <td>
-            <div style="display:flex;align-items:center;gap:6px;">
-              <div class="gem-bar"><div class="gem-bar-fill" style="width:58.8%"></div></div>
-              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">58.8</span>
-            </div>
-          </td>
-          <td>$1,648,888</td>
-          <td>$1,380</td>
-          <td><span class="badge badge-green">-23.0%</span></td>
-          <td><span class="badge badge-red">-5.2%</span></td>
-          <td>1</td>
-          <td>1195</td>
-          <td style="font-size:0.72rem;">Freehold</td>
-          <td><span class="lu-pill lu-mid">58.3</span></td>
-          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.28</td>
-          <td style="font-size:0.72rem;color:var(--text-dim);">PASIR PANJANG ROAD</td>
-        </tr>
-        <tr class="clickable" data-project="SIGNATURE PARK" data-idx="17">
-          <td class="rank-cell">18</td>
-          <td><strong>SIGNATURE PARK</strong></td>
-          <td>D21</td>
-          <td>
-            <div style="display:flex;align-items:center;gap:6px;">
-              <div class="gem-bar"><div class="gem-bar-fill" style="width:58.6%"></div></div>
-              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">58.6</span>
-            </div>
-          </td>
-          <td>$1,740,611</td>
-          <td>$1,665</td>
-          <td><span class="badge badge-green">-4.2%</span></td>
-          <td><span class="badge badge-green">+2.0%</span></td>
-          <td>8</td>
-          <td>1045</td>
-          <td style="font-size:0.72rem;">Freehold</td>
-          <td><span class="lu-pill lu-low">34.9</span></td>
-          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.17</td>
-          <td style="font-size:0.72rem;color:var(--text-dim);">TOH TUCK ROAD</td>
-        </tr>
-        <tr class="clickable" data-project="QUEENSBERRY LODGE" data-idx="18">
-          <td class="rank-cell">19</td>
-          <td><strong>QUEENSBERRY LODGE</strong></td>
-          <td>D10</td>
-          <td>
-            <div style="display:flex;align-items:center;gap:6px;">
-              <div class="gem-bar"><div class="gem-bar-fill" style="width:57.9%"></div></div>
-              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">57.9</span>
-            </div>
-          </td>
-          <td>$1,620,000</td>
-          <td>$1,407</td>
-          <td><span class="badge badge-green">-37.5%</span></td>
-          <td><span class="badge badge-amber">0.0%</span></td>
-          <td>1</td>
-          <td>1152</td>
-          <td style="font-size:0.72rem;">Freehold</td>
-          <td><span class="lu-pill lu-high">97.0</span></td>
-          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.24</td>
-          <td style="font-size:0.72rem;color:var(--text-dim);">SHANGHAI ROAD</td>
-        </tr>
-        <tr class="clickable" data-project="DOMUS" data-idx="19">
-          <td class="rank-cell">20</td>
-          <td><strong>DOMUS</strong> <span class="enbloc-badge">EN-BLOC▲</span></td>
-          <td>D12</td>
-          <td>
-            <div style="display:flex;align-items:center;gap:6px;">
-              <div class="gem-bar"><div class="gem-bar-fill" style="width:55.7%"></div></div>
-              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">55.7</span>
-            </div>
-          </td>
           <td>$1,660,000</td>
           <td>$1,658</td>
-          <td><span class="badge badge-green">-1.2%</span></td>
+          <td><span class="badge badge-red">+0.7%</span></td>
           <td><span class="badge badge-green">+29.2%</span></td>
           <td>1</td>
           <td>1001</td>
@@ -780,19 +371,145 @@
           <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.10</td>
           <td style="font-size:0.72rem;color:var(--text-dim);">IRRAWADDY ROAD</td>
         </tr>
-        <tr class="clickable" data-project="THE PARC CONDOMINIUM" data-idx="20">
-          <td class="rank-cell">21</td>
+        <tr class="clickable" data-project="M66" data-idx="1">
+          <td class="rank-cell">2</td>
+          <td><strong>M66</strong> <span class="enbloc-badge">EN-BLOC▲</span></td>
+          <td>D12</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:70.0%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">70.0</span>
+            </div>
+          </td>
+          <td>$1,550,000</td>
+          <td>$1,412</td>
+          <td><span class="badge badge-green">-14.1%</span></td>
+          <td><span class="badge badge-green">+2.9%</span></td>
+          <td>1</td>
+          <td>1098</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-high">91.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.14</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">MOONSTONE LANE</td>
+        </tr>
+        <tr class="clickable" data-project="THE SPRINGS" data-idx="2">
+          <td class="rank-cell">3</td>
+          <td><strong>THE SPRINGS</strong> <span class="enbloc-badge">EN-BLOC▲</span></td>
+          <td>D11</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:69.9%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">69.9</span>
+            </div>
+          </td>
+          <td>$1,949,000</td>
+          <td>$1,947</td>
+          <td><span class="badge badge-green">-9.4%</span></td>
+          <td><span class="badge badge-green">+7.6%</span></td>
+          <td>2</td>
+          <td>1001</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-high">100.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.32</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">MOULMEIN RISE</td>
+        </tr>
+        <tr class="clickable" data-project="CASA FORTUNA" data-idx="3">
+          <td class="rank-cell">4</td>
+          <td><strong>CASA FORTUNA</strong> <span class="enbloc-badge">EN-BLOC▲</span></td>
+          <td>D12</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:67.9%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">67.9</span>
+            </div>
+          </td>
+          <td>$1,605,000</td>
+          <td>$1,537</td>
+          <td><span class="badge badge-green">-6.7%</span></td>
+          <td><span class="badge badge-green">+7.2%</span></td>
+          <td>2</td>
+          <td>1044</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-high">97.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.91</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">AH HOOD ROAD</td>
+        </tr>
+        <tr class="clickable" data-project="WHITEHAVEN" data-idx="4">
+          <td class="rank-cell">5</td>
+          <td><strong>WHITEHAVEN</strong></td>
+          <td>D5</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:67.5%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">67.5</span>
+            </div>
+          </td>
+          <td>$1,818,000</td>
+          <td>$1,578</td>
+          <td><span class="badge badge-green">-5.7%</span></td>
+          <td><span class="badge badge-green">+36.6%</span></td>
+          <td>1</td>
+          <td>1152</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-mid">58.3</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.28</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">PASIR PANJANG ROAD</td>
+        </tr>
+        <tr class="clickable" data-project="LE HILL CONDOMINIUM" data-idx="5">
+          <td class="rank-cell">6</td>
+          <td><strong>LE HILL CONDOMINIUM</strong></td>
+          <td>D5</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:66.2%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">66.2</span>
+            </div>
+          </td>
+          <td>$1,552,000</td>
+          <td>$1,567</td>
+          <td><span class="badge badge-green">-21.3%</span></td>
+          <td><span class="badge badge-green">+4.5%</span></td>
+          <td>1</td>
+          <td>990</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-high">69.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">1.53</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">PASIR PANJANG HILL</td>
+        </tr>
+        <tr class="clickable" data-project="SOUTHAVEN II" data-idx="6">
+          <td class="rank-cell">7</td>
+          <td><strong>SOUTHAVEN II</strong></td>
+          <td>D21</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:64.7%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">64.7</span>
+            </div>
+          </td>
+          <td>$1,719,333</td>
+          <td>$1,652</td>
+          <td><span class="badge badge-green">-5.8%</span></td>
+          <td><span class="badge badge-green">+10.0%</span></td>
+          <td>3</td>
+          <td>1041</td>
+          <td style="font-size:0.72rem;">999 yrs lease commen</td>
+          <td><span class="lu-pill lu-high">78.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">1.59</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">HINDHEDE WALK</td>
+        </tr>
+        <tr class="clickable" data-project="THE PARC CONDOMINIUM" data-idx="7">
+          <td class="rank-cell">8</td>
           <td><strong>THE PARC CONDOMINIUM</strong></td>
           <td>D5</td>
           <td>
             <div style="display:flex;align-items:center;gap:6px;">
-              <div class="gem-bar"><div class="gem-bar-fill" style="width:54.7%"></div></div>
-              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">54.7</span>
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:64.1%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">64.1</span>
             </div>
           </td>
           <td>$1,780,000</td>
           <td>$1,817</td>
-          <td><span class="badge badge-red">+1.4%</span></td>
+          <td><span class="badge badge-green">-8.7%</span></td>
           <td><span class="badge badge-green">+4.0%</span></td>
           <td>1</td>
           <td>980</td>
@@ -801,145 +518,145 @@
           <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">3.15</td>
           <td style="font-size:0.72rem;color:var(--text-dim);">WEST COAST WALK</td>
         </tr>
-        <tr class="clickable" data-project="THE CITRINE" data-idx="21">
-          <td class="rank-cell">22</td>
-          <td><strong>THE CITRINE</strong> <span class="enbloc-badge">EN-BLOC▲</span></td>
-          <td>D12</td>
-          <td>
-            <div style="display:flex;align-items:center;gap:6px;">
-              <div class="gem-bar"><div class="gem-bar-fill" style="width:54.5%"></div></div>
-              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">54.5</span>
-            </div>
-          </td>
-          <td>$1,521,750</td>
-          <td>$1,588</td>
-          <td><span class="badge badge-green">-5.3%</span></td>
-          <td><span class="badge badge-green">+3.9%</span></td>
-          <td>2</td>
-          <td>958</td>
-          <td style="font-size:0.72rem;">Freehold</td>
-          <td><span class="lu-pill lu-high">95.0</span></td>
-          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.84</td>
-          <td style="font-size:0.72rem;color:var(--text-dim);">JALAN DATOH</td>
-        </tr>
-        <tr class="clickable" data-project="THE MARQUE @ IRRAWADDY" data-idx="22">
-          <td class="rank-cell">23</td>
-          <td><strong>THE MARQUE @ IRRAWADDY</strong> <span class="enbloc-badge">EN-BLOC▲</span></td>
-          <td>D12</td>
-          <td>
-            <div style="display:flex;align-items:center;gap:6px;">
-              <div class="gem-bar"><div class="gem-bar-fill" style="width:54.3%"></div></div>
-              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">54.3</span>
-            </div>
-          </td>
-          <td>$1,740,000</td>
-          <td>$1,640</td>
-          <td><span class="badge badge-green">-2.2%</span></td>
-          <td><span class="badge badge-green">+2.6%</span></td>
-          <td>2</td>
-          <td>1060</td>
-          <td style="font-size:0.72rem;">Freehold</td>
-          <td><span class="lu-pill lu-high">97.0</span></td>
-          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.90</td>
-          <td style="font-size:0.72rem;color:var(--text-dim);">SHAN ROAD</td>
-        </tr>
-        <tr class="clickable" data-project="RIVERBAY" data-idx="23">
-          <td class="rank-cell">24</td>
-          <td><strong>RIVERBAY</strong> <span class="enbloc-badge">EN-BLOC▲</span></td>
-          <td>D12</td>
-          <td>
-            <div style="display:flex;align-items:center;gap:6px;">
-              <div class="gem-bar"><div class="gem-bar-fill" style="width:52.6%"></div></div>
-              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">52.6</span>
-            </div>
-          </td>
-          <td>$1,543,296</td>
-          <td>$1,642</td>
-          <td><span class="badge badge-green">-2.1%</span></td>
-          <td><span class="badge badge-green">+3.6%</span></td>
-          <td>3</td>
-          <td>940</td>
-          <td style="font-size:0.72rem;">999 yrs lease commen</td>
-          <td><span class="lu-pill lu-high">80.0</span></td>
-          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.05</td>
-          <td style="font-size:0.72rem;color:var(--text-dim);">MAR THOMA ROAD</td>
-        </tr>
-        <tr class="clickable" data-project="CALARASI" data-idx="24">
-          <td class="rank-cell">25</td>
-          <td><strong>CALARASI</strong> <span class="enbloc-badge">EN-BLOC▲</span></td>
-          <td>D12</td>
-          <td>
-            <div style="display:flex;align-items:center;gap:6px;">
-              <div class="gem-bar"><div class="gem-bar-fill" style="width:52.5%"></div></div>
-              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">52.5</span>
-            </div>
-          </td>
-          <td>$1,725,000</td>
-          <td>$1,526</td>
-          <td><span class="badge badge-green">-9.0%</span></td>
-          <td><span class="badge badge-amber">0.0%</span></td>
-          <td>1</td>
-          <td>1130</td>
-          <td style="font-size:0.72rem;">Freehold</td>
-          <td><span class="lu-pill lu-high">100.0</span></td>
-          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.90</td>
-          <td style="font-size:0.72rem;color:var(--text-dim);">KIM KEAT LANE</td>
-        </tr>
-        <tr class="clickable" data-project="GARDENVISTA" data-idx="25">
-          <td class="rank-cell">26</td>
-          <td><strong>GARDENVISTA</strong></td>
-          <td>D21</td>
-          <td>
-            <div style="display:flex;align-items:center;gap:6px;">
-              <div class="gem-bar"><div class="gem-bar-fill" style="width:52.5%"></div></div>
-              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">52.5</span>
-            </div>
-          </td>
-          <td>$1,875,000</td>
-          <td>$1,836</td>
-          <td><span class="badge badge-red">+5.7%</span></td>
-          <td><span class="badge badge-green">+2.8%</span></td>
-          <td>2</td>
-          <td>1023</td>
-          <td style="font-size:0.72rem;">99 yrs lease commenc</td>
-          <td><span class="lu-pill lu-high">72.0</span></td>
-          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.30</td>
-          <td style="font-size:0.72rem;color:var(--text-dim);">DUNEARN ROAD</td>
-        </tr>
-        <tr class="clickable" data-project="VIZ AT HOLLAND" data-idx="26">
-          <td class="rank-cell">27</td>
-          <td><strong>VIZ AT HOLLAND</strong></td>
+        <tr class="clickable" data-project="M5" data-idx="8">
+          <td class="rank-cell">9</td>
+          <td><strong>M5</strong></td>
           <td>D10</td>
           <td>
             <div style="display:flex;align-items:center;gap:6px;">
-              <div class="gem-bar"><div class="gem-bar-fill" style="width:52.3%"></div></div>
-              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">52.3</span>
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:62.8%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">62.8</span>
             </div>
           </td>
-          <td>$1,940,000</td>
-          <td>$2,048</td>
-          <td><span class="badge badge-green">-9.1%</span></td>
-          <td><span class="badge badge-green">+9.0%</span></td>
+          <td>$1,718,000</td>
+          <td>$1,698</td>
+          <td><span class="badge badge-green">-26.9%</span></td>
+          <td><span class="badge badge-amber">-3.5%</span></td>
           <td>1</td>
-          <td>947</td>
+          <td>1012</td>
           <td style="font-size:0.72rem;">Freehold</td>
-          <td><span class="lu-pill lu-mid">51.5</span></td>
-          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">3.70</td>
-          <td style="font-size:0.72rem;color:var(--text-dim);">QUEENSWAY</td>
+          <td><span class="lu-pill lu-high">100.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.28</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">JALAN MUTIARA</td>
         </tr>
-        <tr class="clickable" data-project="RESIDENTIAL APARTMENTS" data-idx="27">
-          <td class="rank-cell">28</td>
+        <tr class="clickable" data-project="QUEENSBERRY LODGE" data-idx="9">
+          <td class="rank-cell">10</td>
+          <td><strong>QUEENSBERRY LODGE</strong></td>
+          <td>D10</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:61.3%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">61.3</span>
+            </div>
+          </td>
+          <td>$1,620,000</td>
+          <td>$1,407</td>
+          <td><span class="badge badge-green">-38.2%</span></td>
+          <td><span class="badge badge-amber">0.0%</span></td>
+          <td>1</td>
+          <td>1152</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-high">97.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.24</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">SHANGHAI ROAD</td>
+        </tr>
+        <tr class="clickable" data-project="PARC IMPERIAL" data-idx="10">
+          <td class="rank-cell">11</td>
+          <td><strong>PARC IMPERIAL</strong></td>
+          <td>D5</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:61.0%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">61.0</span>
+            </div>
+          </td>
+          <td>$1,648,888</td>
+          <td>$1,380</td>
+          <td><span class="badge badge-green">-17.6%</span></td>
+          <td><span class="badge badge-red">-5.2%</span></td>
+          <td>1</td>
+          <td>1195</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-mid">58.3</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.28</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">PASIR PANJANG ROAD</td>
+        </tr>
+        <tr class="clickable" data-project="KAP RESIDENCES" data-idx="11">
+          <td class="rank-cell">12</td>
+          <td><strong>KAP RESIDENCES</strong></td>
+          <td>D21</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:60.4%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">60.4</span>
+            </div>
+          </td>
+          <td>$1,705,000</td>
+          <td>$1,762</td>
+          <td><span class="badge badge-red">+0.1%</span></td>
+          <td><span class="badge badge-green">+1.5%</span></td>
+          <td>2</td>
+          <td>969</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-high">60.9</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">1.90</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">KING ALBERT PARK</td>
+        </tr>
+        <tr class="clickable" data-project="SPRINGDALE CONDOMINIUM" data-idx="12">
+          <td class="rank-cell">13</td>
+          <td><strong>SPRINGDALE CONDOMINIUM</strong></td>
+          <td>D21</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:59.7%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">59.7</span>
+            </div>
+          </td>
+          <td>$1,857,571</td>
+          <td>$1,676</td>
+          <td><span class="badge badge-green">-3.8%</span></td>
+          <td><span class="badge badge-green">+1.3%</span></td>
+          <td>7</td>
+          <td>1107</td>
+          <td style="font-size:0.72rem;">999 yrs lease commen</td>
+          <td><span class="lu-pill lu-high">78.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">1.59</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">HINDHEDE WALK</td>
+        </tr>
+        <tr class="clickable" data-project="MIRO" data-idx="13">
+          <td class="rank-cell">14</td>
+          <td><strong>MIRO</strong></td>
+          <td>D11</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:57.5%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">57.5</span>
+            </div>
+          </td>
+          <td>$1,700,000</td>
+          <td>$1,595</td>
+          <td><span class="badge badge-green">-29.3%</span></td>
+          <td><span class="badge badge-red">-9.6%</span></td>
+          <td>1</td>
+          <td>1066</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-high">83.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.07</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">LINCOLN ROAD</td>
+        </tr>
+        <tr class="clickable" data-project="RESIDENTIAL APARTMENTS" data-idx="14">
+          <td class="rank-cell">15</td>
           <td><strong>RESIDENTIAL APARTMENTS</strong> <span class="enbloc-badge">EN-BLOC▲</span></td>
           <td>D12</td>
           <td>
             <div style="display:flex;align-items:center;gap:6px;">
-              <div class="gem-bar"><div class="gem-bar-fill" style="width:52.2%"></div></div>
-              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">52.2</span>
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:55.9%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">55.9</span>
             </div>
           </td>
           <td>$1,770,000</td>
           <td>$1,787</td>
-          <td><span class="badge badge-red">+6.5%</span></td>
+          <td><span class="badge badge-red">+8.5%</span></td>
           <td><span class="badge badge-green">+0.9%</span></td>
           <td>1</td>
           <td>990</td>
@@ -948,40 +665,166 @@
           <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.02</td>
           <td style="font-size:0.72rem;color:var(--text-dim);">ST. GEORGE'S ROAD</td>
         </tr>
-        <tr class="clickable" data-project="ONE ST MICHAEL\'S" data-idx="28">
-          <td class="rank-cell">29</td>
-          <td><strong>ONE ST MICHAEL'S</strong></td>
+        <tr class="clickable" data-project="THE CENTRIO" data-idx="15">
+          <td class="rank-cell">16</td>
+          <td><strong>THE CENTRIO</strong> <span class="enbloc-badge">EN-BLOC▲</span></td>
           <td>D12</td>
           <td>
             <div style="display:flex;align-items:center;gap:6px;">
-              <div class="gem-bar"><div class="gem-bar-fill" style="width:51.5%"></div></div>
-              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">51.5</span>
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:55.7%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">55.7</span>
             </div>
           </td>
-          <td>$1,550,000</td>
-          <td>$1,655</td>
-          <td><span class="badge badge-green">-1.3%</span></td>
-          <td><span class="badge badge-green">+11.7%</span></td>
+          <td>$1,680,000</td>
+          <td>$1,715</td>
+          <td><span class="badge badge-red">+4.1%</span></td>
+          <td><span class="badge badge-green">+3.2%</span></td>
+          <td>2</td>
+          <td>980</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-high">83.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.10</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">IRRAWADDY ROAD</td>
+        </tr>
+        <tr class="clickable" data-project="THE PEAK@BALMEG" data-idx="16">
+          <td class="rank-cell">17</td>
+          <td><strong>THE PEAK@BALMEG</strong></td>
+          <td>D5</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:55.6%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">55.6</span>
+            </div>
+          </td>
+          <td>$1,965,000</td>
+          <td>$1,984</td>
+          <td><span class="badge badge-green">-0.3%</span></td>
+          <td><span class="badge badge-green">+7.7%</span></td>
+          <td>1</td>
+          <td>990</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-mid">49.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">1.62</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">BALMEG HILL</td>
+        </tr>
+        <tr class="clickable" data-project="SHERWOOD CONDOMINIUM" data-idx="17">
+          <td class="rank-cell">18</td>
+          <td><strong>SHERWOOD CONDOMINIUM</strong></td>
+          <td>D21</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:55.1%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">55.1</span>
+            </div>
+          </td>
+          <td>$1,500,000</td>
+          <td>$1,602</td>
+          <td><span class="badge badge-green">-9.0%</span></td>
+          <td><span class="badge badge-amber">-2.2%</span></td>
           <td>1</td>
           <td>936</td>
           <td style="font-size:0.72rem;">Freehold</td>
-          <td><span class="lu-pill lu-high">80.0</span></td>
-          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.14</td>
-          <td style="font-size:0.72rem;color:var(--text-dim);">ST. MICHAEL'S ROAD</td>
+          <td><span class="lu-pill lu-high">77.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">1.52</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">JALAN JURONG KECHIL</td>
         </tr>
-        <tr class="clickable" data-project="THE MONTANA" data-idx="29">
-          <td class="rank-cell">30</td>
+        <tr class="clickable" data-project="PALM GREEN" data-idx="18">
+          <td class="rank-cell">19</td>
+          <td><strong>PALM GREEN</strong></td>
+          <td>D5</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:53.9%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">53.9</span>
+            </div>
+          </td>
+          <td>$1,680,000</td>
+          <td>$1,486</td>
+          <td><span class="badge badge-green">-11.2%</span></td>
+          <td><span class="badge badge-amber">0.0%</span></td>
+          <td>1</td>
+          <td>1130</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-mid">58.3</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.28</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">PASIR PANJANG ROAD</td>
+        </tr>
+        <tr class="clickable" data-project="GARDENVISTA" data-idx="19">
+          <td class="rank-cell">20</td>
+          <td><strong>GARDENVISTA</strong></td>
+          <td>D21</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:53.1%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">53.1</span>
+            </div>
+          </td>
+          <td>$1,875,000</td>
+          <td>$1,836</td>
+          <td><span class="badge badge-red">+4.9%</span></td>
+          <td><span class="badge badge-green">+2.8%</span></td>
+          <td>2</td>
+          <td>1023</td>
+          <td style="font-size:0.72rem;">99 yrs lease commenc</td>
+          <td><span class="lu-pill lu-high">72.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.30</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">DUNEARN ROAD</td>
+        </tr>
+        <tr class="clickable" data-project="BLISS@KOVAN" data-idx="20">
+          <td class="rank-cell">21</td>
+          <td><strong>BLISS@KOVAN</strong> <span class="enbloc-badge">EN-BLOC▲</span></td>
+          <td>D19</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:52.1%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">52.1</span>
+            </div>
+          </td>
+          <td>$1,600,000</td>
+          <td>$1,728</td>
+          <td><span class="badge badge-red">+10.9%</span></td>
+          <td><span class="badge badge-green">+2.9%</span></td>
+          <td>1</td>
+          <td>926</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-high">92.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">1.48</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">SIMON LANE</td>
+        </tr>
+        <tr class="clickable" data-project="NINETEEN SHELFORD ROAD" data-idx="21">
+          <td class="rank-cell">22</td>
+          <td><strong>NINETEEN SHELFORD ROAD</strong></td>
+          <td>D11</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:51.7%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">51.7</span>
+            </div>
+          </td>
+          <td>$1,902,000</td>
+          <td>$1,950</td>
+          <td><span class="badge badge-green">-9.3%</span></td>
+          <td><span class="badge badge-amber">-2.7%</span></td>
+          <td>3</td>
+          <td>976</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-high">72.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">1.71</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">SHELFORD ROAD</td>
+        </tr>
+        <tr class="clickable" data-project="THE MONTANA" data-idx="22">
+          <td class="rank-cell">23</td>
           <td><strong>THE MONTANA</strong></td>
           <td>D10</td>
           <td>
             <div style="display:flex;align-items:center;gap:6px;">
-              <div class="gem-bar"><div class="gem-bar-fill" style="width:51.1%"></div></div>
-              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">51.1</span>
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:51.4%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">51.4</span>
             </div>
           </td>
           <td>$2,000,000</td>
           <td>$2,111</td>
-          <td><span class="badge badge-green">-6.3%</span></td>
+          <td><span class="badge badge-green">-9.1%</span></td>
           <td><span class="badge badge-amber">0.0%</span></td>
           <td>1</td>
           <td>947</td>
@@ -989,6 +832,153 @@
           <td><span class="lu-pill lu-high">100.0</span></td>
           <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.28</td>
           <td style="font-size:0.72rem;color:var(--text-dim);">JALAN MUTIARA</td>
+        </tr>
+        <tr class="clickable" data-project="THE FOLIAGE" data-idx="23">
+          <td class="rank-cell">24</td>
+          <td><strong>THE FOLIAGE</strong></td>
+          <td>D5</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:50.8%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">50.8</span>
+            </div>
+          </td>
+          <td>$1,650,000</td>
+          <td>$1,488</td>
+          <td><span class="badge badge-green">-11.1%</span></td>
+          <td><span class="badge badge-amber">0.0%</span></td>
+          <td>1</td>
+          <td>1109</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-mid">58.3</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.28</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">PASIR PANJANG ROAD</td>
+        </tr>
+        <tr class="clickable" data-project="IRESIDENCES" data-idx="24">
+          <td class="rank-cell">25</td>
+          <td><strong>IRESIDENCES</strong> <span class="enbloc-badge">EN-BLOC▲</span></td>
+          <td>D12</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:49.5%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">49.5</span>
+            </div>
+          </td>
+          <td>$1,800,000</td>
+          <td>$1,689</td>
+          <td><span class="badge badge-red">+2.7%</span></td>
+          <td><span class="badge badge-amber">0.0%</span></td>
+          <td>1</td>
+          <td>1066</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-high">83.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.10</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">IRRAWADDY ROAD</td>
+        </tr>
+        <tr class="clickable" data-project="GILSTEAD TWO" data-idx="25">
+          <td class="rank-cell">26</td>
+          <td><strong>GILSTEAD TWO</strong></td>
+          <td>D11</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:49.4%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">49.4</span>
+            </div>
+          </td>
+          <td>$1,600,000</td>
+          <td>$1,770</td>
+          <td><span class="badge badge-green">-17.7%</span></td>
+          <td><span class="badge badge-red">-13.3%</span></td>
+          <td>1</td>
+          <td>904</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-mid">57.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">1.93</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">GILSTEAD ROAD</td>
+        </tr>
+        <tr class="clickable" data-project="SHELFORD REGENCY" data-idx="26">
+          <td class="rank-cell">27</td>
+          <td><strong>SHELFORD REGENCY</strong></td>
+          <td>D11</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:49.2%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">49.2</span>
+            </div>
+          </td>
+          <td>$2,000,000</td>
+          <td>$2,161</td>
+          <td><span class="badge badge-red">+0.5%</span></td>
+          <td><span class="badge badge-green">+7.8%</span></td>
+          <td>1</td>
+          <td>926</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-high">72.0</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">1.71</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">SHELFORD ROAD</td>
+        </tr>
+        <tr class="clickable" data-project="THE MAYLEA" data-idx="27">
+          <td class="rank-cell">28</td>
+          <td><strong>THE MAYLEA</strong></td>
+          <td>D5</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:48.9%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">48.9</span>
+            </div>
+          </td>
+          <td>$1,635,000</td>
+          <td>$1,688</td>
+          <td><span class="badge badge-green">-15.2%</span></td>
+          <td><span class="badge badge-amber">-2.2%</span></td>
+          <td>1</td>
+          <td>969</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-mid">58.3</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">2.28</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">PASIR PANJANG ROAD</td>
+        </tr>
+        <tr class="clickable" data-project="HILLVIEW GREEN" data-idx="28">
+          <td class="rank-cell">29</td>
+          <td><strong>HILLVIEW GREEN</strong></td>
+          <td>D21</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:48.3%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">48.3</span>
+            </div>
+          </td>
+          <td>$1,608,000</td>
+          <td>$1,642</td>
+          <td><span class="badge badge-green">-6.8%</span></td>
+          <td><span class="badge badge-green">+2.5%</span></td>
+          <td>1</td>
+          <td>980</td>
+          <td style="font-size:0.72rem;">999 yrs lease commen</td>
+          <td><span class="lu-pill lu-mid">56.1</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">1.95</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">HUME AVENUE</td>
+        </tr>
+        <tr class="clickable" data-project="1 KING ALBERT PARK" data-idx="29">
+          <td class="rank-cell">30</td>
+          <td><strong>1 KING ALBERT PARK</strong></td>
+          <td>D21</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="gem-bar"><div class="gem-bar-fill" style="width:47.7%"></div></div>
+              <span style="font-family:'Space Mono',monospace;font-size:0.75rem;">47.7</span>
+            </div>
+          </td>
+          <td>$1,950,000</td>
+          <td>$1,759</td>
+          <td><span class="badge badge-red">+1.2%</span></td>
+          <td><span class="badge badge-amber">0.0%</span></td>
+          <td>1</td>
+          <td>1109</td>
+          <td style="font-size:0.72rem;">Freehold</td>
+          <td><span class="lu-pill lu-high">60.9</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-dim);">1.90</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">KING ALBERT PARK</td>
         </tr>
       </tbody>
     </table>
@@ -1051,53 +1041,53 @@
   <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(350px,1fr)); gap:1rem; margin:1rem 0;">
     <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem;">
       <div style="display:flex;justify-content:space-between;align-items:center;">
-        <strong style="color:var(--accent);">#1 CLEMENTI PARK</strong>
-        <span style="font-family:'Space Mono',monospace;font-size:0.85rem;color:var(--accent2);">77.7/100</span>
+        <strong style="color:var(--accent);">#1 DOMUS</strong>
+        <span style="font-family:'Space Mono',monospace;font-size:0.85rem;color:var(--accent2);">70.7/100</span>
       </div>
       <div style="font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;">
-        D21 · ~$1,730,000 · $1474 psf · 1173 sqft
+        D12 · ~$1,660,000 · $1658 psf · 1001 sqft
       </div>
-      <div style="font-size:0.82rem;margin-top:0.6rem;">Trading 15% below district median. 10 recent transactions — liquid exit.</div>
+      <div style="font-size:0.82rem;margin-top:0.6rem;">PSF up 29% — strong momentum.</div>
     </div>
     <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem;">
       <div style="display:flex;justify-content:space-between;align-items:center;">
-        <strong style="color:var(--accent);">#2 WHITEHAVEN</strong>
-        <span style="font-family:'Space Mono',monospace;font-size:0.85rem;color:var(--accent2);">75.7/100</span>
+        <strong style="color:var(--accent);">#2 M66</strong>
+        <span style="font-family:'Space Mono',monospace;font-size:0.85rem;color:var(--accent2);">70.0/100</span>
       </div>
       <div style="font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;">
-        D5 · ~$1,818,000 · $1578 psf · 1152 sqft
+        D12 · ~$1,550,000 · $1412 psf · 1098 sqft
       </div>
-      <div style="font-size:0.82rem;margin-top:0.6rem;">Trading 12% below district median. PSF up 37% — strong momentum.</div>
+      <div style="font-size:0.82rem;margin-top:0.6rem;">Trading 14% below district median.</div>
     </div>
     <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem;">
       <div style="display:flex;justify-content:space-between;align-items:center;">
-        <strong style="color:var(--accent);">#3 CASA FORTUNA</strong>
-        <span style="font-family:'Space Mono',monospace;font-size:0.85rem;color:var(--accent2);">74.0/100</span>
+        <strong style="color:var(--accent);">#3 THE SPRINGS</strong>
+        <span style="font-family:'Space Mono',monospace;font-size:0.85rem;color:var(--accent2);">69.9/100</span>
+      </div>
+      <div style="font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;">
+        D11 · ~$1,949,000 · $1947 psf · 1001 sqft
+      </div>
+      <div style="font-size:0.82rem;margin-top:0.6rem;">Trading 9% below district median.</div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <strong style="color:var(--accent);">#4 CASA FORTUNA</strong>
+        <span style="font-family:'Space Mono',monospace;font-size:0.85rem;color:var(--accent2);">67.9/100</span>
       </div>
       <div style="font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;">
         D12 · ~$1,605,000 · $1537 psf · 1044 sqft
       </div>
-      <div style="font-size:0.82rem;margin-top:0.6rem;">Trading 8% below district median.</div>
+      <div style="font-size:0.82rem;margin-top:0.6rem;">Trading 7% below district median.</div>
     </div>
     <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem;">
       <div style="display:flex;justify-content:space-between;align-items:center;">
-        <strong style="color:var(--accent);">#4 SOUTHAVEN II</strong>
-        <span style="font-family:'Space Mono',monospace;font-size:0.85rem;color:var(--accent2);">71.9/100</span>
+        <strong style="color:var(--accent);">#5 WHITEHAVEN</strong>
+        <span style="font-family:'Space Mono',monospace;font-size:0.85rem;color:var(--accent2);">67.5/100</span>
       </div>
       <div style="font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;">
-        D21 · ~$1,719,333 · $1652 psf · 1041 sqft
+        D5 · ~$1,818,000 · $1578 psf · 1152 sqft
       </div>
-      <div style="font-size:0.82rem;margin-top:0.6rem;">16 recent transactions — liquid exit. Balanced value, trend, and liquidity profile.</div>
-    </div>
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem;">
-      <div style="display:flex;justify-content:space-between;align-items:center;">
-        <strong style="color:var(--accent);">#5 THE WATERLINE</strong>
-        <span style="font-family:'Space Mono',monospace;font-size:0.85rem;color:var(--accent2);">70.7/100</span>
-      </div>
-      <div style="font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;">
-        D19 · ~$1,716,944 · $1470 psf · 1168 sqft
-      </div>
-      <div style="font-size:0.82rem;margin-top:0.6rem;">Trading 8% below district median.</div>
+      <div style="font-size:0.82rem;margin-top:0.6rem;">Trading 6% below district median. PSF up 37% — strong momentum.</div>
     </div>
   </div>
 
@@ -1292,8 +1282,8 @@ function analyseProperty() {
 // Chart data
 const districtData = [{"district": "12.0", "count": 41, "avgPSF": 1636, "avgPrice": 1683192}, {"district": "21.0", "count": 39, "avgPSF": 1712, "avgPrice": 1767715}, {"district": "11.0", "count": 20, "avgPSF": 1875, "avgPrice": 1857600}, {"district": "5.0", "count": 18, "avgPSF": 1753, "avgPrice": 1785648}, {"district": "19.0", "count": 12, "avgPSF": 1600, "avgPrice": 1715065}, {"district": "10.0", "count": 9, "avgPSF": 1821, "avgPrice": 1834000}, {"district": "4.0", "count": 3, "avgPSF": 1907, "avgPrice": 1731667}, {"district": "20.0", "count": 2, "avgPSF": 1392, "avgPrice": 1640000}];
 const yoyData = [{"year": 2024, "count": 54, "avgPSF": 1698}, {"year": 2025, "count": 90, "avgPSF": 1726}];
-const projectData = [{"name": "CLEMENTI PARK", "fullName": "CLEMENTI PARK", "gem": 77.7, "value": 85.4, "liquidity": 82.6, "trend": 83.7, "avgPSF": 1474, "avgPrice": 1730000, "txns": 2, "district": "21", "street": "SUNSET WAY", "tenure": "Freehold", "segment": "Outside Central Region", "psfDiscount": -15.2, "psfTrend": 4.5, "recentTxns": 10, "sqft": 1173, "resalability": 74.1, "sizeBracket": 95.0, "txnVelocity": 10.0, "illiquidityFlag": false, "luScore": 52.1, "luGreen": 100.0, "luBuzz": 0.0, "luEdu": 35.0, "luUpside": 64.5, "luPurity": 60.0, "luAvgGPR": 1.7, "luBreakdown": {"RESIDENTIAL": 317, "UTILITY": 2, "PARK": 4, "WATERBODY": 4, "COMMERCIAL & RESIDENTIAL": 2}, "enBloc": false, "projLat": 1.32628, "projLon": 103.76867}, {"name": "WHITEHAVEN", "fullName": "WHITEHAVEN", "gem": 75.7, "value": 81.9, "liquidity": 60.8, "trend": 100.0, "avgPSF": 1578, "avgPrice": 1818000, "txns": 1, "district": "5", "street": "PASIR PANJANG ROAD", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -12.0, "psfTrend": 36.6, "recentTxns": 5, "sqft": 1152, "resalability": 74.5, "sizeBracket": 95.0, "txnVelocity": 4.29, "illiquidityFlag": false, "luScore": 58.3, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 0.0, "luUpside": 13.2, "luPurity": 100.0, "luAvgGPR": 2.28, "luBreakdown": {"RESIDENTIAL": 69, "RESERVE SITE": 7, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 26, "PARK": 8, "WATERBODY": 3, "BUSINESS 1": 37, "PLACE OF WORSHIP": 1, "CIVIC & COMMUNITY INSTITUTION": 2, "HEALTH & MEDICAL CARE": 1, "BUSINESS PARK": 1}, "enBloc": false, "projLat": 1.27504, "projLon": 103.79513}, {"name": "CASA FORTUNA", "fullName": "CASA FORTUNA", "gem": 74.0, "value": 71.0, "liquidity": 52.1, "trend": 88.5, "avgPSF": 1537, "avgPrice": 1605000, "txns": 2, "district": "12", "street": "AH HOOD ROAD", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -8.4, "psfTrend": 7.2, "recentTxns": 4, "sqft": 1044, "resalability": 66.2, "sizeBracket": 80.0, "txnVelocity": 4.0, "illiquidityFlag": false, "luScore": 97.0, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 80.0, "luAvgGPR": 2.91, "luBreakdown": {"RESIDENTIAL": 128, "COMMERCIAL & RESIDENTIAL": 98, "PARK": 4, "PLACE OF WORSHIP": 5, "CIVIC & COMMUNITY INSTITUTION": 4, "SPORTS & RECREATION": 3, "HOTEL": 5, "UTILITY": 1, "WATERBODY": 4, "BUSINESS 1": 1, "EDUCATIONAL INSTITUTION": 1, "HEALTH & MEDICAL CARE": 1, "OPEN SPACE": 1}, "enBloc": true, "projLat": 1.32763, "projLon": 103.84649}, {"name": "SOUTHAVEN II", "fullName": "SOUTHAVEN II", "gem": 71.9, "value": 54.2, "liquidity": 92.0, "trend": 95.1, "avgPSF": 1652, "avgPrice": 1719333, "txns": 3, "district": "21", "street": "HINDHEDE WALK", "tenure": "999 yrs lease commencing from 1877", "segment": "Outside Central Region", "psfDiscount": -4.9, "psfTrend": 10.0, "recentTxns": 16, "sqft": 1041, "resalability": 72.1, "sizeBracket": 76.7, "txnVelocity": 13.72, "illiquidityFlag": false, "luScore": 78.0, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 35.0, "luUpside": 100.0, "luPurity": 40.0, "luAvgGPR": 1.59, "luBreakdown": {"PLACE OF WORSHIP": 2, "PARK": 5, "RESIDENTIAL": 499, "OPEN SPACE": 3, "UTILITY": 3, "COMMERCIAL": 37, "COMMERCIAL & RESIDENTIAL": 1}, "enBloc": false, "projLat": 1.34648, "projLon": 103.77438}, {"name": "THE WATERLINE", "fullName": "THE WATERLINE", "gem": 70.7, "value": 71.7, "liquidity": 34.4, "trend": 86.5, "avgPSF": 1470, "avgPrice": 1716944, "txns": 2, "district": "19", "street": "POH HUAT ROAD WEST", "tenure": "Freehold", "segment": "Outside Central Region", "psfDiscount": -8.4, "psfTrend": 5.5, "recentTxns": 3, "sqft": 1168, "resalability": 67.8, "sizeBracket": 95.0, "txnVelocity": 3.0, "illiquidityFlag": false, "luScore": 77.1, "luGreen": 100.0, "luBuzz": 50.0, "luEdu": 100.0, "luUpside": 60.2, "luPurity": 80.0, "luAvgGPR": 1.41, "luBreakdown": {"PLACE OF WORSHIP": 4, "RESIDENTIAL": 665, "EDUCATIONAL INSTITUTION": 1, "WATERBODY": 2, "COMMERCIAL & RESIDENTIAL": 3, "PARK": 6, "CIVIC & COMMUNITY INSTITUTION": 3, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 1, "RESERVE SITE": 1, "OPEN SPACE": 1, "UTILITY": 1}, "enBloc": false, "projLat": 1.3679, "projLon": 103.87584}, {"name": "M5", "fullName": "M5", "gem": 68.6, "value": 98.6, "liquidity": 88.2, "trend": 9.7, "avgPSF": 1698, "avgPrice": 1718000, "txns": 1, "district": "10", "street": "JALAN MUTIARA", "tenure": "Freehold", "segment": "Core Central Region", "psfDiscount": -24.6, "psfTrend": -3.5, "recentTxns": 11, "sqft": 1012, "resalability": 54.0, "sizeBracket": 80.0, "txnVelocity": 9.43, "illiquidityFlag": false, "luScore": 100.0, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 100.0, "luAvgGPR": 2.28, "luBreakdown": {"RESIDENTIAL": 145, "COMMERCIAL & RESIDENTIAL": 14, "PLACE OF WORSHIP": 4, "OPEN SPACE": 3, "WATERBODY": 2, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 2, "PARK": 2, "EDUCATIONAL INSTITUTION": 1, "RESERVE SITE": 3, "CIVIC & COMMUNITY INSTITUTION": 1, "COMMERCIAL": 2}, "enBloc": false, "projLat": 1.29583, "projLon": 103.82877}, {"name": "BEACON HEIGHTS", "fullName": "BEACON HEIGHTS", "gem": 67.6, "value": 55.7, "liquidity": 82.6, "trend": 62.8, "avgPSF": 1590, "avgPrice": 1688000, "txns": 6, "district": "12", "street": "MAR THOMA ROAD", "tenure": "999 yrs lease commencing from 1882", "segment": "Rest of Central Region", "psfDiscount": -5.2, "psfTrend": 2.2, "recentTxns": 10, "sqft": 1062, "resalability": 65.5, "sizeBracket": 80.8, "txnVelocity": 10.0, "illiquidityFlag": false, "luScore": 80.0, "luGreen": 100.0, "luBuzz": 0.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 100.0, "luAvgGPR": 2.05, "luBreakdown": {"RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 43, "RESIDENTIAL": 223, "COMMERCIAL & RESIDENTIAL": 13, "WATERBODY": 5, "PARK": 10, "OPEN SPACE": 3, "PLACE OF WORSHIP": 4, "CIVIC & COMMUNITY INSTITUTION": 4, "EDUCATIONAL INSTITUTION": 3}, "enBloc": true, "projLat": 1.32771, "projLon": 103.86261}, {"name": "M66", "fullName": "M66", "gem": 67.6, "value": 85.4, "liquidity": 34.4, "trend": 68.8, "avgPSF": 1412, "avgPrice": 1550000, "txns": 1, "district": "12", "street": "MOONSTONE LANE", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -15.8, "psfTrend": 2.9, "recentTxns": 3, "sqft": 1098, "resalability": 59.6, "sizeBracket": 80.0, "txnVelocity": 3.0, "illiquidityFlag": false, "luScore": 91.0, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 40.0, "luAvgGPR": 2.14, "luBreakdown": {"RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 82, "RESIDENTIAL": 270, "COMMERCIAL & RESIDENTIAL": 36, "COMMERCIAL": 4, "WATERBODY": 5, "PLACE OF WORSHIP": 5, "PARK": 11, "UTILITY": 3, "OPEN SPACE": 3, "CIVIC & COMMUNITY INSTITUTION": 4, "HEALTH & MEDICAL CARE": 1, "EDUCATIONAL INSTITUTION": 1, "RESERVE SITE": 2}, "enBloc": true, "projLat": 1.32789, "projLon": 103.86571}, {"name": "FLORAVIEW", "fullName": "FLORAVIEW", "gem": 67.5, "value": 95.8, "liquidity": 73.6, "trend": 46.2, "avgPSF": 1392, "avgPrice": 1640000, "txns": 2, "district": "20", "street": "ANG MO KIO STREET 66", "tenure": "Freehold", "segment": "Outside Central Region", "psfDiscount": -22.8, "psfTrend": 1.1, "recentTxns": 8, "sqft": 1179, "resalability": 63.0, "sizeBracket": 95.0, "txnVelocity": 6.86, "illiquidityFlag": false, "luScore": 40.4, "luGreen": 30.0, "luBuzz": 100.0, "luEdu": 0.0, "luUpside": 9.7, "luPurity": 80.0, "luAvgGPR": 2.05, "luBreakdown": {"RESIDENTIAL": 146, "WATERBODY": 2, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 5, "BUSINESS 1": 9, "BUSINESS 2": 1, "PARK": 1, "RESERVE SITE": 1}, "enBloc": false, "projLat": 1.39205, "projLon": 103.85024}, {"name": "D'LOTUS", "fullName": "D'LOTUS", "gem": 63.5, "value": 47.7, "liquidity": 52.1, "trend": 72.2, "avgPSF": 1611, "avgPrice": 1716667, "txns": 3, "district": "12", "street": "LORONG AMPAS", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -4.0, "psfTrend": 3.5, "recentTxns": 4, "sqft": 1066, "resalability": 62.1, "sizeBracket": 80.0, "txnVelocity": 3.69, "illiquidityFlag": false, "luScore": 98.0, "luGreen": 90.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 100.0, "luAvgGPR": 2.89, "luBreakdown": {"COMMERCIAL & RESIDENTIAL": 89, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 27, "PARK": 3, "RESIDENTIAL": 199, "BUSINESS 1": 15, "CIVIC & COMMUNITY INSTITUTION": 3, "HOTEL": 7, "HEALTH & MEDICAL CARE": 3, "PLACE OF WORSHIP": 7, "WATERBODY": 3, "RESERVE SITE": 1, "COMMERCIAL": 1}, "enBloc": true, "projLat": 1.32582, "projLon": 103.85346}, {"name": "LOFT @ NATHAN", "fullName": "LOFT @ NATHAN", "gem": 62.0, "value": 99.3, "liquidity": 34.4, "trend": 99.3, "avgPSF": 1542, "avgPrice": 1510000, "txns": 1, "district": "10", "street": "NATHAN ROAD", "tenure": "Freehold", "segment": "Core Central Region", "psfDiscount": -31.5, "psfTrend": 33.1, "recentTxns": 3, "sqft": 980, "resalability": 56.9, "sizeBracket": 55.0, "txnVelocity": 3.0, "illiquidityFlag": false, "luScore": 66.0, "luGreen": 0.0, "luBuzz": 75.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 40.0, "luAvgGPR": 2.01, "luBreakdown": {"RESIDENTIAL": 249, "COMMERCIAL & RESIDENTIAL": 8, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 2, "WATERBODY": 2, "UTILITY": 3, "CIVIC & COMMUNITY INSTITUTION": 1, "PLACE OF WORSHIP": 1}, "enBloc": false, "projLat": 1.29621, "projLon": 103.8258}, {"name": "SPRINGDALE CONDOMINIUM", "fullName": "SPRINGDALE CONDOMINIUM", "gem": 61.6, "value": 46.4, "liquidity": 82.6, "trend": 51.4, "avgPSF": 1676, "avgPrice": 1857571, "txns": 7, "district": "21", "street": "HINDHEDE WALK", "tenure": "999 yrs lease commencing from 1877", "segment": "Outside Central Region", "psfDiscount": -3.5, "psfTrend": 1.3, "recentTxns": 10, "sqft": 1107, "resalability": 64.8, "sizeBracket": 89.3, "txnVelocity": 10.0, "illiquidityFlag": false, "luScore": 78.0, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 35.0, "luUpside": 100.0, "luPurity": 40.0, "luAvgGPR": 1.59, "luBreakdown": {"PLACE OF WORSHIP": 2, "PARK": 5, "RESIDENTIAL": 499, "OPEN SPACE": 3, "UTILITY": 3, "COMMERCIAL": 37, "COMMERCIAL & RESIDENTIAL": 1}, "enBloc": false, "projLat": 1.34648, "projLon": 103.77438}, {"name": "LE HILL CONDOMINIUM", "fullName": "LE HILL CONDOMINIUM", "gem": 61.4, "value": 82.6, "liquidity": 52.1, "trend": 84.7, "avgPSF": 1567, "avgPrice": 1552000, "txns": 1, "district": "5", "street": "PASIR PANJANG HILL", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -12.6, "psfTrend": 4.5, "recentTxns": 4, "sqft": 990, "resalability": 57.5, "sizeBracket": 55.0, "txnVelocity": 4.0, "illiquidityFlag": false, "luScore": 69.0, "luGreen": 90.0, "luBuzz": 100.0, "luEdu": 0.0, "luUpside": 100.0, "luPurity": 40.0, "luAvgGPR": 1.53, "luBreakdown": {"RESIDENTIAL": 381, "UTILITY": 2, "PLACE OF WORSHIP": 4, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 10, "COMMERCIAL & RESIDENTIAL": 13, "PORT / AIRPORT": 1, "PARK": 3, "CIVIC & COMMUNITY INSTITUTION": 1, "RESERVE SITE": 1, "WATERBODY": 2}, "enBloc": false, "projLat": 1.28095, "projLon": 103.78614}, {"name": "REGAL COURT", "fullName": "REGAL COURT", "gem": 60.2, "value": 90.3, "liquidity": 16.7, "trend": 31.9, "avgPSF": 1347, "avgPrice": 1580000, "txns": 1, "district": "12", "street": "KIM KEAT ROAD", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -19.7, "psfTrend": 0.0, "recentTxns": 2, "sqft": 1173, "resalability": 51.2, "sizeBracket": 95.0, "txnVelocity": 2.0, "illiquidityFlag": false, "luScore": 98.0, "luGreen": 90.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 100.0, "luAvgGPR": 2.89, "luBreakdown": {"COMMERCIAL & RESIDENTIAL": 94, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 27, "PARK": 3, "RESIDENTIAL": 204, "BUSINESS 1": 15, "CIVIC & COMMUNITY INSTITUTION": 3, "HOTEL": 8, "HEALTH & MEDICAL CARE": 3, "PLACE OF WORSHIP": 7, "WATERBODY": 3, "RESERVE SITE": 1, "COMMERCIAL": 1}, "enBloc": true, "projLat": 1.32456, "projLon": 103.85311}, {"name": "BALESTIER POINT", "fullName": "BALESTIER POINT", "gem": 59.6, "value": 91.0, "liquidity": 16.7, "trend": 31.9, "avgPSF": 1345, "avgPrice": 1520000, "txns": 1, "district": "12", "street": "BALESTIER ROAD", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -19.8, "psfTrend": 0.0, "recentTxns": 2, "sqft": 1130, "resalability": 51.2, "sizeBracket": 95.0, "txnVelocity": 2.0, "illiquidityFlag": false, "luScore": 97.0, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 80.0, "luAvgGPR": 2.9, "luBreakdown": {"RESIDENTIAL": 183, "COMMERCIAL & RESIDENTIAL": 97, "PARK": 4, "PLACE OF WORSHIP": 5, "CIVIC & COMMUNITY INSTITUTION": 5, "RESERVE SITE": 1, "HOTEL": 5, "UTILITY": 1, "HEALTH & MEDICAL CARE": 3, "SPORTS & RECREATION": 1, "WATERBODY": 3, "BUSINESS 1": 1, "EDUCATIONAL INSTITUTION": 1, "OPEN SPACE": 1}, "enBloc": true, "projLat": 1.32656, "projLon": 103.84594}, {"name": "THE SPRINGS", "fullName": "THE SPRINGS", "gem": 59.5, "value": 68.8, "liquidity": 34.4, "trend": 91.3, "avgPSF": 1947, "avgPrice": 1949000, "txns": 2, "district": "11", "street": "MOULMEIN RISE", "tenure": "Freehold", "segment": "Core Central Region", "psfDiscount": -7.8, "psfTrend": 7.6, "recentTxns": 3, "sqft": 1001, "resalability": 60.0, "sizeBracket": 67.5, "txnVelocity": 3.0, "illiquidityFlag": false, "luScore": 100.0, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 100.0, "luAvgGPR": 2.32, "luBreakdown": {"RESIDENTIAL": 153, "COMMERCIAL": 6, "HEALTH & MEDICAL CARE": 11, "PLACE OF WORSHIP": 7, "CIVIC & COMMUNITY INSTITUTION": 4, "WHITE": 3, "EDUCATIONAL INSTITUTION": 6, "PARK": 4, "OPEN SPACE": 1, "HOTEL": 2}, "enBloc": true, "projLat": 1.31933, "projLon": 103.84659}, {"name": "PARC IMPERIAL", "fullName": "PARC IMPERIAL", "gem": 58.8, "value": 96.5, "liquidity": 66.0, "trend": 9.0, "avgPSF": 1380, "avgPrice": 1648888, "txns": 1, "district": "5", "street": "PASIR PANJANG ROAD", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -23.0, "psfTrend": -5.2, "recentTxns": 6, "sqft": 1195, "resalability": 53.0, "sizeBracket": 95.0, "txnVelocity": 6.0, "illiquidityFlag": false, "luScore": 58.3, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 0.0, "luUpside": 13.2, "luPurity": 100.0, "luAvgGPR": 2.28, "luBreakdown": {"RESIDENTIAL": 69, "RESERVE SITE": 7, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 26, "PARK": 8, "WATERBODY": 3, "BUSINESS 1": 37, "PLACE OF WORSHIP": 1, "CIVIC & COMMUNITY INSTITUTION": 2, "HEALTH & MEDICAL CARE": 1, "BUSINESS PARK": 1}, "enBloc": false, "projLat": 1.27504, "projLon": 103.79513}, {"name": "SIGNATURE PARK", "fullName": "SIGNATURE PARK", "gem": 58.6, "value": 50.0, "liquidity": 96.2, "trend": 58.0, "avgPSF": 1665, "avgPrice": 1740611, "txns": 8, "district": "21", "street": "TOH TUCK ROAD", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -4.2, "psfTrend": 2.0, "recentTxns": 25, "sqft": 1045, "resalability": 66.4, "sizeBracket": 80.0, "txnVelocity": 20.02, "illiquidityFlag": false, "luScore": 34.9, "luGreen": 90.0, "luBuzz": 0.0, "luEdu": 70.0, "luUpside": 11.5, "luPurity": 0.0, "luAvgGPR": 2.17, "luBreakdown": {"RESIDENTIAL": 602, "UTILITY": 9, "RESERVE SITE": 2, "BUSINESS 1": 6, "PARK": 3, "EDUCATIONAL INSTITUTION": 1}, "enBloc": false, "projLat": 1.33923, "projLon": 103.76371}, {"name": "QUEENSBERRY LODGE", "fullName": "QUEENSBERRY LODGE", "gem": 57.9, "value": 100.0, "liquidity": 5.6, "trend": 31.9, "avgPSF": 1407, "avgPrice": 1620000, "txns": 1, "district": "10", "street": "SHANGHAI ROAD", "tenure": "Freehold", "segment": "Core Central Region", "psfDiscount": -37.5, "psfTrend": 0.0, "recentTxns": 1, "sqft": 1152, "resalability": 49.5, "sizeBracket": 95.0, "txnVelocity": 1.0, "illiquidityFlag": false, "luScore": 97.0, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 80.0, "luAvgGPR": 2.24, "luBreakdown": {"RESIDENTIAL": 145, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 4, "COMMERCIAL & RESIDENTIAL": 14, "PLACE OF WORSHIP": 4, "OPEN SPACE": 3, "WATERBODY": 4, "PARK": 2, "EDUCATIONAL INSTITUTION": 1, "RESERVE SITE": 2, "CIVIC & COMMUNITY INSTITUTION": 1, "UTILITY": 1, "COMMERCIAL": 2}, "enBloc": false, "projLat": 1.29461, "projLon": 103.828}, {"name": "DOMUS", "fullName": "DOMUS", "gem": 55.7, "value": 31.9, "liquidity": 34.4, "trend": 98.6, "avgPSF": 1658, "avgPrice": 1660000, "txns": 1, "district": "12", "street": "IRRAWADDY ROAD", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -1.2, "psfTrend": 29.2, "recentTxns": 3, "sqft": 1001, "resalability": 65.6, "sizeBracket": 80.0, "txnVelocity": 3.0, "illiquidityFlag": false, "luScore": 83.0, "luGreen": 60.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 40.0, "luAvgGPR": 2.1, "luBreakdown": {"COMMERCIAL": 6, "RESIDENTIAL": 459, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 3, "CIVIC & COMMUNITY INSTITUTION": 4, "PLACE OF WORSHIP": 3, "WHITE": 3, "RESERVE SITE": 1, "EDUCATIONAL INSTITUTION": 3, "HEALTH & MEDICAL CARE": 5, "PARK": 2, "UTILITY": 3, "HOTEL": 3}, "enBloc": true, "projLat": 1.32071, "projLon": 103.8426}, {"name": "THE PARC CONDOMINIUM", "fullName": "THE PARC CONDOMINIUM", "gem": 54.7, "value": 24.3, "liquidity": 90.3, "trend": 77.1, "avgPSF": 1817, "avgPrice": 1780000, "txns": 1, "district": "5", "street": "WEST COAST WALK", "tenure": "Freehold", "segment": "Outside Central Region", "psfDiscount": 1.4, "psfTrend": 4.0, "recentTxns": 14, "sqft": 980, "resalability": 61.7, "sizeBracket": 55.0, "txnVelocity": 11.21, "illiquidityFlag": false, "luScore": 87.6, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 86.2, "luPurity": 40.0, "luAvgGPR": 3.15, "luBreakdown": {"RESIDENTIAL": 294, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 19, "UTILITY": 3, "COMMERCIAL & RESIDENTIAL": 2, "HEALTH & MEDICAL CARE": 2, "PARK": 5, "PLACE OF WORSHIP": 1, "COMMERCIAL": 2, "WATERBODY": 1, "SPORTS & RECREATION": 2, "OPEN SPACE": 2, "EDUCATIONAL INSTITUTION": 2}, "enBloc": false, "projLat": 1.31052, "projLon": 103.76363}, {"name": "THE CITRINE", "fullName": "THE CITRINE", "gem": 54.5, "value": 56.9, "liquidity": 34.4, "trend": 76.0, "avgPSF": 1588, "avgPrice": 1521750, "txns": 2, "district": "12", "street": "JALAN DATOH", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -5.3, "psfTrend": 3.9, "recentTxns": 3, "sqft": 958, "resalability": 53.7, "sizeBracket": 55.0, "txnVelocity": 3.0, "illiquidityFlag": false, "luScore": 95.0, "luGreen": 90.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 80.0, "luAvgGPR": 2.84, "luBreakdown": {"RESIDENTIAL": 167, "COMMERCIAL & RESIDENTIAL": 65, "PLACE OF WORSHIP": 3, "OPEN SPACE": 2, "CIVIC & COMMUNITY INSTITUTION": 2, "RESERVE SITE": 1, "HOTEL": 5, "PARK": 1, "WATERBODY": 2, "EDUCATIONAL INSTITUTION": 1, "HEALTH & MEDICAL CARE": 1, "UTILITY": 1}, "enBloc": true, "projLat": 1.32802, "projLon": 103.84298}, {"name": "THE MARQUE @ IRRAWADDY", "fullName": "THE MARQUE @ IRRAWADDY", "gem": 54.3, "value": 38.5, "liquidity": 34.4, "trend": 66.3, "avgPSF": 1640, "avgPrice": 1740000, "txns": 2, "district": "12", "street": "SHAN ROAD", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -2.2, "psfTrend": 2.6, "recentTxns": 3, "sqft": 1060, "resalability": 59.1, "sizeBracket": 80.0, "txnVelocity": 3.0, "illiquidityFlag": false, "luScore": 97.0, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 80.0, "luAvgGPR": 2.9, "luBreakdown": {"RESIDENTIAL": 149, "COMMERCIAL & RESIDENTIAL": 100, "PARK": 3, "PLACE OF WORSHIP": 5, "CIVIC & COMMUNITY INSTITUTION": 5, "HOTEL": 5, "UTILITY": 1, "HEALTH & MEDICAL CARE": 5, "SPORTS & RECREATION": 1, "WATERBODY": 4, "BUSINESS 1": 1, "EDUCATIONAL INSTITUTION": 1, "OPEN SPACE": 1}, "enBloc": true, "projLat": 1.32632, "projLon": 103.84716}, {"name": "RIVERBAY", "fullName": "RIVERBAY", "gem": 52.6, "value": 40.5, "liquidity": 60.8, "trend": 74.3, "avgPSF": 1642, "avgPrice": 1543296, "txns": 3, "district": "12", "street": "MAR THOMA ROAD", "tenure": "999 yrs lease commencing from 1882", "segment": "Rest of Central Region", "psfDiscount": -2.1, "psfTrend": 3.6, "recentTxns": 5, "sqft": 940, "resalability": 57.2, "sizeBracket": 55.0, "txnVelocity": 5.0, "illiquidityFlag": false, "luScore": 80.0, "luGreen": 100.0, "luBuzz": 0.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 100.0, "luAvgGPR": 2.05, "luBreakdown": {"RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 43, "RESIDENTIAL": 223, "COMMERCIAL & RESIDENTIAL": 13, "WATERBODY": 5, "PARK": 10, "OPEN SPACE": 3, "PLACE OF WORSHIP": 4, "CIVIC & COMMUNITY INSTITUTION": 4, "EDUCATIONAL INSTITUTION": 3}, "enBloc": true, "projLat": 1.32771, "projLon": 103.86261}, {"name": "CALARASI", "fullName": "CALARASI", "gem": 52.5, "value": 75.0, "liquidity": 5.6, "trend": 31.9, "avgPSF": 1526, "avgPrice": 1725000, "txns": 1, "district": "12", "street": "KIM KEAT LANE", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -9.0, "psfTrend": 0.0, "recentTxns": 1, "sqft": 1130, "resalability": 49.5, "sizeBracket": 95.0, "txnVelocity": 1.0, "illiquidityFlag": false, "luScore": 100.0, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 100.0, "luAvgGPR": 2.9, "luBreakdown": {"COMMERCIAL & RESIDENTIAL": 89, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 27, "PARK": 3, "RESIDENTIAL": 178, "BUSINESS 1": 15, "CIVIC & COMMUNITY INSTITUTION": 3, "HOTEL": 10, "HEALTH & MEDICAL CARE": 3, "OPEN SPACE": 2, "PLACE OF WORSHIP": 7, "EDUCATIONAL INSTITUTION": 1, "WATERBODY": 3, "RESERVE SITE": 1, "COMMERCIAL": 1}, "enBloc": true, "projLat": 1.32399, "projLon": 103.85368}, {"name": "GARDENVISTA", "fullName": "GARDENVISTA", "gem": 52.5, "value": 15.3, "liquidity": 89.2, "trend": 67.7, "avgPSF": 1836, "avgPrice": 1875000, "txns": 2, "district": "21", "street": "DUNEARN ROAD", "tenure": "99 yrs lease commencing from 1999", "segment": "Rest of Central Region", "psfDiscount": 5.7, "psfTrend": 2.8, "recentTxns": 13, "sqft": 1023, "resalability": 65.8, "sizeBracket": 75.0, "txnVelocity": 12.02, "illiquidityFlag": false, "luScore": 72.0, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 35.0, "luUpside": 100.0, "luPurity": 0.0, "luAvgGPR": 2.3, "luBreakdown": {"RESIDENTIAL": 511, "UTILITY": 6, "PARK": 3, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 15, "COMMERCIAL & RESIDENTIAL": 7, "OPEN SPACE": 1, "WATERBODY": 3, "COMMERCIAL": 1}, "enBloc": false, "projLat": 1.33483, "projLon": 103.78748}, {"name": "VIZ AT HOLLAND", "fullName": "VIZ AT HOLLAND", "gem": 52.3, "value": 75.7, "liquidity": 60.8, "trend": 93.8, "avgPSF": 2048, "avgPrice": 1940000, "txns": 1, "district": "10", "street": "QUEENSWAY", "tenure": "Freehold", "segment": "Core Central Region", "psfDiscount": -9.1, "psfTrend": 9.0, "recentTxns": 5, "sqft": 947, "resalability": 59.9, "sizeBracket": 55.0, "txnVelocity": 5.0, "illiquidityFlag": false, "luScore": 51.5, "luGreen": 100.0, "luBuzz": 0.0, "luEdu": 0.0, "luUpside": 90.0, "luPurity": 60.0, "luAvgGPR": 3.7, "luBreakdown": {"RESIDENTIAL": 6, "UTILITY": 2, "OPEN SPACE": 1, "PARK": 8, "WATERBODY": 3, "RESERVE SITE": 1, "HEALTH & MEDICAL CARE": 2, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 1, "CIVIC & COMMUNITY INSTITUTION": 1}, "enBloc": false, "projLat": 1.28852, "projLon": 103.79891}, {"name": "RESIDENTIAL APARTMENTS", "fullName": "RESIDENTIAL APARTMENTS", "gem": 52.2, "value": 13.5, "liquidity": 92.0, "trend": 45.1, "avgPSF": 1787, "avgPrice": 1770000, "txns": 1, "district": "12", "street": "ST. GEORGE'S ROAD", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": 6.5, "psfTrend": 0.9, "recentTxns": 16, "sqft": 990, "resalability": 57.8, "sizeBracket": 55.0, "txnVelocity": 13.72, "illiquidityFlag": false, "luScore": 100.0, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 100.0, "luAvgGPR": 2.02, "luBreakdown": {"RESIDENTIAL": 196, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 29, "COMMERCIAL & RESIDENTIAL": 40, "PARK": 10, "PLACE OF WORSHIP": 4, "WATERBODY": 4, "EDUCATIONAL INSTITUTION": 2, "CIVIC & COMMUNITY INSTITUTION": 6, "COMMERCIAL": 1, "OPEN SPACE": 2}, "enBloc": true, "projLat": 1.32225, "projLon": 103.86311}, {"name": "ONE ST MICHAEL'S", "fullName": "ONE ST MICHAEL'S", "gem": 51.5, "value": 32.6, "liquidity": 52.1, "trend": 96.5, "avgPSF": 1655, "avgPrice": 1550000, "txns": 1, "district": "12", "street": "ST. MICHAEL'S ROAD", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -1.3, "psfTrend": 11.7, "recentTxns": 4, "sqft": 936, "resalability": 58.3, "sizeBracket": 55.0, "txnVelocity": 3.69, "illiquidityFlag": false, "luScore": 80.0, "luGreen": 100.0, "luBuzz": 0.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 100.0, "luAvgGPR": 2.14, "luBreakdown": {"RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 71, "RESIDENTIAL": 264, "COMMERCIAL & RESIDENTIAL": 43, "COMMERCIAL": 3, "WATERBODY": 6, "PARK": 11, "OPEN SPACE": 4, "PLACE OF WORSHIP": 4, "EDUCATIONAL INSTITUTION": 3, "CIVIC & COMMUNITY INSTITUTION": 5}, "enBloc": false, "projLat": 1.32661, "projLon": 103.86297}, {"name": "THE MONTANA", "fullName": "THE MONTANA", "gem": 51.1, "value": 63.2, "liquidity": 60.8, "trend": 31.9, "avgPSF": 2111, "avgPrice": 2000000, "txns": 1, "district": "10", "street": "JALAN MUTIARA", "tenure": "Freehold", "segment": "Core Central Region", "psfDiscount": -6.3, "psfTrend": 0.0, "recentTxns": 5, "sqft": 947, "resalability": 51.4, "sizeBracket": 55.0, "txnVelocity": 5.0, "illiquidityFlag": false, "luScore": 100.0, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 100.0, "luAvgGPR": 2.28, "luBreakdown": {"RESIDENTIAL": 145, "COMMERCIAL & RESIDENTIAL": 14, "PLACE OF WORSHIP": 4, "OPEN SPACE": 3, "WATERBODY": 2, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 2, "PARK": 2, "EDUCATIONAL INSTITUTION": 1, "RESERVE SITE": 3, "CIVIC & COMMUNITY INSTITUTION": 1, "COMMERCIAL": 2}, "enBloc": false, "projLat": 1.29583, "projLon": 103.82877}];
-const projectTxns = {"CLEMENTI PARK": [{"date": "2024-11-01", "price": 2100000, "psf": 1561, "sqft": 1345}, {"date": "2024-12-01", "price": 2560000, "psf": 1486, "sqft": 1722}, {"date": "2024-12-01", "price": 1680000, "psf": 1445, "sqft": 1162}, {"date": "2025-08-01", "price": 2320000, "psf": 1400, "sqft": 1657}, {"date": "2025-08-01", "price": 1780000, "psf": 1503, "sqft": 1184}, {"date": "2025-08-01", "price": 3080000, "psf": 1644, "sqft": 1872}, {"date": "2025-08-01", "price": 3120000, "psf": 1374, "sqft": 2271}, {"date": "2025-08-01", "price": 2060000, "psf": 1531, "sqft": 1345}, {"date": "2025-09-01", "price": 2880000, "psf": 1641, "sqft": 1754}, {"date": "2025-10-01", "price": 2880000, "psf": 1538, "sqft": 1872}], "WHITEHAVEN": [{"date": "2024-09-01", "price": 1800000, "psf": 1086, "sqft": 1657}, {"date": "2024-11-01", "price": 1200000, "psf": 1138, "sqft": 1054}, {"date": "2025-01-01", "price": 1818000, "psf": 1578, "sqft": 1151}, {"date": "2025-08-01", "price": 1650000, "psf": 1065, "sqft": 1550}, {"date": "2025-11-01", "price": 1030000, "psf": 1914, "sqft": 538}], "CASA FORTUNA": [{"date": "2024-11-01", "price": 1610000, "psf": 1542, "sqft": 1044}, {"date": "2024-12-01", "price": 1600000, "psf": 1532, "sqft": 1044}, {"date": "2025-08-01", "price": 835000, "psf": 1650, "sqft": 505}, {"date": "2025-11-01", "price": 832500, "psf": 1646, "sqft": 505}], "SOUTHAVEN II": [{"date": "2024-09-01", "price": 2300000, "psf": 1751, "sqft": 1313}, {"date": "2024-10-01", "price": 2550000, "psf": 1692, "sqft": 1506}, {"date": "2024-12-01", "price": 1650000, "psf": 1580, "sqft": 1044}, {"date": "2024-12-01", "price": 3320000, "psf": 1383, "sqft": 2400}, {"date": "2024-12-01", "price": 3000000, "psf": 978, "sqft": 3067}, {"date": "2024-12-01", "price": 2300000, "psf": 1766, "sqft": 1302}, {"date": "2025-08-01", "price": 2500000, "psf": 1452, "sqft": 1722}, {"date": "2025-09-01", "price": 3050000, "psf": 994, "sqft": 3067}, {"date": "2025-09-01", "price": 2550000, "psf": 1657, "sqft": 1539}, {"date": "2025-09-01", "price": 5380000, "psf": 984, "sqft": 5468}, {"date": "2025-09-01", "price": 2750000, "psf": 1787, "sqft": 1539}, {"date": "2025-09-01", "price": 1618000, "psf": 1689, "sqft": 958}, {"date": "2025-10-01", "price": 2200000, "psf": 1548, "sqft": 1420}, {"date": "2025-11-01", "price": 2680000, "psf": 1741, "sqft": 1539}, {"date": "2025-11-01", "price": 2400000, "psf": 1664, "sqft": 1442}, {"date": "2025-11-01", "price": 1890000, "psf": 1688, "sqft": 1119}], "THE WATERLINE": [{"date": "2024-10-01", "price": 720000, "psf": 1394, "sqft": 516}, {"date": "2025-10-01", "price": 1715000, "psf": 1462, "sqft": 1173}, {"date": "2025-10-01", "price": 1718888, "psf": 1479, "sqft": 1162}], "M5": [{"date": "2024-10-01", "price": 925000, "psf": 2096, "sqft": 441}, {"date": "2024-11-01", "price": 940000, "psf": 2130, "sqft": 441}, {"date": "2024-12-01", "price": 1540000, "psf": 2044, "sqft": 753}, {"date": "2024-12-01", "price": 1515000, "psf": 2040, "sqft": 742}, {"date": "2024-12-01", "price": 1578500, "psf": 2095, "sqft": 753}, {"date": "2024-12-01", "price": 1489000, "psf": 2005, "sqft": 742}, {"date": "2025-01-01", "price": 1548000, "psf": 2084, "sqft": 742}, {"date": "2025-08-01", "price": 935000, "psf": 2119, "sqft": 441}, {"date": "2025-10-01", "price": 1566300, "psf": 2109, "sqft": 742}, {"date": "2025-11-01", "price": 1535000, "psf": 2037, "sqft": 753}, {"date": "2025-12-01", "price": 1718000, "psf": 1698, "sqft": 1011}], "BEACON HEIGHTS": [{"date": "2024-10-01", "price": 1500000, "psf": 1620, "sqft": 925}, {"date": "2024-11-01", "price": 1628000, "psf": 1512, "sqft": 1076}, {"date": "2024-11-01", "price": 995000, "psf": 1491, "sqft": 667}, {"date": "2024-11-01", "price": 1350000, "psf": 1511, "sqft": 893}, {"date": "2024-12-01", "price": 1710000, "psf": 1589, "sqft": 1076}, {"date": "2025-08-01", "price": 1850000, "psf": 1669, "sqft": 1108}, {"date": "2025-09-01", "price": 1740000, "psf": 1569, "sqft": 1108}, {"date": "2025-09-01", "price": 1410000, "psf": 1523, "sqft": 925}, {"date": "2025-09-01", "price": 1700000, "psf": 1579, "sqft": 1076}, {"date": "2025-10-01", "price": 1038000, "psf": 1555, "sqft": 667}], "M66": [{"date": "2024-09-01", "price": 1550000, "psf": 1412, "sqft": 1097}, {"date": "2024-11-01", "price": 990000, "psf": 1586, "sqft": 624}, {"date": "2025-09-01", "price": 2030000, "psf": 1319, "sqft": 1539}], "FLORAVIEW": [{"date": "2024-10-01", "price": 1680000, "psf": 1419, "sqft": 1184}, {"date": "2024-11-01", "price": 1098000, "psf": 1417, "sqft": 775}, {"date": "2025-01-01", "price": 962888, "psf": 1443, "sqft": 667}, {"date": "2025-02-01", "price": 1200000, "psf": 1593, "sqft": 753}, {"date": "2025-08-01", "price": 1100000, "psf": 1525, "sqft": 721}, {"date": "2025-08-01", "price": 855000, "psf": 1444, "sqft": 592}, {"date": "2025-10-01", "price": 1140000, "psf": 1605, "sqft": 710}, {"date": "2025-12-01", "price": 1600000, "psf": 1364, "sqft": 1173}], "D'LOTUS": [{"date": "2024-10-01", "price": 1650000, "psf": 1548, "sqft": 1065}, {"date": "2025-08-01", "price": 1750000, "psf": 1642, "sqft": 1065}, {"date": "2025-09-01", "price": 1750000, "psf": 1642, "sqft": 1065}, {"date": "2025-11-01", "price": 1340000, "psf": 1660, "sqft": 807}], "LOFT @ NATHAN": [{"date": "2024-10-01", "price": 1510000, "psf": 1542, "sqft": 979}, {"date": "2025-01-01", "price": 910000, "psf": 2013, "sqft": 452}, {"date": "2025-09-01", "price": 788000, "psf": 2092, "sqft": 376}], "SPRINGDALE CONDOMINIUM": [{"date": "2024-09-01", "price": 1448000, "psf": 1564, "sqft": 925}, {"date": "2024-09-01", "price": 1880000, "psf": 1663, "sqft": 1130}, {"date": "2024-11-01", "price": 1855000, "psf": 1673, "sqft": 1108}, {"date": "2024-12-01", "price": 1855000, "psf": 1657, "sqft": 1119}, {"date": "2024-12-01", "price": 2550000, "psf": 1836, "sqft": 1388}, {"date": "2025-01-01", "price": 1990000, "psf": 1712, "sqft": 1162}, {"date": "2025-09-01", "price": 1980000, "psf": 1719, "sqft": 1151}, {"date": "2025-09-01", "price": 1928000, "psf": 1674, "sqft": 1151}, {"date": "2025-09-01", "price": 1515000, "psf": 1637, "sqft": 925}, {"date": "2025-09-01", "price": 2030000, "psf": 1763, "sqft": 1151}], "LE HILL CONDOMINIUM": [{"date": "2024-10-01", "price": 1765000, "psf": 1355, "sqft": 1302}, {"date": "2025-01-01", "price": 1470000, "psf": 1484, "sqft": 990}, {"date": "2025-02-01", "price": 1868000, "psf": 1400, "sqft": 1334}, {"date": "2025-08-01", "price": 1552000, "psf": 1567, "sqft": 990}], "REGAL COURT": [{"date": "2024-11-01", "price": 1580000, "psf": 1347, "sqft": 1173}, {"date": "2025-02-01", "price": 1288000, "psf": 1408, "sqft": 914}], "BALESTIER POINT": [{"date": "2025-10-01", "price": 1520000, "psf": 1345, "sqft": 1130}, {"date": "2025-10-01", "price": 1900000, "psf": 1161, "sqft": 1636}], "THE SPRINGS": [{"date": "2025-08-01", "price": 1960000, "psf": 1937, "sqft": 1011}, {"date": "2025-09-01", "price": 2190000, "psf": 2211, "sqft": 990}, {"date": "2025-09-01", "price": 1938000, "psf": 1957, "sqft": 990}], "PARC IMPERIAL": [{"date": "2024-10-01", "price": 888000, "psf": 1793, "sqft": 495}, {"date": "2024-11-01", "price": 753000, "psf": 1841, "sqft": 409}, {"date": "2024-11-01", "price": 705000, "psf": 1926, "sqft": 365}, {"date": "2025-01-01", "price": 698000, "psf": 1907, "sqft": 365}, {"date": "2025-02-01", "price": 790000, "psf": 1984, "sqft": 398}, {"date": "2025-08-01", "price": 1648888, "psf": 1380, "sqft": 1194}], "SIGNATURE PARK": [{"date": "2024-09-01", "price": 2320000, "psf": 1711, "sqft": 1356}, {"date": "2024-09-01", "price": 1728000, "psf": 1638, "sqft": 1054}, {"date": "2024-09-01", "price": 2470000, "psf": 1738, "sqft": 1420}, {"date": "2024-10-01", "price": 2355000, "psf": 1657, "sqft": 1420}, {"date": "2024-10-01", "price": 2288000, "psf": 1687, "sqft": 1356}, {"date": "2024-10-01", "price": 1730000, "psf": 1640, "sqft": 1054}, {"date": "2024-11-01", "price": 1750000, "psf": 1694, "sqft": 1033}, {"date": "2025-01-01", "price": 2456000, "psf": 1729, "sqft": 1420}, {"date": "2025-01-01", "price": 2435000, "psf": 1740, "sqft": 1399}, {"date": "2025-01-01", "price": 2388000, "psf": 1681, "sqft": 1420}, {"date": "2025-02-01", "price": 2380000, "psf": 1714, "sqft": 1388}, {"date": "2025-02-01", "price": 2420000, "psf": 1729, "sqft": 1399}, {"date": "2025-09-01", "price": 1750000, "psf": 1676, "sqft": 1044}, {"date": "2025-09-01", "price": 3210000, "psf": 1864, "sqft": 1722}, {"date": "2025-10-01", "price": 1748888, "psf": 1658, "sqft": 1054}, {"date": "2025-10-01", "price": 2450000, "psf": 1751, "sqft": 1399}, {"date": "2025-10-01", "price": 2400000, "psf": 1756, "sqft": 1367}, {"date": "2025-11-01", "price": 1678000, "psf": 1624, "sqft": 1033}, {"date": "2025-11-01", "price": 2450000, "psf": 1724, "sqft": 1420}, {"date": "2025-11-01", "price": 1770000, "psf": 1678, "sqft": 1054}, {"date": "2025-11-01", "price": 2580000, "psf": 1844, "sqft": 1399}, {"date": "2025-11-01", "price": 2320000, "psf": 1671, "sqft": 1388}, {"date": "2025-11-01", "price": 2453000, "psf": 1753, "sqft": 1399}, {"date": "2025-12-01", "price": 2530000, "psf": 1781, "sqft": 1420}, {"date": "2025-12-01", "price": 1770000, "psf": 1713, "sqft": 1033}], "QUEENSBERRY LODGE": [{"date": "2025-09-01", "price": 1620000, "psf": 1407, "sqft": 1151}], "DOMUS": [{"date": "2024-09-01", "price": 3880000, "psf": 1392, "sqft": 2787}, {"date": "2025-08-01", "price": 1660000, "psf": 1658, "sqft": 1001}, {"date": "2025-08-01", "price": 2650000, "psf": 1939, "sqft": 1367}], "THE PARC CONDOMINIUM": [{"date": "2024-09-01", "price": 2688300, "psf": 1892, "sqft": 1420}, {"date": "2024-09-01", "price": 1780000, "psf": 1817, "sqft": 979}, {"date": "2024-09-01", "price": 2268888, "psf": 1865, "sqft": 1216}, {"date": "2024-10-01", "price": 4700000, "psf": 1277, "sqft": 3681}, {"date": "2024-11-01", "price": 2460000, "psf": 2022, "sqft": 1216}, {"date": "2024-11-01", "price": 2473800, "psf": 1899, "sqft": 1302}, {"date": "2024-11-01", "price": 2760000, "psf": 1943, "sqft": 1420}, {"date": "2024-12-01", "price": 2900000, "psf": 1911, "sqft": 1517}, {"date": "2025-01-01", "price": 1030000, "psf": 1543, "sqft": 667}, {"date": "2025-01-01", "price": 2760000, "psf": 1943, "sqft": 1420}, {"date": "2025-01-01", "price": 2628000, "psf": 1850, "sqft": 1420}, {"date": "2025-09-01", "price": 3000000, "psf": 1991, "sqft": 1506}, {"date": "2025-10-01", "price": 2900000, "psf": 2041, "sqft": 1420}, {"date": "2025-12-01", "price": 2950000, "psf": 1944, "sqft": 1517}], "THE CITRINE": [{"date": "2024-11-01", "price": 1530000, "psf": 1597, "sqft": 958}, {"date": "2024-12-01", "price": 1513500, "psf": 1580, "sqft": 958}, {"date": "2025-11-01", "price": 2225000, "psf": 1737, "sqft": 1280}], "THE MARQUE @ IRRAWADDY": [{"date": "2024-09-01", "price": 1790000, "psf": 1646, "sqft": 1087}, {"date": "2024-11-01", "price": 1500000, "psf": 1742, "sqft": 861}, {"date": "2025-09-01", "price": 1690000, "psf": 1635, "sqft": 1033}], "RIVERBAY": [{"date": "2024-11-01", "price": 800000, "psf": 1548, "sqft": 516}, {"date": "2025-02-01", "price": 1508000, "psf": 1592, "sqft": 947}, {"date": "2025-08-01", "price": 1543888, "psf": 1630, "sqft": 947}, {"date": "2025-10-01", "price": 798000, "psf": 1545, "sqft": 516}, {"date": "2025-10-01", "price": 1578000, "psf": 1705, "sqft": 925}], "CALARASI": [{"date": "2025-11-01", "price": 1725000, "psf": 1526, "sqft": 1130}], "GARDENVISTA": [{"date": "2024-09-01", "price": 2200000, "psf": 1875, "sqft": 1173}, {"date": "2024-10-01", "price": 2328000, "psf": 2003, "sqft": 1162}, {"date": "2024-10-01", "price": 2200000, "psf": 1984, "sqft": 1108}, {"date": "2024-10-01", "price": 1750000, "psf": 1869, "sqft": 936}, {"date": "2024-12-01", "price": 2540000, "psf": 1888, "sqft": 1345}, {"date": "2024-12-01", "price": 1505000, "psf": 1726, "sqft": 871}, {"date": "2025-01-01", "price": 2238888, "psf": 1981, "sqft": 1130}, {"date": "2025-02-01", "price": 2000000, "psf": 1804, "sqft": 1108}, {"date": "2025-08-01", "price": 2340000, "psf": 2013, "sqft": 1162}, {"date": "2025-09-01", "price": 1550000, "psf": 1778, "sqft": 871}, {"date": "2025-10-01", "price": 2275000, "psf": 1939, "sqft": 1173}, {"date": "2025-10-01", "price": 2260000, "psf": 1981, "sqft": 1140}, {"date": "2025-10-01", "price": 2390000, "psf": 2115, "sqft": 1130}], "VIZ AT HOLLAND": [{"date": "2024-10-01", "price": 1632888, "psf": 1996, "sqft": 818}, {"date": "2024-10-01", "price": 910000, "psf": 1838, "sqft": 495}, {"date": "2025-01-01", "price": 1940000, "psf": 2048, "sqft": 947}, {"date": "2025-09-01", "price": 1800000, "psf": 2200, "sqft": 818}, {"date": "2025-09-01", "price": 1653000, "psf": 2021, "sqft": 818}], "RESIDENTIAL APARTMENTS": [{"date": "2024-10-01", "price": 1330000, "psf": 1177, "sqft": 1130}, {"date": "2024-10-01", "price": 2280000, "psf": 1780, "sqft": 1280}, {"date": "2024-10-01", "price": 1243000, "psf": 1298, "sqft": 958}, {"date": "2024-11-01", "price": 1770000, "psf": 1787, "sqft": 990}, {"date": "2024-11-01", "price": 1300000, "psf": 1150, "sqft": 1130}, {"date": "2024-11-01", "price": 18888000, "psf": 2446, "sqft": 7722}, {"date": "2024-12-01", "price": 6920000, "psf": 3966, "sqft": 1744}, {"date": "2024-12-01", "price": 2400000, "psf": 2123, "sqft": 1130}, {"date": "2025-01-01", "price": 2170000, "psf": 1193, "sqft": 1819}, {"date": "2025-01-01", "price": 3500000, "psf": 1730, "sqft": 2023}, {"date": "2025-08-01", "price": 6500000, "psf": 3741, "sqft": 1737}, {"date": "2025-09-01", "price": 3700000, "psf": 2058, "sqft": 1797}, {"date": "2025-10-01", "price": 2748888, "psf": 1700, "sqft": 1616}, {"date": "2025-10-01", "price": 1445000, "psf": 1303, "sqft": 1108}, {"date": "2025-11-01", "price": 3020000, "psf": 2806, "sqft": 1076}, {"date": "2025-12-01", "price": 1750000, "psf": 1333, "sqft": 1313}], "ONE ST MICHAEL'S": [{"date": "2024-10-01", "price": 2039888, "psf": 1723, "sqft": 1184}, {"date": "2024-12-01", "price": 1550000, "psf": 1655, "sqft": 936}, {"date": "2025-11-01", "price": 2350000, "psf": 1882, "sqft": 1248}, {"date": "2025-11-01", "price": 2238000, "psf": 1890, "sqft": 1184}], "THE MONTANA": [{"date": "2024-11-01", "price": 1080000, "psf": 1930, "sqft": 559}, {"date": "2024-11-01", "price": 1200000, "psf": 2144, "sqft": 559}, {"date": "2024-12-01", "price": 1018000, "psf": 1603, "sqft": 635}, {"date": "2025-10-01", "price": 2245000, "psf": 2397, "sqft": 936}, {"date": "2025-10-01", "price": 2000000, "psf": 2111, "sqft": 947}]};
+const projectData = [{"name": "DOMUS", "fullName": "DOMUS", "gem": 70.7, "prism": 70.7, "avap": 26.4, "mlrp": 81.1, "dmp": 98.1, "ntcp": 96.8, "esqp": 81.1, "yrp": 64.2, "tcScore": 96.8, "mrtDist": 159, "nearestMRT": "Novena MRT", "value": 25.0, "liquidity": 34.4, "trend": 98.6, "avgPSF": 1658, "avgPrice": 1660000, "txns": 1, "district": "12", "street": "IRRAWADDY ROAD", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": 0.7, "psfTrend": 29.2, "recentTxns": 3, "sqft": 1001, "resalability": 73.9, "sizeBracket": 80.0, "illiquidityFlag": false, "estYield": 3.26, "schoolScore": 55.0, "luScore": 83.0, "luGreen": 60.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 40.0, "luAvgGPR": 2.1, "luBreakdown": {"COMMERCIAL": 6, "RESIDENTIAL": 459, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 3, "CIVIC & COMMUNITY INSTITUTION": 4, "PLACE OF WORSHIP": 3, "WHITE": 3, "RESERVE SITE": 1, "EDUCATIONAL INSTITUTION": 3, "HEALTH & MEDICAL CARE": 5, "PARK": 2, "UTILITY": 3, "HOTEL": 3}, "enBloc": true, "projLat": 1.32071, "projLon": 103.8426}, {"name": "M66", "fullName": "M66", "gem": 70.0, "prism": 70.0, "avap": 79.2, "mlrp": 67.9, "dmp": 90.6, "ntcp": 15.0, "esqp": 75.5, "yrp": 94.3, "tcScore": 15.0, "mrtDist": 630, "nearestMRT": "Potong Pasir MRT", "value": 83.3, "liquidity": 34.4, "trend": 68.8, "avgPSF": 1412, "avgPrice": 1550000, "txns": 1, "district": "12", "street": "MOONSTONE LANE", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -14.1, "psfTrend": 2.9, "recentTxns": 3, "sqft": 1098, "resalability": 65.6, "sizeBracket": 80.0, "illiquidityFlag": false, "estYield": 3.83, "schoolScore": 30.0, "luScore": 91.0, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 40.0, "luAvgGPR": 2.14, "luBreakdown": {"RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 82, "RESIDENTIAL": 270, "COMMERCIAL & RESIDENTIAL": 36, "COMMERCIAL": 4, "WATERBODY": 5, "PLACE OF WORSHIP": 5, "PARK": 11, "UTILITY": 3, "OPEN SPACE": 3, "CIVIC & COMMUNITY INSTITUTION": 4, "HEALTH & MEDICAL CARE": 1, "EDUCATIONAL INSTITUTION": 1, "RESERVE SITE": 2}, "enBloc": true, "projLat": 1.32789, "projLon": 103.86571}, {"name": "THE SPRINGS", "fullName": "THE SPRINGS", "gem": 69.9, "prism": 69.9, "avap": 69.8, "mlrp": 64.2, "dmp": 92.5, "ntcp": 66.7, "esqp": 92.5, "yrp": 18.9, "tcScore": 66.7, "mrtDist": 407, "nearestMRT": "Novena MRT", "value": 74.7, "liquidity": 34.4, "trend": 91.3, "avgPSF": 1947, "avgPrice": 1949000, "txns": 2, "district": "11", "street": "MOULMEIN RISE", "tenure": "Freehold", "segment": "Core Central Region", "psfDiscount": -9.4, "psfTrend": 7.6, "recentTxns": 3, "sqft": 1001, "resalability": 63.6, "sizeBracket": 67.5, "illiquidityFlag": false, "estYield": 2.77, "schoolScore": 30.0, "luScore": 100.0, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 100.0, "luAvgGPR": 2.32, "luBreakdown": {"RESIDENTIAL": 153, "COMMERCIAL": 6, "HEALTH & MEDICAL CARE": 11, "PLACE OF WORSHIP": 7, "CIVIC & COMMUNITY INSTITUTION": 4, "WHITE": 3, "EDUCATIONAL INSTITUTION": 6, "PARK": 4, "OPEN SPACE": 1, "HOTEL": 2}, "enBloc": true, "projLat": 1.31933, "projLon": 103.84659}, {"name": "CASA FORTUNA", "fullName": "CASA FORTUNA", "gem": 67.9, "prism": 67.9, "avap": 62.3, "mlrp": 86.8, "dmp": 96.2, "ntcp": 6.9, "esqp": 73.6, "yrp": 84.9, "tcScore": 6.9, "mrtDist": 695, "nearestMRT": "Toa Payoh MRT", "value": 66.1, "liquidity": 52.1, "trend": 88.5, "avgPSF": 1537, "avgPrice": 1605000, "txns": 2, "district": "12", "street": "AH HOOD ROAD", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -6.7, "psfTrend": 7.2, "recentTxns": 4, "sqft": 1044, "resalability": 71.1, "sizeBracket": 80.0, "illiquidityFlag": false, "estYield": 3.51, "schoolScore": 15.0, "luScore": 97.0, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 80.0, "luAvgGPR": 2.91, "luBreakdown": {"RESIDENTIAL": 128, "COMMERCIAL & RESIDENTIAL": 98, "PARK": 4, "PLACE OF WORSHIP": 5, "CIVIC & COMMUNITY INSTITUTION": 4, "SPORTS & RECREATION": 3, "HOTEL": 5, "UTILITY": 1, "WATERBODY": 4, "BUSINESS 1": 1, "EDUCATIONAL INSTITUTION": 1, "HEALTH & MEDICAL CARE": 1, "OPEN SPACE": 1}, "enBloc": true, "projLat": 1.32763, "projLon": 103.84649}, {"name": "WHITEHAVEN", "fullName": "WHITEHAVEN", "gem": 67.5, "prism": 67.5, "avap": 58.5, "mlrp": 98.1, "dmp": 100.0, "ntcp": 51.3, "esqp": 16.0, "yrp": 81.1, "tcScore": 51.3, "mrtDist": 469, "nearestMRT": "Pasir Panjang MRT", "value": 62.5, "liquidity": 60.8, "trend": 100.0, "avgPSF": 1578, "avgPrice": 1818000, "txns": 1, "district": "5", "street": "PASIR PANJANG ROAD", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -5.7, "psfTrend": 36.6, "recentTxns": 5, "sqft": 1152, "resalability": 84.5, "sizeBracket": 95.0, "illiquidityFlag": false, "estYield": 3.42, "schoolScore": 0.0, "luScore": 58.3, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 0.0, "luUpside": 13.2, "luPurity": 100.0, "luAvgGPR": 2.28, "luBreakdown": {"RESIDENTIAL": 69, "RESERVE SITE": 7, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 26, "PARK": 8, "WATERBODY": 3, "BUSINESS 1": 37, "PLACE OF WORSHIP": 1, "CIVIC & COMMUNITY INSTITUTION": 2, "HEALTH & MEDICAL CARE": 1, "BUSINESS PARK": 1}, "enBloc": false, "projLat": 1.27504, "projLon": 103.79513}, {"name": "LE HILL CONDOMINIUM", "fullName": "LE HILL CONDOMINIUM", "gem": 66.2, "prism": 66.2, "avap": 98.1, "mlrp": 71.7, "dmp": 81.1, "ntcp": 9.6, "esqp": 35.8, "yrp": 83.0, "tcScore": 9.6, "mrtDist": 670, "nearestMRT": "Haw Par Villa MRT", "value": 97.9, "liquidity": 52.1, "trend": 84.7, "avgPSF": 1567, "avgPrice": 1552000, "txns": 1, "district": "5", "street": "PASIR PANJANG HILL", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -21.3, "psfTrend": 4.5, "recentTxns": 4, "sqft": 990, "resalability": 55.6, "sizeBracket": 55.0, "illiquidityFlag": false, "estYield": 3.45, "schoolScore": 0.0, "luScore": 69.0, "luGreen": 90.0, "luBuzz": 100.0, "luEdu": 0.0, "luUpside": 100.0, "luPurity": 40.0, "luAvgGPR": 1.53, "luBreakdown": {"RESIDENTIAL": 381, "UTILITY": 2, "PLACE OF WORSHIP": 4, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 10, "COMMERCIAL & RESIDENTIAL": 13, "PORT / AIRPORT": 1, "PARK": 3, "CIVIC & COMMUNITY INSTITUTION": 1, "RESERVE SITE": 1, "WATERBODY": 2}, "enBloc": false, "projLat": 1.28095, "projLon": 103.78614}, {"name": "SOUTHAVEN II", "fullName": "SOUTHAVEN II", "gem": 64.7, "prism": 64.7, "avap": 56.6, "mlrp": 100.0, "dmp": 94.3, "ntcp": 4.3, "esqp": 61.3, "yrp": 66.0, "tcScore": 4.3, "mrtDist": 725, "nearestMRT": "Beauty World MRT", "value": 60.2, "liquidity": 92.0, "trend": 95.1, "avgPSF": 1652, "avgPrice": 1719333, "txns": 3, "district": "21", "street": "HINDHEDE WALK", "tenure": "999 yrs lease commencing from 1877", "segment": "Outside Central Region", "psfDiscount": -5.8, "psfTrend": 10.0, "recentTxns": 16, "sqft": 1041, "resalability": 69.2, "sizeBracket": 76.7, "illiquidityFlag": false, "estYield": 3.27, "schoolScore": 40.0, "luScore": 78.0, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 35.0, "luUpside": 100.0, "luPurity": 40.0, "luAvgGPR": 1.59, "luBreakdown": {"PLACE OF WORSHIP": 2, "PARK": 5, "RESIDENTIAL": 499, "OPEN SPACE": 3, "UTILITY": 3, "COMMERCIAL": 37, "COMMERCIAL & RESIDENTIAL": 1}, "enBloc": false, "projLat": 1.34648, "projLon": 103.77438}, {"name": "THE PARC CONDOMINIUM", "fullName": "THE PARC CONDOMINIUM", "gem": 64.1, "prism": 64.1, "avap": 64.2, "mlrp": 92.5, "dmp": 71.7, "ntcp": 23.0, "esqp": 84.9, "yrp": 26.4, "tcScore": 23.0, "mrtDist": 585, "nearestMRT": "Clementi MRT", "value": 72.9, "liquidity": 90.3, "trend": 77.1, "avgPSF": 1817, "avgPrice": 1780000, "txns": 1, "district": "5", "street": "WEST COAST WALK", "tenure": "Freehold", "segment": "Outside Central Region", "psfDiscount": -8.7, "psfTrend": 4.0, "recentTxns": 14, "sqft": 980, "resalability": 53.1, "sizeBracket": 55.0, "illiquidityFlag": false, "estYield": 2.97, "schoolScore": 45.0, "luScore": 87.6, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 86.2, "luPurity": 40.0, "luAvgGPR": 3.15, "luBreakdown": {"RESIDENTIAL": 294, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 19, "UTILITY": 3, "COMMERCIAL & RESIDENTIAL": 2, "HEALTH & MEDICAL CARE": 2, "PARK": 5, "PLACE OF WORSHIP": 1, "COMMERCIAL": 2, "WATERBODY": 1, "SPORTS & RECREATION": 2, "OPEN SPACE": 2, "EDUCATIONAL INSTITUTION": 2}, "enBloc": false, "projLat": 1.31052, "projLon": 103.76363}, {"name": "M5", "fullName": "M5", "gem": 62.8, "prism": 62.8, "avap": 84.9, "mlrp": 88.7, "dmp": 13.2, "ntcp": 17.1, "esqp": 92.5, "yrp": 54.7, "tcScore": 17.1, "mrtDist": 617, "nearestMRT": "Great World MRT", "value": 88.2, "liquidity": 88.2, "trend": 9.7, "avgPSF": 1698, "avgPrice": 1718000, "txns": 1, "district": "10", "street": "JALAN MUTIARA", "tenure": "Freehold", "segment": "Core Central Region", "psfDiscount": -26.9, "psfTrend": -3.5, "recentTxns": 11, "sqft": 1012, "resalability": 48.9, "sizeBracket": 80.0, "illiquidityFlag": false, "estYield": 3.18, "schoolScore": 30.0, "luScore": 100.0, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 100.0, "luAvgGPR": 2.28, "luBreakdown": {"RESIDENTIAL": 145, "COMMERCIAL & RESIDENTIAL": 14, "PLACE OF WORSHIP": 4, "OPEN SPACE": 3, "WATERBODY": 2, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 2, "PARK": 2, "EDUCATIONAL INSTITUTION": 1, "RESERVE SITE": 3, "CIVIC & COMMUNITY INSTITUTION": 1, "COMMERCIAL": 2}, "enBloc": false, "projLat": 1.29583, "projLon": 103.82877}, {"name": "QUEENSBERRY LODGE", "fullName": "QUEENSBERRY LODGE", "gem": 61.3, "prism": 61.3, "avap": 100.0, "mlrp": 20.8, "dmp": 55.7, "ntcp": 6.9, "esqp": 87.7, "yrp": 96.2, "tcScore": 6.9, "mrtDist": 694, "nearestMRT": "Great World MRT", "value": 98.6, "liquidity": 5.6, "trend": 31.9, "avgPSF": 1407, "avgPrice": 1620000, "txns": 1, "district": "10", "street": "SHANGHAI ROAD", "tenure": "Freehold", "segment": "Core Central Region", "psfDiscount": -38.2, "psfTrend": 0.0, "recentTxns": 1, "sqft": 1152, "resalability": 60.3, "sizeBracket": 95.0, "illiquidityFlag": false, "estYield": 3.84, "schoolScore": 30.0, "luScore": 97.0, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 80.0, "luAvgGPR": 2.24, "luBreakdown": {"RESIDENTIAL": 145, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 4, "COMMERCIAL & RESIDENTIAL": 14, "PLACE OF WORSHIP": 4, "OPEN SPACE": 3, "WATERBODY": 4, "PARK": 2, "EDUCATIONAL INSTITUTION": 1, "RESERVE SITE": 2, "CIVIC & COMMUNITY INSTITUTION": 1, "UTILITY": 1, "COMMERCIAL": 2}, "enBloc": false, "projLat": 1.29461, "projLon": 103.828}, {"name": "PARC IMPERIAL", "fullName": "PARC IMPERIAL", "gem": 61.0, "prism": 61.0, "avap": 86.8, "mlrp": 79.2, "dmp": 22.6, "ntcp": 51.3, "esqp": 16.0, "yrp": 100.0, "tcScore": 51.3, "mrtDist": 469, "nearestMRT": "Pasir Panjang MRT", "value": 90.3, "liquidity": 66.0, "trend": 9.0, "avgPSF": 1380, "avgPrice": 1648888, "txns": 1, "district": "5", "street": "PASIR PANJANG ROAD", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -17.6, "psfTrend": -5.2, "recentTxns": 6, "sqft": 1195, "resalability": 52.7, "sizeBracket": 95.0, "illiquidityFlag": false, "estYield": 3.91, "schoolScore": 0.0, "luScore": 58.3, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 0.0, "luUpside": 13.2, "luPurity": 100.0, "luAvgGPR": 2.28, "luBreakdown": {"RESIDENTIAL": 69, "RESERVE SITE": 7, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 26, "PARK": 8, "WATERBODY": 3, "BUSINESS 1": 37, "PLACE OF WORSHIP": 1, "CIVIC & COMMUNITY INSTITUTION": 2, "HEALTH & MEDICAL CARE": 1, "BUSINESS PARK": 1}, "enBloc": false, "projLat": 1.27504, "projLon": 103.79513}, {"name": "KAP RESIDENCES", "fullName": "KAP RESIDENCES", "gem": 60.4, "prism": 60.4, "avap": 37.7, "mlrp": 73.6, "dmp": 67.9, "ntcp": 98.9, "esqp": 46.2, "yrp": 42.5, "tcScore": 98.9, "mrtDist": 85, "nearestMRT": "King Albert Park MRT", "value": 33.0, "liquidity": 52.1, "trend": 54.5, "avgPSF": 1762, "avgPrice": 1705000, "txns": 2, "district": "21", "street": "KING ALBERT PARK", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": 0.1, "psfTrend": 1.5, "recentTxns": 4, "sqft": 969, "resalability": 55.7, "sizeBracket": 67.5, "illiquidityFlag": false, "estYield": 3.07, "schoolScore": 55.0, "luScore": 60.9, "luGreen": 90.0, "luBuzz": 25.0, "luEdu": 100.0, "luUpside": 47.5, "luPurity": 40.0, "luAvgGPR": 1.9, "luBreakdown": {"EDUCATIONAL INSTITUTION": 1, "PARK": 2, "RESIDENTIAL": 430, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 10, "COMMERCIAL & RESIDENTIAL": 1, "OPEN SPACE": 1, "UTILITY": 3, "WATERBODY": 2, "COMMERCIAL": 1}, "enBloc": false, "projLat": 1.3357, "projLon": 103.78359}, {"name": "SPRINGDALE CONDOMINIUM", "fullName": "SPRINGDALE CONDOMINIUM", "gem": 59.7, "prism": 59.7, "avap": 52.8, "mlrp": 94.3, "dmp": 77.4, "ntcp": 4.3, "esqp": 61.3, "yrp": 62.3, "tcScore": 4.3, "mrtDist": 725, "nearestMRT": "Beauty World MRT", "value": 52.8, "liquidity": 82.6, "trend": 51.4, "avgPSF": 1676, "avgPrice": 1857571, "txns": 7, "district": "21", "street": "HINDHEDE WALK", "tenure": "999 yrs lease commencing from 1877", "segment": "Outside Central Region", "psfDiscount": -3.8, "psfTrend": 1.3, "recentTxns": 10, "sqft": 1107, "resalability": 63.7, "sizeBracket": 89.3, "illiquidityFlag": false, "estYield": 3.22, "schoolScore": 40.0, "luScore": 78.0, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 35.0, "luUpside": 100.0, "luPurity": 40.0, "luAvgGPR": 1.59, "luBreakdown": {"PLACE OF WORSHIP": 2, "PARK": 5, "RESIDENTIAL": 499, "OPEN SPACE": 3, "UTILITY": 3, "COMMERCIAL": 37, "COMMERCIAL & RESIDENTIAL": 1}, "enBloc": false, "projLat": 1.34648, "projLon": 103.77438}, {"name": "MIRO", "fullName": "MIRO", "gem": 57.5, "prism": 57.5, "avap": 88.7, "mlrp": 28.3, "dmp": 5.7, "ntcp": 42.5, "esqp": 98.1, "yrp": 77.4, "tcScore": 42.5, "mrtDist": 503, "nearestMRT": "Novena MRT", "value": 91.0, "liquidity": 34.4, "trend": 4.2, "avgPSF": 1595, "avgPrice": 1700000, "txns": 1, "district": "11", "street": "LINCOLN ROAD", "tenure": "Freehold", "segment": "Core Central Region", "psfDiscount": -29.3, "psfTrend": -9.6, "recentTxns": 3, "sqft": 1066, "resalability": 47.4, "sizeBracket": 80.0, "illiquidityFlag": false, "estYield": 3.38, "schoolScore": 85.0, "luScore": 83.0, "luGreen": 90.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 0.0, "luAvgGPR": 2.07, "luBreakdown": {"COMMERCIAL": 6, "PARK": 3, "RESIDENTIAL": 325, "CIVIC & COMMUNITY INSTITUTION": 3, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 1, "PLACE OF WORSHIP": 9, "WATERBODY": 1, "UTILITY": 5, "EDUCATIONAL INSTITUTION": 3, "HOTEL": 3, "WHITE": 1}, "enBloc": false, "projLat": 1.31642, "projLon": 103.84328}, {"name": "RESIDENTIAL APARTMENTS", "fullName": "RESIDENTIAL APARTMENTS", "gem": 55.9, "prism": 55.9, "avap": 8.5, "mlrp": 90.6, "dmp": 45.3, "ntcp": 71.2, "esqp": 100.0, "yrp": 32.1, "tcScore": 71.2, "mrtDist": 387, "nearestMRT": "Boon Keng MRT", "value": 7.3, "liquidity": 92.0, "trend": 45.1, "avgPSF": 1787, "avgPrice": 1770000, "txns": 1, "district": "12", "street": "ST. GEORGE'S ROAD", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": 8.5, "psfTrend": 0.9, "recentTxns": 16, "sqft": 990, "resalability": 48.0, "sizeBracket": 55.0, "illiquidityFlag": false, "estYield": 3.02, "schoolScore": 55.0, "luScore": 100.0, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 100.0, "luAvgGPR": 2.02, "luBreakdown": {"RESIDENTIAL": 196, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 29, "COMMERCIAL & RESIDENTIAL": 40, "PARK": 10, "PLACE OF WORSHIP": 4, "WATERBODY": 4, "EDUCATIONAL INSTITUTION": 2, "CIVIC & COMMUNITY INSTITUTION": 6, "COMMERCIAL": 1, "OPEN SPACE": 2}, "enBloc": true, "projLat": 1.32225, "projLon": 103.86311}, {"name": "THE CENTRIO", "fullName": "THE CENTRIO", "gem": 55.7, "prism": 55.7, "avap": 17.0, "mlrp": 45.3, "dmp": 69.8, "ntcp": 96.8, "esqp": 81.1, "yrp": 52.8, "tcScore": 96.8, "mrtDist": 159, "nearestMRT": "Novena MRT", "value": 14.9, "liquidity": 34.4, "trend": 70.5, "avgPSF": 1715, "avgPrice": 1680000, "txns": 2, "district": "12", "street": "IRRAWADDY ROAD", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": 4.1, "psfTrend": 3.2, "recentTxns": 3, "sqft": 980, "resalability": 52.9, "sizeBracket": 55.0, "illiquidityFlag": false, "estYield": 3.15, "schoolScore": 55.0, "luScore": 83.0, "luGreen": 60.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 40.0, "luAvgGPR": 2.1, "luBreakdown": {"COMMERCIAL": 6, "RESIDENTIAL": 459, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 3, "CIVIC & COMMUNITY INSTITUTION": 4, "PLACE OF WORSHIP": 3, "WHITE": 3, "RESERVE SITE": 1, "EDUCATIONAL INSTITUTION": 3, "HEALTH & MEDICAL CARE": 5, "PARK": 2, "UTILITY": 3, "HOTEL": 3}, "enBloc": true, "projLat": 1.32071, "projLon": 103.8426}, {"name": "THE PEAK@BALMEG", "fullName": "THE PEAK@BALMEG", "gem": 55.6, "prism": 55.6, "avap": 39.6, "mlrp": 83.0, "dmp": 84.9, "ntcp": 96.3, "esqp": 3.8, "yrp": 13.2, "tcScore": 96.3, "mrtDist": 170, "nearestMRT": "Haw Par Villa MRT", "value": 33.3, "liquidity": 66.0, "trend": 92.4, "avgPSF": 1984, "avgPrice": 1965000, "txns": 1, "district": "5", "street": "BALMEG HILL", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -0.3, "psfTrend": 7.7, "recentTxns": 6, "sqft": 990, "resalability": 57.1, "sizeBracket": 55.0, "illiquidityFlag": false, "estYield": 2.72, "schoolScore": 0.0, "luScore": 49.0, "luGreen": 90.0, "luBuzz": 0.0, "luEdu": 0.0, "luUpside": 100.0, "luPurity": 40.0, "luAvgGPR": 1.62, "luBreakdown": {"RESIDENTIAL": 147, "PLACE OF WORSHIP": 3, "SPORTS & RECREATION": 2, "BUSINESS PARK": 2, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 10, "COMMERCIAL & RESIDENTIAL": 13, "UTILITY": 3, "COMMERCIAL": 1, "RESERVE SITE": 2, "PARK": 1}, "enBloc": false, "projLat": 1.28263, "projLon": 103.7831}, {"name": "SHERWOOD CONDOMINIUM", "fullName": "SHERWOOD CONDOMINIUM", "gem": 55.1, "prism": 55.1, "avap": 67.0, "mlrp": 60.4, "dmp": 15.1, "ntcp": 39.8, "esqp": 69.8, "yrp": 75.5, "tcScore": 39.8, "mrtDist": 513, "nearestMRT": "Beauty World MRT", "value": 74.3, "liquidity": 66.0, "trend": 13.9, "avgPSF": 1602, "avgPrice": 1500000, "txns": 1, "district": "21", "street": "JALAN JURONG KECHIL", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -9.0, "psfTrend": -2.2, "recentTxns": 6, "sqft": 936, "resalability": 42.0, "sizeBracket": 55.0, "illiquidityFlag": false, "estYield": 3.37, "schoolScore": 55.0, "luScore": 77.0, "luGreen": 30.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 40.0, "luAvgGPR": 1.52, "luBreakdown": {"COMMERCIAL": 37, "RESIDENTIAL": 795, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 42, "CIVIC & COMMUNITY INSTITUTION": 1, "RESERVE SITE": 2, "UTILITY": 3, "PLACE OF WORSHIP": 3, "COMMERCIAL & RESIDENTIAL": 3, "PARK": 1}, "enBloc": false, "projLat": 1.34099, "projLon": 103.77195}, {"name": "PALM GREEN", "fullName": "PALM GREEN", "gem": 53.9, "prism": 53.9, "avap": 75.5, "mlrp": 34.9, "dmp": 60.4, "ntcp": 51.3, "esqp": 16.0, "yrp": 88.7, "tcScore": 51.3, "mrtDist": 469, "nearestMRT": "Pasir Panjang MRT", "value": 79.2, "liquidity": 16.7, "trend": 31.9, "avgPSF": 1486, "avgPrice": 1680000, "txns": 1, "district": "5", "street": "PASIR PANJANG ROAD", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -11.2, "psfTrend": 0.0, "recentTxns": 2, "sqft": 1130, "resalability": 60.7, "sizeBracket": 95.0, "illiquidityFlag": false, "estYield": 3.63, "schoolScore": 0.0, "luScore": 58.3, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 0.0, "luUpside": 13.2, "luPurity": 100.0, "luAvgGPR": 2.28, "luBreakdown": {"RESIDENTIAL": 69, "RESERVE SITE": 7, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 26, "PARK": 8, "WATERBODY": 3, "BUSINESS 1": 37, "PLACE OF WORSHIP": 1, "CIVIC & COMMUNITY INSTITUTION": 2, "HEALTH & MEDICAL CARE": 1, "BUSINESS PARK": 1}, "enBloc": false, "projLat": 1.27504, "projLon": 103.79513}, {"name": "GARDENVISTA", "fullName": "GARDENVISTA", "gem": 53.1, "prism": 53.1, "avap": 15.1, "mlrp": 96.2, "dmp": 86.8, "ntcp": 55.4, "esqp": 39.6, "yrp": 28.3, "tcScore": 55.4, "mrtDist": 453, "nearestMRT": "King Albert Park MRT", "value": 13.9, "liquidity": 89.2, "trend": 67.7, "avgPSF": 1836, "avgPrice": 1875000, "txns": 2, "district": "21", "street": "DUNEARN ROAD", "tenure": "99 yrs lease commencing from 1999", "segment": "Rest of Central Region", "psfDiscount": 4.9, "psfTrend": 2.8, "recentTxns": 13, "sqft": 1023, "resalability": 62.8, "sizeBracket": 75.0, "illiquidityFlag": false, "estYield": 2.94, "schoolScore": 15.0, "luScore": 72.0, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 35.0, "luUpside": 100.0, "luPurity": 0.0, "luAvgGPR": 2.3, "luBreakdown": {"RESIDENTIAL": 511, "UTILITY": 6, "PARK": 3, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 15, "COMMERCIAL & RESIDENTIAL": 7, "OPEN SPACE": 1, "WATERBODY": 3, "COMMERCIAL": 1}, "enBloc": false, "projLat": 1.33483, "projLon": 103.78748}, {"name": "BLISS@KOVAN", "fullName": "BLISS@KOVAN", "gem": 52.1, "prism": 52.1, "avap": 5.7, "mlrp": 62.3, "dmp": 66.0, "ntcp": 78.8, "esqp": 77.4, "yrp": 49.1, "tcScore": 78.8, "mrtDist": 347, "nearestMRT": "Kovan MRT", "value": 6.2, "liquidity": 52.1, "trend": 69.4, "avgPSF": 1728, "avgPrice": 1600000, "txns": 1, "district": "19", "street": "SIMON LANE", "tenure": "Freehold", "segment": "Outside Central Region", "psfDiscount": 10.9, "psfTrend": 2.9, "recentTxns": 4, "sqft": 926, "resalability": 51.7, "sizeBracket": 55.0, "illiquidityFlag": false, "estYield": 3.12, "schoolScore": 30.0, "luScore": 92.0, "luGreen": 90.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 60.0, "luAvgGPR": 1.48, "luBreakdown": {"WATERBODY": 1, "RESIDENTIAL": 1210, "CIVIC & COMMUNITY INSTITUTION": 6, "COMMERCIAL & RESIDENTIAL": 58, "PLACE OF WORSHIP": 6, "RESERVE SITE": 1, "UTILITY": 2, "PARK": 3, "EDUCATIONAL INSTITUTION": 1, "HEALTH & MEDICAL CARE": 1, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 1}, "enBloc": true, "projLat": 1.36246, "projLon": 103.88388}, {"name": "NINETEEN SHELFORD ROAD", "fullName": "NINETEEN SHELFORD ROAD", "gem": 51.7, "prism": 51.7, "avap": 67.0, "mlrp": 66.0, "dmp": 11.3, "ntcp": 66.0, "esqp": 53.8, "yrp": 20.8, "tcScore": 66.0, "mrtDist": 410, "nearestMRT": "Tan Kah Kee MRT", "value": 74.3, "liquidity": 66.0, "trend": 11.8, "avgPSF": 1950, "avgPrice": 1902000, "txns": 3, "district": "11", "street": "SHELFORD ROAD", "tenure": "Freehold", "segment": "Core Central Region", "psfDiscount": -9.3, "psfTrend": -2.7, "recentTxns": 6, "sqft": 976, "resalability": 44.2, "sizeBracket": 63.3, "illiquidityFlag": false, "estYield": 2.77, "schoolScore": 40.0, "luScore": 72.0, "luGreen": 90.0, "luBuzz": 0.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 60.0, "luAvgGPR": 1.71, "luBreakdown": {"HEALTH & MEDICAL CARE": 1, "EDUCATIONAL INSTITUTION": 3, "RESIDENTIAL": 673, "COMMERCIAL & RESIDENTIAL": 15, "PARK": 3, "PLACE OF WORSHIP": 3, "UTILITY": 2, "RESERVE SITE": 1}, "enBloc": false, "projLat": 1.32762, "projLon": 103.81022}, {"name": "THE MONTANA", "fullName": "THE MONTANA", "gem": 51.4, "prism": 51.4, "avap": 71.7, "mlrp": 58.5, "dmp": 32.1, "ntcp": 17.1, "esqp": 92.5, "yrp": 5.7, "tcScore": 17.1, "mrtDist": 617, "nearestMRT": "Great World MRT", "value": 75.0, "liquidity": 60.8, "trend": 31.9, "avgPSF": 2111, "avgPrice": 2000000, "txns": 1, "district": "10", "street": "JALAN MUTIARA", "tenure": "Freehold", "segment": "Core Central Region", "psfDiscount": -9.1, "psfTrend": 0.0, "recentTxns": 5, "sqft": 947, "resalability": 45.2, "sizeBracket": 55.0, "illiquidityFlag": false, "estYield": 2.56, "schoolScore": 30.0, "luScore": 100.0, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 100.0, "luAvgGPR": 2.28, "luBreakdown": {"RESIDENTIAL": 145, "COMMERCIAL & RESIDENTIAL": 14, "PLACE OF WORSHIP": 4, "OPEN SPACE": 3, "WATERBODY": 2, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 2, "PARK": 2, "EDUCATIONAL INSTITUTION": 1, "RESERVE SITE": 3, "CIVIC & COMMUNITY INSTITUTION": 1, "COMMERCIAL": 2}, "enBloc": false, "projLat": 1.29583, "projLon": 103.82877}, {"name": "THE FOLIAGE", "fullName": "THE FOLIAGE", "gem": 50.8, "prism": 50.8, "avap": 73.6, "mlrp": 22.6, "dmp": 60.4, "ntcp": 51.3, "esqp": 16.0, "yrp": 86.8, "tcScore": 51.3, "mrtDist": 469, "nearestMRT": "Pasir Panjang MRT", "value": 78.5, "liquidity": 5.6, "trend": 31.9, "avgPSF": 1488, "avgPrice": 1650000, "txns": 1, "district": "5", "street": "PASIR PANJANG ROAD", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -11.1, "psfTrend": 0.0, "recentTxns": 1, "sqft": 1109, "resalability": 60.7, "sizeBracket": 95.0, "illiquidityFlag": false, "estYield": 3.63, "schoolScore": 0.0, "luScore": 58.3, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 0.0, "luUpside": 13.2, "luPurity": 100.0, "luAvgGPR": 2.28, "luBreakdown": {"RESIDENTIAL": 69, "RESERVE SITE": 7, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 26, "PARK": 8, "WATERBODY": 3, "BUSINESS 1": 37, "PLACE OF WORSHIP": 1, "CIVIC & COMMUNITY INSTITUTION": 2, "HEALTH & MEDICAL CARE": 1, "BUSINESS PARK": 1}, "enBloc": false, "projLat": 1.27504, "projLon": 103.79513}, {"name": "IRESIDENCES", "fullName": "IRESIDENCES", "gem": 49.5, "prism": 49.5, "avap": 18.9, "mlrp": 26.4, "dmp": 47.2, "ntcp": 96.8, "esqp": 81.1, "yrp": 57.5, "tcScore": 96.8, "mrtDist": 159, "nearestMRT": "Novena MRT", "value": 18.8, "liquidity": 16.7, "trend": 31.9, "avgPSF": 1689, "avgPrice": 1800000, "txns": 1, "district": "12", "street": "IRRAWADDY ROAD", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": 2.7, "psfTrend": 0.0, "recentTxns": 2, "sqft": 1066, "resalability": 55.2, "sizeBracket": 80.0, "illiquidityFlag": false, "estYield": 3.2, "schoolScore": 55.0, "luScore": 83.0, "luGreen": 60.0, "luBuzz": 100.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 40.0, "luAvgGPR": 2.1, "luBreakdown": {"COMMERCIAL": 6, "RESIDENTIAL": 459, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 3, "CIVIC & COMMUNITY INSTITUTION": 4, "PLACE OF WORSHIP": 3, "WHITE": 3, "RESERVE SITE": 1, "EDUCATIONAL INSTITUTION": 3, "HEALTH & MEDICAL CARE": 5, "PARK": 2, "UTILITY": 3, "HOTEL": 3}, "enBloc": true, "projLat": 1.32071, "projLon": 103.8426}, {"name": "GILSTEAD TWO", "fullName": "GILSTEAD TWO", "gem": 49.4, "prism": 49.4, "avap": 90.6, "mlrp": 15.1, "dmp": 1.9, "ntcp": 82.2, "esqp": 49.1, "yrp": 37.7, "tcScore": 82.2, "mrtDist": 327, "nearestMRT": "Newton MRT", "value": 91.7, "liquidity": 34.4, "trend": 2.8, "avgPSF": 1770, "avgPrice": 1600000, "txns": 1, "district": "11", "street": "GILSTEAD ROAD", "tenure": "Freehold", "segment": "Core Central Region", "psfDiscount": -17.7, "psfTrend": -13.3, "recentTxns": 3, "sqft": 904, "resalability": 39.8, "sizeBracket": 55.0, "illiquidityFlag": false, "estYield": 3.05, "schoolScore": 70.0, "luScore": 57.0, "luGreen": 30.0, "luBuzz": 0.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 40.0, "luAvgGPR": 1.93, "luBreakdown": {"RESIDENTIAL": 305, "PLACE OF WORSHIP": 6, "CIVIC & COMMUNITY INSTITUTION": 6, "WATERBODY": 5, "EDUCATIONAL INSTITUTION": 1, "HOTEL": 2, "WHITE": 8, "COMMERCIAL & RESIDENTIAL": 1, "COMMERCIAL": 1, "UTILITY": 3, "PARK": 1}, "enBloc": false, "projLat": 1.31578, "projLon": 103.8389}, {"name": "SHELFORD REGENCY", "fullName": "SHELFORD REGENCY", "gem": 49.2, "prism": 49.2, "avap": 32.1, "mlrp": 52.8, "dmp": 83.0, "ntcp": 66.0, "esqp": 53.8, "yrp": 1.9, "tcScore": 66.0, "mrtDist": 410, "nearestMRT": "Tan Kah Kee MRT", "value": 27.1, "liquidity": 34.4, "trend": 93.1, "avgPSF": 2161, "avgPrice": 2000000, "txns": 1, "district": "11", "street": "SHELFORD ROAD", "tenure": "Freehold", "segment": "Core Central Region", "psfDiscount": 0.5, "psfTrend": 7.8, "recentTxns": 3, "sqft": 926, "resalability": 56.6, "sizeBracket": 55.0, "illiquidityFlag": false, "estYield": 2.5, "schoolScore": 40.0, "luScore": 72.0, "luGreen": 90.0, "luBuzz": 0.0, "luEdu": 100.0, "luUpside": 100.0, "luPurity": 60.0, "luAvgGPR": 1.71, "luBreakdown": {"HEALTH & MEDICAL CARE": 1, "EDUCATIONAL INSTITUTION": 3, "RESIDENTIAL": 673, "COMMERCIAL & RESIDENTIAL": 15, "PARK": 3, "PLACE OF WORSHIP": 3, "UTILITY": 2, "RESERVE SITE": 1}, "enBloc": false, "projLat": 1.32762, "projLon": 103.81022}, {"name": "THE MAYLEA", "fullName": "THE MAYLEA", "gem": 48.9, "prism": 48.9, "avap": 83.0, "mlrp": 47.2, "dmp": 17.0, "ntcp": 51.3, "esqp": 16.0, "yrp": 60.4, "tcScore": 51.3, "mrtDist": 469, "nearestMRT": "Pasir Panjang MRT", "value": 84.7, "liquidity": 52.1, "trend": 14.6, "avgPSF": 1688, "avgPrice": 1635000, "txns": 1, "district": "5", "street": "PASIR PANJANG ROAD", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": -15.2, "psfTrend": -2.2, "recentTxns": 4, "sqft": 969, "resalability": 42.1, "sizeBracket": 55.0, "illiquidityFlag": false, "estYield": 3.2, "schoolScore": 0.0, "luScore": 58.3, "luGreen": 100.0, "luBuzz": 100.0, "luEdu": 0.0, "luUpside": 13.2, "luPurity": 100.0, "luAvgGPR": 2.28, "luBreakdown": {"RESIDENTIAL": 69, "RESERVE SITE": 7, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 26, "PARK": 8, "WATERBODY": 3, "BUSINESS 1": 37, "PLACE OF WORSHIP": 1, "CIVIC & COMMUNITY INSTITUTION": 2, "HEALTH & MEDICAL CARE": 1, "BUSINESS PARK": 1}, "enBloc": false, "projLat": 1.27504, "projLon": 103.79513}, {"name": "HILLVIEW GREEN", "fullName": "HILLVIEW GREEN", "gem": 48.3, "prism": 48.3, "avap": 60.4, "mlrp": 56.6, "dmp": 64.2, "ntcp": 9.1, "esqp": 27.4, "yrp": 67.9, "tcScore": 9.1, "mrtDist": 673, "nearestMRT": "Hillview MRT", "value": 66.0, "liquidity": 52.1, "trend": 65.3, "avgPSF": 1642, "avgPrice": 1608000, "txns": 1, "district": "21", "street": "HUME AVENUE", "tenure": "999 yrs lease commencing from 1883", "segment": "Outside Central Region", "psfDiscount": -6.8, "psfTrend": 2.5, "recentTxns": 4, "sqft": 980, "resalability": 51.0, "sizeBracket": 55.0, "illiquidityFlag": false, "estYield": 3.29, "schoolScore": 15.0, "luScore": 56.1, "luGreen": 100.0, "luBuzz": 0.0, "luEdu": 100.0, "luUpside": 28.2, "luPurity": 60.0, "luAvgGPR": 1.95, "luBreakdown": {"PARK": 3, "RESIDENTIAL": 449, "UTILITY": 2, "OPEN SPACE": 1, "PLACE OF WORSHIP": 1, "CIVIC & COMMUNITY INSTITUTION": 1, "EDUCATIONAL INSTITUTION": 1}, "enBloc": false, "projLat": 1.35899, "projLon": 103.76363}, {"name": "1 KING ALBERT PARK", "fullName": "1 KING ALBERT PARK", "gem": 47.7, "prism": 47.7, "avap": 22.6, "mlrp": 34.9, "dmp": 60.4, "ntcp": 98.9, "esqp": 46.2, "yrp": 42.5, "tcScore": 98.9, "mrtDist": 85, "nearestMRT": "King Albert Park MRT", "value": 22.2, "liquidity": 16.7, "trend": 31.9, "avgPSF": 1759, "avgPrice": 1950000, "txns": 1, "district": "21", "street": "KING ALBERT PARK", "tenure": "Freehold", "segment": "Rest of Central Region", "psfDiscount": 1.2, "psfTrend": 0.0, "recentTxns": 2, "sqft": 1109, "resalability": 60.7, "sizeBracket": 95.0, "illiquidityFlag": false, "estYield": 3.07, "schoolScore": 55.0, "luScore": 60.9, "luGreen": 90.0, "luBuzz": 25.0, "luEdu": 100.0, "luUpside": 47.5, "luPurity": 40.0, "luAvgGPR": 1.9, "luBreakdown": {"EDUCATIONAL INSTITUTION": 1, "PARK": 2, "RESIDENTIAL": 430, "RESIDENTIAL WITH COMMERCIAL AT 1ST STOREY": 10, "COMMERCIAL & RESIDENTIAL": 1, "OPEN SPACE": 1, "UTILITY": 3, "WATERBODY": 2, "COMMERCIAL": 1}, "enBloc": false, "projLat": 1.3357, "projLon": 103.78359}];
+const projectTxns = {"DOMUS": [{"date": "2024-09-01", "price": 3880000, "psf": 1392, "sqft": 2787}, {"date": "2025-08-01", "price": 1660000, "psf": 1658, "sqft": 1001}, {"date": "2025-08-01", "price": 2650000, "psf": 1939, "sqft": 1367}], "M66": [{"date": "2024-09-01", "price": 1550000, "psf": 1412, "sqft": 1097}, {"date": "2024-11-01", "price": 990000, "psf": 1586, "sqft": 624}, {"date": "2025-09-01", "price": 2030000, "psf": 1319, "sqft": 1539}], "THE SPRINGS": [{"date": "2025-08-01", "price": 1960000, "psf": 1937, "sqft": 1011}, {"date": "2025-09-01", "price": 2190000, "psf": 2211, "sqft": 990}, {"date": "2025-09-01", "price": 1938000, "psf": 1957, "sqft": 990}], "CASA FORTUNA": [{"date": "2024-11-01", "price": 1610000, "psf": 1542, "sqft": 1044}, {"date": "2024-12-01", "price": 1600000, "psf": 1532, "sqft": 1044}, {"date": "2025-08-01", "price": 835000, "psf": 1650, "sqft": 505}, {"date": "2025-11-01", "price": 832500, "psf": 1646, "sqft": 505}], "WHITEHAVEN": [{"date": "2024-09-01", "price": 1800000, "psf": 1086, "sqft": 1657}, {"date": "2024-11-01", "price": 1200000, "psf": 1138, "sqft": 1054}, {"date": "2025-01-01", "price": 1818000, "psf": 1578, "sqft": 1151}, {"date": "2025-08-01", "price": 1650000, "psf": 1065, "sqft": 1550}, {"date": "2025-11-01", "price": 1030000, "psf": 1914, "sqft": 538}], "LE HILL CONDOMINIUM": [{"date": "2024-10-01", "price": 1765000, "psf": 1355, "sqft": 1302}, {"date": "2025-01-01", "price": 1470000, "psf": 1484, "sqft": 990}, {"date": "2025-02-01", "price": 1868000, "psf": 1400, "sqft": 1334}, {"date": "2025-08-01", "price": 1552000, "psf": 1567, "sqft": 990}], "SOUTHAVEN II": [{"date": "2024-09-01", "price": 2300000, "psf": 1751, "sqft": 1313}, {"date": "2024-10-01", "price": 2550000, "psf": 1692, "sqft": 1506}, {"date": "2024-12-01", "price": 1650000, "psf": 1580, "sqft": 1044}, {"date": "2024-12-01", "price": 3320000, "psf": 1383, "sqft": 2400}, {"date": "2024-12-01", "price": 3000000, "psf": 978, "sqft": 3067}, {"date": "2024-12-01", "price": 2300000, "psf": 1766, "sqft": 1302}, {"date": "2025-08-01", "price": 2500000, "psf": 1452, "sqft": 1722}, {"date": "2025-09-01", "price": 3050000, "psf": 994, "sqft": 3067}, {"date": "2025-09-01", "price": 2550000, "psf": 1657, "sqft": 1539}, {"date": "2025-09-01", "price": 5380000, "psf": 984, "sqft": 5468}, {"date": "2025-09-01", "price": 2750000, "psf": 1787, "sqft": 1539}, {"date": "2025-09-01", "price": 1618000, "psf": 1689, "sqft": 958}, {"date": "2025-10-01", "price": 2200000, "psf": 1548, "sqft": 1420}, {"date": "2025-11-01", "price": 2680000, "psf": 1741, "sqft": 1539}, {"date": "2025-11-01", "price": 2400000, "psf": 1664, "sqft": 1442}, {"date": "2025-11-01", "price": 1890000, "psf": 1688, "sqft": 1119}], "THE PARC CONDOMINIUM": [{"date": "2024-09-01", "price": 2688300, "psf": 1892, "sqft": 1420}, {"date": "2024-09-01", "price": 1780000, "psf": 1817, "sqft": 979}, {"date": "2024-09-01", "price": 2268888, "psf": 1865, "sqft": 1216}, {"date": "2024-10-01", "price": 4700000, "psf": 1277, "sqft": 3681}, {"date": "2024-11-01", "price": 2460000, "psf": 2022, "sqft": 1216}, {"date": "2024-11-01", "price": 2473800, "psf": 1899, "sqft": 1302}, {"date": "2024-11-01", "price": 2760000, "psf": 1943, "sqft": 1420}, {"date": "2024-12-01", "price": 2900000, "psf": 1911, "sqft": 1517}, {"date": "2025-01-01", "price": 1030000, "psf": 1543, "sqft": 667}, {"date": "2025-01-01", "price": 2760000, "psf": 1943, "sqft": 1420}, {"date": "2025-01-01", "price": 2628000, "psf": 1850, "sqft": 1420}, {"date": "2025-09-01", "price": 3000000, "psf": 1991, "sqft": 1506}, {"date": "2025-10-01", "price": 2900000, "psf": 2041, "sqft": 1420}, {"date": "2025-12-01", "price": 2950000, "psf": 1944, "sqft": 1517}], "M5": [{"date": "2024-10-01", "price": 925000, "psf": 2096, "sqft": 441}, {"date": "2024-11-01", "price": 940000, "psf": 2130, "sqft": 441}, {"date": "2024-12-01", "price": 1540000, "psf": 2044, "sqft": 753}, {"date": "2024-12-01", "price": 1515000, "psf": 2040, "sqft": 742}, {"date": "2024-12-01", "price": 1578500, "psf": 2095, "sqft": 753}, {"date": "2024-12-01", "price": 1489000, "psf": 2005, "sqft": 742}, {"date": "2025-01-01", "price": 1548000, "psf": 2084, "sqft": 742}, {"date": "2025-08-01", "price": 935000, "psf": 2119, "sqft": 441}, {"date": "2025-10-01", "price": 1566300, "psf": 2109, "sqft": 742}, {"date": "2025-11-01", "price": 1535000, "psf": 2037, "sqft": 753}, {"date": "2025-12-01", "price": 1718000, "psf": 1698, "sqft": 1011}], "QUEENSBERRY LODGE": [{"date": "2025-09-01", "price": 1620000, "psf": 1407, "sqft": 1151}], "PARC IMPERIAL": [{"date": "2024-10-01", "price": 888000, "psf": 1793, "sqft": 495}, {"date": "2024-11-01", "price": 753000, "psf": 1841, "sqft": 409}, {"date": "2024-11-01", "price": 705000, "psf": 1926, "sqft": 365}, {"date": "2025-01-01", "price": 698000, "psf": 1907, "sqft": 365}, {"date": "2025-02-01", "price": 790000, "psf": 1984, "sqft": 398}, {"date": "2025-08-01", "price": 1648888, "psf": 1380, "sqft": 1194}], "KAP RESIDENCES": [{"date": "2024-10-01", "price": 1730000, "psf": 1710, "sqft": 1011}, {"date": "2024-10-01", "price": 1430000, "psf": 2044, "sqft": 699}, {"date": "2025-08-01", "price": 1680000, "psf": 1815, "sqft": 925}, {"date": "2025-09-01", "price": 988000, "psf": 1995, "sqft": 495}], "SPRINGDALE CONDOMINIUM": [{"date": "2024-09-01", "price": 1448000, "psf": 1564, "sqft": 925}, {"date": "2024-09-01", "price": 1880000, "psf": 1663, "sqft": 1130}, {"date": "2024-11-01", "price": 1855000, "psf": 1673, "sqft": 1108}, {"date": "2024-12-01", "price": 1855000, "psf": 1657, "sqft": 1119}, {"date": "2024-12-01", "price": 2550000, "psf": 1836, "sqft": 1388}, {"date": "2025-01-01", "price": 1990000, "psf": 1712, "sqft": 1162}, {"date": "2025-09-01", "price": 1980000, "psf": 1719, "sqft": 1151}, {"date": "2025-09-01", "price": 1928000, "psf": 1674, "sqft": 1151}, {"date": "2025-09-01", "price": 1515000, "psf": 1637, "sqft": 925}, {"date": "2025-09-01", "price": 2030000, "psf": 1763, "sqft": 1151}], "MIRO": [{"date": "2024-10-01", "price": 3500000, "psf": 1787, "sqft": 1959}, {"date": "2025-11-01", "price": 2200000, "psf": 1635, "sqft": 1345}, {"date": "2025-12-01", "price": 1700000, "psf": 1595, "sqft": 1065}], "RESIDENTIAL APARTMENTS": [{"date": "2024-10-01", "price": 1330000, "psf": 1177, "sqft": 1130}, {"date": "2024-10-01", "price": 2280000, "psf": 1780, "sqft": 1280}, {"date": "2024-10-01", "price": 1243000, "psf": 1298, "sqft": 958}, {"date": "2024-11-01", "price": 1770000, "psf": 1787, "sqft": 990}, {"date": "2024-11-01", "price": 1300000, "psf": 1150, "sqft": 1130}, {"date": "2024-11-01", "price": 18888000, "psf": 2446, "sqft": 7722}, {"date": "2024-12-01", "price": 6920000, "psf": 3966, "sqft": 1744}, {"date": "2024-12-01", "price": 2400000, "psf": 2123, "sqft": 1130}, {"date": "2025-01-01", "price": 2170000, "psf": 1193, "sqft": 1819}, {"date": "2025-01-01", "price": 3500000, "psf": 1730, "sqft": 2023}, {"date": "2025-08-01", "price": 6500000, "psf": 3741, "sqft": 1737}, {"date": "2025-09-01", "price": 3700000, "psf": 2058, "sqft": 1797}, {"date": "2025-10-01", "price": 2748888, "psf": 1700, "sqft": 1616}, {"date": "2025-10-01", "price": 1445000, "psf": 1303, "sqft": 1108}, {"date": "2025-11-01", "price": 3020000, "psf": 2806, "sqft": 1076}, {"date": "2025-12-01", "price": 1750000, "psf": 1333, "sqft": 1313}], "THE CENTRIO": [{"date": "2024-09-01", "price": 1680000, "psf": 1715, "sqft": 979}, {"date": "2024-10-01", "price": 2220000, "psf": 1825, "sqft": 1216}, {"date": "2024-11-01", "price": 1680000, "psf": 1715, "sqft": 979}], "THE PEAK@BALMEG": [{"date": "2024-12-01", "price": 4360000, "psf": 1674, "sqft": 2604}, {"date": "2024-12-01", "price": 4818800, "psf": 1571, "sqft": 3067}, {"date": "2024-12-01", "price": 3300000, "psf": 1881, "sqft": 1754}, {"date": "2025-08-01", "price": 2820000, "psf": 1871, "sqft": 1506}, {"date": "2025-09-01", "price": 1965000, "psf": 1984, "sqft": 990}, {"date": "2025-10-01", "price": 3250000, "psf": 1668, "sqft": 1948}], "SHERWOOD CONDOMINIUM": [{"date": "2024-11-01", "price": 1485000, "psf": 1550, "sqft": 958}, {"date": "2025-02-01", "price": 1790000, "psf": 1459, "sqft": 1227}, {"date": "2025-09-01", "price": 1500000, "psf": 1602, "sqft": 936}, {"date": "2025-09-01", "price": 1380000, "psf": 1545, "sqft": 893}, {"date": "2025-10-01", "price": 1333000, "psf": 1474, "sqft": 904}, {"date": "2025-11-01", "price": 1380000, "psf": 1491, "sqft": 925}], "PALM GREEN": [{"date": "2024-12-01", "price": 1780000, "psf": 1378, "sqft": 1291}, {"date": "2025-10-01", "price": 1680000, "psf": 1486, "sqft": 1130}], "GARDENVISTA": [{"date": "2024-09-01", "price": 2200000, "psf": 1875, "sqft": 1173}, {"date": "2024-10-01", "price": 2328000, "psf": 2003, "sqft": 1162}, {"date": "2024-10-01", "price": 2200000, "psf": 1984, "sqft": 1108}, {"date": "2024-10-01", "price": 1750000, "psf": 1869, "sqft": 936}, {"date": "2024-12-01", "price": 2540000, "psf": 1888, "sqft": 1345}, {"date": "2024-12-01", "price": 1505000, "psf": 1726, "sqft": 871}, {"date": "2025-01-01", "price": 2238888, "psf": 1981, "sqft": 1130}, {"date": "2025-02-01", "price": 2000000, "psf": 1804, "sqft": 1108}, {"date": "2025-08-01", "price": 2340000, "psf": 2013, "sqft": 1162}, {"date": "2025-09-01", "price": 1550000, "psf": 1778, "sqft": 871}, {"date": "2025-10-01", "price": 2275000, "psf": 1939, "sqft": 1173}, {"date": "2025-10-01", "price": 2260000, "psf": 1981, "sqft": 1140}, {"date": "2025-10-01", "price": 2390000, "psf": 2115, "sqft": 1130}], "BLISS@KOVAN": [{"date": "2024-11-01", "price": 1485000, "psf": 1769, "sqft": 839}, {"date": "2024-11-01", "price": 940000, "psf": 1588, "sqft": 592}, {"date": "2025-01-01", "price": 1600000, "psf": 1728, "sqft": 925}, {"date": "2025-10-01", "price": 1450000, "psf": 1727, "sqft": 839}], "NINETEEN SHELFORD ROAD": [{"date": "2024-11-01", "price": 1868000, "psf": 1995, "sqft": 936}, {"date": "2025-01-01", "price": 1888000, "psf": 1886, "sqft": 1001}, {"date": "2025-01-01", "price": 1850000, "psf": 2071, "sqft": 893}, {"date": "2025-02-01", "price": 1200000, "psf": 1639, "sqft": 731}, {"date": "2025-08-01", "price": 1880000, "psf": 2183, "sqft": 861}, {"date": "2025-09-01", "price": 1950000, "psf": 1969, "sqft": 990}], "THE MONTANA": [{"date": "2024-11-01", "price": 1080000, "psf": 1930, "sqft": 559}, {"date": "2024-11-01", "price": 1200000, "psf": 2144, "sqft": 559}, {"date": "2024-12-01", "price": 1018000, "psf": 1603, "sqft": 635}, {"date": "2025-10-01", "price": 2245000, "psf": 2397, "sqft": 936}, {"date": "2025-10-01", "price": 2000000, "psf": 2111, "sqft": 947}], "THE FOLIAGE": [{"date": "2025-01-01", "price": 1650000, "psf": 1488, "sqft": 1108}], "IRESIDENCES": [{"date": "2025-01-01", "price": 1800000, "psf": 1689, "sqft": 1065}, {"date": "2025-09-01", "price": 2650000, "psf": 1970, "sqft": 1345}], "GILSTEAD TWO": [{"date": "2024-09-01", "price": 2100000, "psf": 2323, "sqft": 904}, {"date": "2024-09-01", "price": 1750000, "psf": 2258, "sqft": 775}, {"date": "2025-12-01", "price": 1600000, "psf": 1770, "sqft": 904}], "SHELFORD REGENCY": [{"date": "2024-11-01", "price": 2650000, "psf": 2069, "sqft": 1280}, {"date": "2024-12-01", "price": 2000000, "psf": 2161, "sqft": 925}, {"date": "2025-10-01", "price": 2650000, "psf": 2301, "sqft": 1151}], "THE MAYLEA": [{"date": "2024-09-01", "price": 850000, "psf": 1717, "sqft": 495}, {"date": "2025-02-01", "price": 2000000, "psf": 1630, "sqft": 1227}, {"date": "2025-08-01", "price": 2630000, "psf": 1587, "sqft": 1657}, {"date": "2025-11-01", "price": 1635000, "psf": 1688, "sqft": 968}], "HILLVIEW GREEN": [{"date": "2024-09-01", "price": 2050000, "psf": 1574, "sqft": 1302}, {"date": "2024-10-01", "price": 1900000, "psf": 1459, "sqft": 1302}, {"date": "2024-12-01", "price": 1608000, "psf": 1642, "sqft": 979}, {"date": "2024-12-01", "price": 1880000, "psf": 1468, "sqft": 1280}], "1 KING ALBERT PARK": [{"date": "2024-12-01", "price": 1450000, "psf": 1796, "sqft": 807}, {"date": "2025-08-01", "price": 1950000, "psf": 1759, "sqft": 1108}]};
 
 let priceChart = null;
 let luRadarChart = null;
@@ -1349,25 +1339,43 @@ function openModal(projectName, idx) {
   // Stats
   const rsLabel = proj.resalability >= 80 ? '🟢 Easy' : proj.resalability >= 60 ? '🟡 Moderate' : '🔴 Harder';
   const rsColour = proj.resalability >= 80 ? 'var(--green)' : proj.resalability >= 60 ? 'var(--amber)' : 'var(--red)';
-  const velLabel = proj.txnVelocity >= 2.0 ? '🟢 Active' : proj.txnVelocity >= 0.5 ? '🟡 Thin' : '🔴 Illiquid';
-  const velColour = proj.txnVelocity >= 2.0 ? 'var(--green)' : proj.txnVelocity >= 0.5 ? 'var(--amber)' : 'var(--red)';
-  const thinBanner = proj.illiquidityFlag
-    ? `<div style="background:rgba(251,191,36,0.12);border:1px solid var(--amber);border-radius:8px;padding:0.6rem 0.9rem;margin-bottom:1rem;font-size:0.78rem;color:var(--amber);">
-         ⚠️ <strong>Thin Market:</strong> &lt;1 transaction/year historically — boutique or wealth-storage asset. Expect longer exit windows.
-       </div>`
-    : '';
-  document.getElementById('modalStats').innerHTML = thinBanner + `
-    <div class="modal-stat"><div class="label">Gem Score</div><div class="value">${proj.gem}</div></div>
+  // PRISM_rev component bars
+  const prismComponents = proj.avap != null ? `
+    <div style="margin:1rem 0;padding:1rem;background:var(--bg);border-radius:10px;">
+      <div style="font-size:0.75rem;font-weight:700;color:var(--accent2);margin-bottom:0.8rem;letter-spacing:0.08em;">PRISM_rev COMPONENT BREAKDOWN</div>
+      ${[
+        ['Adjusted Value Alpha (AVA)', proj.avap, '25%', '#22d3ee'],
+        ['Liquidity + Resalability (MLR)', proj.mlrp, '20%', '#a78bfa'],
+        ['Dynamic Momentum (DM)', proj.dmp, '15%', '#34d399'],
+        ['Non-linear Transit (NTC)', proj.ntcp, '15%', '#f472b6'],
+        ['Enhanced Spatial Quality (ESQ)', proj.esqp, '15%', '#fb923c'],
+        ['Yield Representation (YR)', proj.yrp, '10%', '#facc15'],
+      ].map(([label, val, wt, col]) => val != null ? `
+        <div style="margin-bottom:0.5rem;">
+          <div style="display:flex;justify-content:space-between;font-size:0.68rem;margin-bottom:2px;">
+            <span style="color:var(--text-dim);">${label} <span style="color:${col};opacity:0.7;">${wt}</span></span>
+            <span style="font-family:'Space Mono',monospace;color:${col};">${val.toFixed(1)}</span>
+          </div>
+          <div style="height:4px;background:var(--border);border-radius:2px;">
+            <div style="width:${Math.min(val,100)}%;height:100%;background:${col};border-radius:2px;opacity:0.8;"></div>
+          </div>
+        </div>` : '').join('')}
+    </div>` : '';
+
+  document.getElementById('modalStats').innerHTML = `
+    <div class="modal-stat"><div class="label">PRISM_rev Score</div><div class="value" style="color:var(--accent2);font-size:1.2rem;font-weight:700;">${proj.prism}</div></div>
     <div class="modal-stat"><div class="label">Avg Price</div><div class="value">$${proj.avgPrice.toLocaleString()}</div></div>
     <div class="modal-stat"><div class="label">Avg PSF</div><div class="value">$${proj.avgPSF}</div></div>
     <div class="modal-stat"><div class="label">PSF Discount</div><div class="value">${proj.psfDiscount > 0 ? '+' : ''}${proj.psfDiscount}%</div></div>
     <div class="modal-stat"><div class="label">PSF Trend</div><div class="value">${proj.psfTrend > 0 ? '+' : ''}${proj.psfTrend}%</div></div>
     <div class="modal-stat"><div class="label">Total Txns</div><div class="value">${proj.txns}</div></div>
+    <div class="modal-stat"><div class="label">Est. Walk</div><div class="value" style="color:${proj.mrtDist <= 400 ? 'var(--green)' : proj.mrtDist <= 600 ? 'var(--amber)' : 'var(--red)'};"> ${proj.mrtDist ? '~' + Math.round(proj.mrtDist/80*10)/10 + ' min' : '—'}</div></div>
+    <div class="modal-stat"><div class="label">Nearest MRT</div><div class="value" style="font-size:0.72rem;">${proj.nearestMRT || '—'}</div></div>
+    <div class="modal-stat"><div class="label">Walk Dist.</div><div class="value" style="font-size:0.85rem;color:var(--text-dim);">${proj.mrtDist ? '~' + proj.mrtDist + ' m' : '—'}</div></div>
     <div class="modal-stat"><div class="label">Resale Ease</div><div class="value" style="color:${rsColour};font-size:0.82rem;">${rsLabel}</div></div>
-    <div class="modal-stat"><div class="label">Resalability</div><div class="value">${proj.resalability}/100</div></div>
-    <div class="modal-stat"><div class="label">Market Depth</div><div class="value" style="color:${velColour};font-size:0.82rem;">${velLabel}</div></div>
-    <div class="modal-stat"><div class="label">Txn/Yr</div><div class="value">${proj.txnVelocity}</div></div>
-  `;
+    ${proj.estYield != null ? `<div class="modal-stat"><div class="label">Est. Yield</div><div class="value" style="color:var(--green);">${proj.estYield}%</div></div>` : ''}
+    ${proj.schoolScore != null ? `<div class="modal-stat"><div class="label">School Score</div><div class="value" style="color:var(--amber);">${proj.schoolScore}</div></div>` : ''}
+  ` + prismComponents;
 
   // Transaction table
   const tbody = document.querySelector('#txnTable tbody');
